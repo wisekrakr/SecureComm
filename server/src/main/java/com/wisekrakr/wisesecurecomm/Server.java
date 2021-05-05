@@ -129,7 +129,7 @@ public class Server  {
                                 ClientThreadMessageHandler.createNotificationMessage(
                                         MessageType.Notifications.ERROR,
                                         "This username cannot be registered, try again.",
-                                        null,
+                                        messageObject.getOwner(),
                                         messageObject.getOwner()
                                 ).toByteArray())
                 );
@@ -142,10 +142,10 @@ public class Server  {
 
     private void runClientHandler(SSLSocket clientSocket, ObjectInputStream in, ObjectOutputStream out, User user) {
         try {
-            ClientHandler newClientHandler = new ClientHandler(clientSocket, user, in, out);
+            ClientHandler clientHandlerAlpha = new ClientHandler(clientSocket, user, in, out);
 
-            if (add2Pool(user, newClientHandler)) {
-                newClientHandler.initializeClientHandler(new ClientHandlerListener() {
+            if (add2Pool(user, clientHandlerAlpha)) {
+                clientHandlerAlpha.initializeClientHandler(new ClientHandlerListener() {
 
                     @Override
                     public void onGettingSecurity(int id, String encodedPublicKey) {
@@ -154,10 +154,10 @@ public class Server  {
                                         id,
                                         MessageType.Security.PUBLIC_KEY,
                                         encodedPublicKey,
-                                        null,
-                                        newClientHandler.getUser()
+                                        clientHandlerAlpha.getUser(),
+                                        clientHandlerAlpha.getUser()
                                 ),
-                                newClientHandler
+                                clientHandlerAlpha
                         );
                     }
 
@@ -168,10 +168,10 @@ public class Server  {
                                         id,
                                         MessageType.Security.SESSION_KEY,
                                         encodedSessionKey,
-                                        newClientHandler.getUser(),
-                                        newClientHandler.getUser()
+                                        clientHandlerAlpha.getUser(),
+                                        clientHandlerAlpha.getUser()
                                 ),
-                                newClientHandler
+                                clientHandlerAlpha
                         );
                     }
 
@@ -184,8 +184,8 @@ public class Server  {
                                                     id,
                                                     MessageType.Security.VERIFY,
                                                     sessionKey,
-                                                    null,
-                                                    newClientHandler.getUser()
+                                                    clientHandlerAlpha.getUser(),
+                                                    clientHandlerAlpha.getUser()
                                             ).toByteArray())
                             );
                         } catch (Throwable t) {
@@ -195,8 +195,8 @@ public class Server  {
 
                     @Override
                     public void onVerified(boolean secureConnection) {
-                        welcomeMessage(newClientHandler);
-                        giveUsers(newClientHandler);
+                        welcomeMessage(clientHandlerAlpha);
+                        giveUsers(clientHandlerAlpha);
                     }
 
                     @Override
@@ -207,7 +207,7 @@ public class Server  {
                                         createMessage(
                                                 messageObject.getId(),
                                                 lineToSend,
-                                                newClientHandler.getUser(),
+                                                clientHandlerAlpha.getUser(),
                                                 new ArrayList<>(clientHandlers.keySet())
                                         ),
                                         clientHandler
@@ -219,7 +219,7 @@ public class Server  {
                     @Override
                     public void onDirectMessage(String lineToSend, MessageObject messageObject) {
                         for (ClientHandler clientHandler : clientHandlers.values()) {
-                            if (clientHandler == newClientHandler ||
+                            if (clientHandler == clientHandlerAlpha ||
                                     clientHandler.getUser().getId() == messageObject.getRecipients(0).getId()) {
 
                                 sendMessage(
@@ -247,7 +247,7 @@ public class Server  {
                                                     messageObject.getId(),
                                                     lineToSend,
                                                     ByteString.copyFrom(MessageCryptography.decryptData(
-                                                            newClientHandler.getSessionKey(),
+                                                            clientHandlerAlpha.getSessionKey(),
                                                             messageObject.getVoiceMessage().toByteArray()
                                                     )),
                                                     messageObject.getFileInfo(),
@@ -288,7 +288,7 @@ public class Server  {
                     public void onCommentMessage(String lineToSend, MessageObject messageObject) {
                         for (ClientHandler clientHandler : clientHandlers.values()) {
                             for (User recipient : messageObject.getRecipientsList()) {
-                                if (clientHandler == newClientHandler && clientHandler.getUser().getId() == recipient.getId()) {
+                                if (clientHandler == clientHandlerAlpha && clientHandler.getUser().getId() == recipient.getId()) {
                                     sendMessage(
                                             createCommentMessage(
                                                     messageObject.getId(),
@@ -306,7 +306,7 @@ public class Server  {
                     @Override
                     public void onDMCommand(String line, MessageObject messageObject) {
                         for (ClientHandler clientHandler : clientHandlers.values()) {
-                            if (clientHandler != newClientHandler &&
+                            if (clientHandler != clientHandlerAlpha &&
                                     clientHandler.getUser().getId() == messageObject.getRecipients(0).getId()) {
 
                                 sendMessage(
@@ -334,23 +334,23 @@ public class Server  {
                     public void onQuit(int id) {
                         // Inform other clients that this client has left
                         for (ClientHandler clientHandler : clientHandlers.values()) {
-                            if (clientHandler != newClientHandler) {
+                            if (clientHandler != clientHandlerAlpha) {
                                 // send small message so that other client know this user is gone
-                                sendMessage(
-                                        createNotificationMessage(
-                                                MessageType.Notifications.INFO,
-                                                "//// User " + user.getName() + " has left ////",
-                                                user,
-                                                clientHandler.getUser()
-                                        ),
-                                        clientHandler
-                                );
+//                                sendMessage(
+//                                        createNotificationMessage(
+//                                                MessageType.Notifications.INFO,
+//                                                "//// User " + clientHandlerAlpha.getUser().getName() + " has left ////",
+//                                                clientHandlerAlpha.getUser(),
+//                                                clientHandler.getUser()
+//                                        ),
+//                                        clientHandler
+//                                );
                                 // update user list for other clients still connected
                                 sendMessage(
                                         createNotificationMessage(
                                                 MessageType.Notifications.USER_OFFLINE,
-                                                user.getName(),
-                                                user,
+                                                clientHandlerAlpha.getUser().getName(),
+                                                clientHandlerAlpha.getUser(),
                                                 clientHandler.getUser()
                                         ),
                                         clientHandler
@@ -362,11 +362,11 @@ public class Server  {
                                         createCommandMessage(
                                                 id,
                                                 MessageType.Commands.APP_QUIT,
-                                                "Adios " + user.getName(),
-                                                null,
-                                                user
+                                                "Adios " + clientHandlerAlpha.getUser().getName(),
+                                                clientHandlerAlpha.getUser(),
+                                                clientHandlerAlpha.getUser()
                                         ),
-                                        newClientHandler
+                                        clientHandlerAlpha
                                 );
                             }
                         }
@@ -374,23 +374,25 @@ public class Server  {
 
                     @Override
                     public void onCleanUp() {
-                        newClientHandler.stopClientHandler();
+                        clientHandlerAlpha.stopClientHandler();
                         // Set this thread to null in client handler pool
-                        if (newClientHandler.getUser() != null) {
+                        if (clientHandlerAlpha.getUser() != null) {
 
-                            clientHandlers.remove(newClientHandler.getUser());
+                            clientHandlers.remove(clientHandlerAlpha.getUser());
+                            clients.remove(clientHandlerAlpha.getUser());
+                            iDs.removeIf(id -> id.equals(clientHandlerAlpha.getUser().getId()));
 
                             try {
-                                if (newClientHandler.getClientSocket() != null)
-                                    newClientHandler.getClientSocket().close();
+                                if (clientHandlerAlpha.getClientSocket() != null)
+                                    clientHandlerAlpha.getClientSocket().close();
                             } catch (Throwable t) {
                                 throw new IllegalStateException("Error: Closing client socket", t);
                             }
 
                             // Close all streams and connections
                             try {
-                                newClientHandler.getIncoming().close();
-                                newClientHandler.getOutgoing().close();
+                                clientHandlerAlpha.getIncoming().close();
+                                clientHandlerAlpha.getOutgoing().close();
                             } catch (Throwable t) {
                                 throw new IllegalStateException("Error: Closing streams", t);
                             }
@@ -407,12 +409,12 @@ public class Server  {
                                         null,
                                         user
                                 ),
-                                newClientHandler
+                                clientHandlerAlpha
                         );
                     }
                 });
 
-                newClientHandler.startClientHandler();
+                clientHandlerAlpha.startClientHandler();
 
                 System.out.println("New client thread accepted. (Thread:" + "Client-" + user.getId() + ")");
                 System.out.println("Clients in chat: " + clientHandlers.size());
@@ -628,7 +630,7 @@ public class Server  {
                         "Welcome to WiseSecComm " + clientHandler.getUser().getName() + "\n" +
                                 "A secure chat and file transfer environment" + "\n" +
                                 "Today's date: " + dateString,
-                        null,
+                        clientHandler.getUser(),
                         clientHandler.getUser()
                 ),
                 clientHandler
@@ -641,6 +643,7 @@ public class Server  {
      * @param newClientHandler client handler that handles the message
      */
     private void giveUsers(ClientHandler newClientHandler) {
+
         for (ClientHandler clientHandler : clientHandlers.values()) {
             if (clientHandler != null) {
                 try {
@@ -662,9 +665,11 @@ public class Server  {
                                         newClientHandler.getUser(),
                                         clientHandler.getUser()
                                 ),
-                                newClientHandler
+                                clientHandler
                         );
                     }
+
+
                 } catch (Throwable t) {
                     throw new IllegalStateException("Error in sending users", t);
                 }

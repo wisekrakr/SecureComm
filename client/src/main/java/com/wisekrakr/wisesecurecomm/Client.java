@@ -82,10 +82,10 @@ public class Client extends Thread implements ClientTalker {
     }
 
     @Override
-    public User createUser(int id, String username, User.Status status, String profilePicture) {
+    public User createUser(Integer id, String username, User.Status status, String profilePicture) {
         IntIDGenerator idGenerator = new IntIDGenerator(1501936765671L, 0, 32, 0, 0, IDMode.SEQUENCE_UID_TIME);
         return User.newBuilder()
-                .setId(id > 0 ? id : idGenerator.generateIntId())
+                .setId(id != null ? id : idGenerator.generateIntId())
                 .setName(username)
                 .setProfilePicture(profilePicture)
                 .setStatus(status)
@@ -94,7 +94,7 @@ public class Client extends Thread implements ClientTalker {
 
     @Override
     public void connectClient(String hostname, int port, String username, String profilePicture){
-        this.user = createUser(0, username, User.Status.ONLINE, profilePicture);
+        this.user = createUser(null, username, User.Status.ONLINE, profilePicture);
 
         try {
             SSLSocketFactory sslSocketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
@@ -117,6 +117,7 @@ public class Client extends Thread implements ClientTalker {
         try {
 
             if(clientSocket.isConnected()) {
+                listener.onConnecting(0.2);
 
                 // tell server my identity
                 sendMessage(ClientMessageHandler.createMessage(
@@ -403,7 +404,7 @@ public class Client extends Thread implements ClientTalker {
                         break;
                     case NOTIFICATION:
                         switch (messageObject.getMessageType().getNotificiations()){
-                            case USER_ONLINE:
+                            case USER_ONLINE: // create user and put into HashMap with user id as key. Show on gui.
                                 User newUser = createUser(
                                         messageObject.getOwner().getId(),
                                         messageObject.getOwner().getName(),
@@ -411,20 +412,20 @@ public class Client extends Thread implements ClientTalker {
                                         messageObject.getOwner().getProfilePicture()
                                 );
                                 users.put(newUser.getId(), newUser);
-
                                 listener.onGetOnlineUser(users, newUser); // show all users
-
                                 break;
-                            case USER_OFFLINE:
+                            case USER_OFFLINE: // remove user out of HashMap. Remove name from gui.
                                 User finalUser = messageObject.getOwner();
-
                                 users.entrySet().removeIf(u -> u.getKey().equals(finalUser.getId()));
                                 listener.onGetOnlineUser(users,finalUser);
                                 break;
-                            case USER_STATUS:
+                            case USER_STATUS: // show status change in gui.
                                 listener.onGetOnlineUser(users,messageObject.getOwner());
+
+                                System.out.println("STATUS CHANGE: \n" + messageObject.getOwner().getStatus());
                                 break;
                             case ERROR:
+                                listener.onNotification("Server error", line, TrayNotificationType.ERROR);
                                 break;
                             case INFO:
                                 listener.onServerMessage(line);
@@ -534,6 +535,7 @@ public class Client extends Thread implements ClientTalker {
         try {
             if(isSecureConnection()){
                 try {
+
                     outgoing.writeObject(MessageCryptography.encryptData(
                             sessionKey,
                             ClientMessageHandler.createEncryptedMessage(

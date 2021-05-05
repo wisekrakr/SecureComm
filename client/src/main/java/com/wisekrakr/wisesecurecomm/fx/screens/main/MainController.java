@@ -43,7 +43,7 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
 
     private final AbstractGUI gui;
     private final EventManager eventManager;
-    private final User user;
+    private User user;
     @FXML private BorderPane borderPane;
     @FXML private TextArea messageBox;
     @FXML private Label usernameLabel,onlineCountLabel;
@@ -93,9 +93,15 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
                 .getResource("images/microphone.png")).toExternalForm());
 
         statusComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+
+            System.out.println("new value change: " + newValue);
+
             switch (newValue){
                 case "Online":
+
                     if(!user.getStatus().equals(User.Status.ONLINE)){
+                        user = refreshUser(User.Status.ONLINE);
+
                         Thread thread = new Thread(sendStatus(User.Status.ONLINE));
                         thread.start();
                         thread.interrupt();
@@ -104,20 +110,28 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
                     break;
                 case "Offline":
                     if(!user.getStatus().equals(User.Status.OFFLINE)){
+                        user = refreshUser(User.Status.OFFLINE);
+
                         Thread thread = new Thread(sendStatus(User.Status.OFFLINE));
                         thread.start();
                         thread.interrupt();
                     }
                     break;
                 case "Away":
+
                     if(!user.getStatus().equals(User.Status.AWAY)){
+                        user = refreshUser(User.Status.AWAY);
+
                         Thread thread = new Thread(sendStatus(User.Status.AWAY));
                         thread.start();
                         thread.interrupt();
                     }
                     break;
                 case "Busy":
+
                     if(!user.getStatus().equals(User.Status.BUSY)){
+                        user = refreshUser(User.Status.BUSY);
+
                         Thread thread = new Thread(sendStatus(User.Status.BUSY));
                         thread.start();
                         thread.interrupt();
@@ -151,6 +165,16 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
 
 // ## Begin AppListener Methods
     @Override
+    public User refreshUser(User.Status status) {
+        return User.newBuilder()
+                .setId(user.getId())
+                .setName(user.getName())
+                .setStatus(status)
+                .setProfilePicture(user.getProfilePicture())
+                .build();
+    }
+
+    @Override
     public Runnable sendInvite(User invitee) {
         return ()-> eventManager.directMessageAPI().inviteToPrivateConversation(
                 user,
@@ -181,7 +205,6 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
 
     @Override
     public void setUserList(Map<Integer, User> users, User activeUser) {
-
         ArrayList<User>listOfUsers = new ArrayList<>(users.values());
 
         // add new user in the user list

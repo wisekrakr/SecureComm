@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ClientTalker {
 
-    User createUser(int id, String username, User.Status status, String profilePicture);
+    User createUser(Integer id, String username, User.Status status, String profilePicture);
 
     /**
      * Connect the client to the server

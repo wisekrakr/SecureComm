@@ -237,6 +237,8 @@ public class ClientHandler {
 							break;
 						case NOTIFICATION:
 							if (messageObject.getMessageType().getNotificiations() == MessageType.Notifications.USER_STATUS) {
+								System.out.println("STATUS CHANGE: \n"+ messageObject.getOwner().getStatus());
+
 								listener.onClientStatusUpdate(messageObject);
 							} else {
 								throw new IllegalStateException("Unexpected message type: " + messageObject.getMessageType());

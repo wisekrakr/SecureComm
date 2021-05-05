@@ -4,4 +4,3 @@ serverKeys.keyStore
 trustedEntities.trustStore
 debug_client.log
 debug_server.log
-proto

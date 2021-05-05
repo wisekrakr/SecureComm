@@ -11,6 +11,6 @@ public interface AppListener {
     Runnable sendStatus(User.Status status);
     void sendAudioMessage(byte[] audioBytes, int duration);
     void setUserList(Map<Integer, User> users, User activeUser);
-
     void queueFilesToOpen(String line, MessageObject fileObject);
+    User refreshUser(User.Status status);
 }

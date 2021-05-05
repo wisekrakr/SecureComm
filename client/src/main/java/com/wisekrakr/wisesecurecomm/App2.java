@@ -15,7 +15,9 @@ public class App2 implements Serializable {
 
     public static void main(String[] args) {
         if(System.getProperty("javax.net.ssl.trustStore") == null || System.getProperty("javax.net.ssl.trustStorePassword") == null) {
-            System.setProperty("javax.net.ssl.trustStore", "sslclienttrust");
+            System.setProperty("javax.net.ssl.trustStore", "trustedEntities.trustStore");
+            System.setProperty("javax.net.ssl.trustStoreType", "JKS");
+
             System.setProperty("javax.net.ssl.trustStorePassword", "123456");
 //            System.setProperty("javax.net.debug", "all");
         }
