@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Point3D?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="borderPane" maxHeight="620.0" maxWidth="1040.0" prefHeight="620.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+    <center>
+        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+            <children>
+                <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pannable="true" prefHeight="496.0" style="-fx-background-color: #181818;" vbarPolicy="ALWAYS" vmin="1.0" vvalue="1.0" VBox.vgrow="ALWAYS">
+                    <content>
+                        <ListView fx:id="chatPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#receiveMessage" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #181818;" stylesheets="@../styles/listViewStyle.css" />
+                    </content>
+                </ScrollPane>
+                <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="100.0" style="-fx-background-color: #808080;" VBox.vgrow="NEVER">
+                    <children>
+                        <TextArea id="messageBox" fx:id="messageBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="100.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="44.0" prefWidth="617.0" promptText="Enter Message..." scaleShape="false" HBox.hgrow="ALWAYS">
+                            <font>
+                                <Font name="Gotham-Ultra" size="13.0" />
+                            </font>
+                        </TextArea>
+                        <Button fx:id="buttonSend" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#sendButtonAction" prefHeight="44.0" prefWidth="226.0" scaleShape="false" style="-fx-background-color: #181818;" text="Send" textAlignment="CENTER" textFill="#d7cfcf" HBox.hgrow="NEVER">
+                     <font>
+                        <Font name="Gotham-Ultra" size="25.0" />
+                     </font></Button>
+                  <Button fx:id="receiveButton" layoutX="793.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMousePressed="#openFileTransferGUI" prefHeight="44.0" prefWidth="56.0" style="-fx-background-color: #181818;">
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/transfer.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                        <Button fx:id="recordButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMousePressed="#recordAudioMessage" prefHeight="44.0" prefWidth="56.0" style="-fx-background-color: #181818;">
+                            <graphic>
+                                <ImageView fx:id="microphoneImageView" fitHeight="24.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../images/microphone.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic></Button>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </center>
+    <left>
+        <VBox maxHeight="1.7976931348623157E308" BorderPane.alignment="CENTER">
+            <children>
+                <HBox fx:id="onlineUsersHbox" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="217.0" style="-fx-background-color: #181818;" stylesheets="@../styles/listViewStyle.css">
+                    <children>
+                        <Label prefHeight="50.0" prefWidth="124.0" text="Online Users:" textAlignment="CENTER" textFill="#d7cfcf">
+                            <font>
+                                <Font name="SansSerif Regular" size="14.0" />
+                            </font>
+                            <padding>
+                                <Insets left="10.0" />
+                            </padding>
+                            <opaqueInsets>
+                                <Insets bottom="10.0" />
+                            </opaqueInsets>
+                        </Label>
+                        <Label fx:id="onlineCountLabel" prefHeight="48.0" prefWidth="94.0" text="0" textFill="#d7cfcf">
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                            <font>
+                                <Font name="SansSerif Regular" size="14.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+                <ListView fx:id="userList" focusTraversable="false" maxHeight="1.7976931348623157E308" onMouseClicked="#selectUser" prefHeight="495.0" prefWidth="217.0" style="-fx-border-width: 3; -fx-border-color: #757373; -fx-background-color: #181818;" stylesheets="@../styles/listViewStyle.css">
+                </ListView>
+            </children>
+        </VBox>
+    </left>
+    <top>
+        <BorderPane fx:id="topPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #181818;" BorderPane.alignment="CENTER">
+            <center>
+                <ImageView fitHeight="124.0" fitWidth="79.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                    <image>
+                        <Image url="@../images/logo.png" />
+                    </image>
+                    <BorderPane.margin>
+                        <Insets left="100.0" right="100.0" />
+                    </BorderPane.margin>
+               <effect>
+                  <ColorAdjust brightness="0.19" contrast="-0.21" saturation="-0.1" />
+               </effect>
+                </ImageView>
+            </center>
+            <right>
+                <HBox prefHeight="24.0" prefWidth="30.0" stylesheets="@../styles/buttonStyle.css" BorderPane.alignment="CENTER">
+                    <children>
+                  <ImageView fx:id="clickToConnectImage" fitHeight="79.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/clickToConnect.png" />
+                     </image>
+                  </ImageView>
+                        <ImageView fitHeight="23.0" fitWidth="30.0" onMouseClicked="#connect" pickOnBounds="true" preserveRatio="true" styleClass="button">
+                            <image>
+                                <Image url="@../images/connect.png" />
+                            </image>
+                            <HBox.margin>
+                                <Insets right="30.0" top="30.0" />
+                            </HBox.margin>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                        </ImageView>
+                        <ImageView fitHeight="22.0" fitWidth="21.0" onMousePressed="#disconnect" pickOnBounds="true" preserveRatio="true" styleClass="button">
+                            <image>
+                                <Image url="@../images/close_normal.png" />
+                            </image>
+                            <HBox.margin>
+                                <Insets right="30.0" top="30.0" />
+                            </HBox.margin>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                        </ImageView>
+                    </children>
+                </HBox>
+            </right>
+            <left>
+                <HBox prefHeight="79.0" prefWidth="245.0" BorderPane.alignment="CENTER">
+                    <children>
+                  <Circle fx:id="userImage" fill="#1f26ff00" radius="34.0" stroke="BLACK" strokeType="INSIDE" translateY="-5.0">
+                     <HBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </HBox.margin>
+                  </Circle>
+                        <VBox>
+                            <HBox.margin>
+                                <Insets left="10.0" top="30.0" />
+                            </HBox.margin>
+                            <children>
+                                <Label fx:id="usernameLabel" text="User" textFill="#d3d2d2">
+                                    <font>
+                                        <Font name="Gotham-Ultra" size="14.0" />
+                                    </font>
+                           <VBox.margin>
+                              <Insets left="20.0" />
+                           </VBox.margin>
+                                </Label>
+                                <ComboBox id="combo-box" fx:id="statusComboBox" prefHeight="25.0" prefWidth="118.0" promptText="Online" stylesheets="@../styles/comboBoxStyle.css">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="Online" />
+                                            <String fx:value="Away" />
+                                            <String fx:value="Busy" />
+                                        </FXCollections>
+                                    </items>
+                           <VBox.margin>
+                              <Insets left="12.0" />
+                           </VBox.margin>
+                                </ComboBox>
+                            </children>
+                        </VBox>
+                    </children></HBox>
+            </left>
+         <top>
+            <MenuBar style="-fx-background-color: #181818;" stylesheets="@../styles/menuStyle.css" BorderPane.alignment="CENTER">
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#disconnect" text="Close" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Delete" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+         </top>
+        </BorderPane>
+    </top>
+    <rotationAxis>
+        <Point3D />
+    </rotationAxis>
+</BorderPane>

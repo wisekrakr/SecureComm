@@ -1,0 +1,46 @@
+.list-cell {
+    -fx-animated: true;
+    -fx-padding: 1px;
+    -fx-font-size: 12.0;
+    -fx-font-family: 'Gotham Ultra';
+}
+
+.list-cell:odd{
+    -fx-background-color: #181818;
+}
+
+.list-cell:even{
+    -fx-background-color: #181818;
+}
+
+.list-cell:hover{
+    -fx-background-color: #a3a3a3;
+}
+
+.list-view {
+    -fx-border-image-width: 0;
+}
+
+#statusList {
+    -fx-box-border: transparent;
+}
+
+#userList {
+    -fx-box-border: transparent;
+}
+
+#listHbox {
+    -fx-background-color: #565656;
+    -fx-padding: 0.2;
+    -fx-spacing: -2;
+}
+
+#onlineUsersHbox {
+    -fx-border-color: #565656;
+    -fx-border-width: 1px;
+    -fx-padding: 0.2;
+    -fx-spacing: -2;
+}
+
+
+
