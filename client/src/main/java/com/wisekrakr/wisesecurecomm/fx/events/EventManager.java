@@ -244,8 +244,8 @@ public class EventManager implements EventListener {
             }
 
             @Override
-            public void recordAudio() {
-                audioManager.recordAudio(mainGui.getController());
+            public void recordAudio(ArrayList<User> recipients) {
+                audioManager.recordAudio(mainGui.getController(),recipients);
             }
 
             @Override

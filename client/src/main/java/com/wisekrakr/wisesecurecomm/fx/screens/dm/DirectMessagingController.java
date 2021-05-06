@@ -30,9 +30,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class DirectMessagingController extends AbstractJFXPanel implements ControllerContext {
 
@@ -215,7 +213,7 @@ public class DirectMessagingController extends AbstractJFXPanel implements Contr
             } else {
                 AudioUtil.setRecording(true);
                 Platform.runLater(() -> microphoneImageView.setImage(microphoneActiveImage));
-                eventManager.voiceMessageAPI().recordAudio();
+                eventManager.voiceMessageAPI().recordAudio(new ArrayList<>(Collections.singleton(other)));
             }
         }else{
             eventManager.showNotification(

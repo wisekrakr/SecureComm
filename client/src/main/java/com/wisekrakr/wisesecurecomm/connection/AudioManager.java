@@ -2,6 +2,7 @@ package com.wisekrakr.wisesecurecomm.connection;
 
 
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
+import com.wisekrakr.wisesecurecomm.communication.proto.User;
 import com.wisekrakr.wisesecurecomm.fx.events.EventManager;
 import com.wisekrakr.wisesecurecomm.fx.screens.main.MainController;
 import com.wisekrakr.wisesecurecomm.fx.screens.traynotifications.TrayNotificationType;
@@ -10,6 +11,8 @@ import javax.sound.sampled.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AudioManager extends AudioUtil {
 
@@ -41,7 +44,7 @@ public class AudioManager extends AudioUtil {
         }
     }
 
-    public void recordAudio(MainController controller) {
+    public void recordAudio(MainController controller, ArrayList<User> recipients) {
         Thread captureThread = new Thread(() -> {
             final int bufferSize = (int) format.getSampleRate() * format.getFrameSize();
             final byte[] buffer = new byte[bufferSize];
@@ -69,7 +72,7 @@ public class AudioManager extends AudioUtil {
 
                 System.out.println("DURATION = " + duration + " /s");
 
-                controller.sendAudioMessage(bytesToSend,duration);
+                controller.sendAudioMessage(bytesToSend,duration, recipients);
             } catch (Throwable e) {
                 throw new IllegalStateException("Capture thread has stopped unexpectedly ", e);
             }

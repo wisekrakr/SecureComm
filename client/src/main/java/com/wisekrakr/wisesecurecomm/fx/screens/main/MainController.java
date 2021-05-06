@@ -185,7 +185,7 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
     }
 
     @Override
-    public void sendAudioMessage(byte[] audioBytes, int duration) {
+    public void sendAudioMessage(byte[] audioBytes, int duration, ArrayList<User> recipients) {
         eventManager.voiceMessageAPI().sendAudioMessage(audioBytes, duration, user, recipients);
     }
 
@@ -308,7 +308,7 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
             } else {
                 AudioUtil.setRecording(true);
                 Platform.runLater(() -> microphoneImageView.setImage(microphoneActiveImage));
-                eventManager.voiceMessageAPI().recordAudio();
+                eventManager.voiceMessageAPI().recordAudio(recipients);
             }
         }else{
             eventManager.showNotification(
@@ -493,6 +493,7 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
                                 break;
                             case VOICE_CHAT:
                                 bubbledLabel.setText(
+                                        "Your audio message \n" +
                                         messageToShow +
                                         "\n Click to open voice player \n" +
                                         " Audio message with size " +
