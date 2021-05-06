@@ -80,22 +80,13 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
         usernameLabel.setText(user.getName());
         userImage.setFill(new ImagePattern(new Image(user.getProfilePicture())));
 
-        int numberOfCircles = 7;
-        while (numberOfCircles > 0){
-//            ShapeAnimations.generateSquareAnimation(300, 75, MainGUI.DESIRED_WIDTH, MainGUI.DESIRED_HEIGHT, borderPane);
-
-            numberOfCircles--;
-        }
-
         microphoneActiveImage = new Image(Objects.requireNonNull(getClass().getClassLoader()
                 .getResource("images/microphone-active.png")).toExternalForm());
         microphoneInactiveImage = new Image(Objects.requireNonNull(getClass().getClassLoader()
                 .getResource("images/microphone.png")).toExternalForm());
 
+        // change user status
         statusComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-
-            System.out.println("new value change: " + newValue);
-
             switch (newValue){
                 case "Online":
 
@@ -140,7 +131,7 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
             }
         });
 
-        /* Added to prevent the enter from adding a new line to inputMessageBox */
+        // added to prevent the enter from adding a new line to inputMessageBox
         messageBox.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
                 sendButtonAction();
@@ -148,18 +139,18 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
             }
         });
 
+        // drag functionality
         borderPane.setOnMousePressed(event -> {
             xOffset = gui.getX() - event.getScreenX();
             yOffset = gui.getY() - event.getScreenY();
             borderPane.setCursor(Cursor.CLOSED_HAND);
         });
-
         borderPane.setOnMouseDragged(event -> gui.setBounds(
                 (int)(event.getScreenX() + xOffset), (int)(event.getScreenY() + yOffset), gui.getWidth(), gui.getHeight()));
-
         borderPane.setOnMouseReleased(event -> borderPane.setCursor(Cursor.DEFAULT));
 
-        messageBox.setWrapText(true); //no horizontal scrollbar
+        //no horizontal scrollbar
+        messageBox.setWrapText(true);
 
     } // ## End Controller Context Methods
 
@@ -213,6 +204,7 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
 
             recipients.add(
                     User.newBuilder()
+                            .setId(activeUser.getId())
                             .setName(activeUser.getName())
                             .setProfilePicture(activeUser.getProfilePicture())
                             .setStatus(activeUser.getStatus())
@@ -439,6 +431,7 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
                     case COMMAND:
                         switch (messageObject.getMessageType().getCommands()){
                             case DM_REQUEST:
+                                System.out.println("MAINCONTROLLER DM REQUEST");
                                 bubbledLabel.setText(messageToShow);
                                 addActionRequired(messageObject, messageToShow);
                                 break;

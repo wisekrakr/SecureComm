@@ -305,9 +305,13 @@ public class Server  {
 
                     @Override
                     public void onDMCommand(String line, MessageObject messageObject) {
+                        System.out.println("GOT DM COMMAND == " + messageObject.getRecipients(0));
+
                         for (ClientHandler clientHandler : clientHandlers.values()) {
-                            if (clientHandler != clientHandlerAlpha &&
-                                    clientHandler.getUser().getId() == messageObject.getRecipients(0).getId()) {
+
+                            System.out.println("ID's " + clientHandler.getUser().getId());
+
+                            if (clientHandler.getUser().getId() == messageObject.getRecipients(0).getId()) {
 
                                 sendMessage(
                                         createCommandMessage(
@@ -336,15 +340,15 @@ public class Server  {
                         for (ClientHandler clientHandler : clientHandlers.values()) {
                             if (clientHandler != clientHandlerAlpha) {
                                 // send small message so that other client know this user is gone
-//                                sendMessage(
-//                                        createNotificationMessage(
-//                                                MessageType.Notifications.INFO,
-//                                                "//// User " + clientHandlerAlpha.getUser().getName() + " has left ////",
-//                                                clientHandlerAlpha.getUser(),
-//                                                clientHandler.getUser()
-//                                        ),
-//                                        clientHandler
-//                                );
+                                sendMessage(
+                                        createNotificationMessage(
+                                                MessageType.Notifications.INFO,
+                                                "//// User " + clientHandlerAlpha.getUser().getName() + " has left ////",
+                                                clientHandlerAlpha.getUser(),
+                                                clientHandler.getUser()
+                                        ),
+                                        clientHandler
+                                );
                                 // update user list for other clients still connected
                                 sendMessage(
                                         createNotificationMessage(
@@ -465,7 +469,7 @@ public class Server  {
                 } else {
                     clientHandler.getOutgoing().writeObject(Base64.getEncoder().encode(messageObject.toByteArray()));
                 }
-//				out.flush();
+//				clientHandler.getOutgoing().flush();
             } catch (Throwable t) {
                 throw new IllegalStateException("Error in sending message", t);
             }

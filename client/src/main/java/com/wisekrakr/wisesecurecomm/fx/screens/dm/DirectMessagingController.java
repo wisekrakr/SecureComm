@@ -246,7 +246,7 @@ public class DirectMessagingController extends AbstractJFXPanel implements Contr
         Thread thread = new Thread(sendBye());
         thread.start();
 
-        eventManager.removeDirectMessagingGUI(user, "Ended private conversation with " + other, other);
+        eventManager.removeDirectMessagingGUI(user, "Ended private conversation with " + other.getName(), other);
 
         thread.interrupt();
     }

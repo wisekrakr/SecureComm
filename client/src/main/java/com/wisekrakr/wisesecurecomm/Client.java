@@ -317,6 +317,7 @@ public class Client extends Thread implements ClientTalker {
                     case COMMAND:
                         switch (messageObject.getMessageType().getCommands()){
                             case DM_REQUEST:
+                                System.out.println("GOT DM REQUEST");
                                 listener.onDirectMessageRequestReceived(line, messageObject);
                                 break;
                             case DM_RESPONSE:
