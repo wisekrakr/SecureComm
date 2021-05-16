@@ -4,110 +4,94 @@
 package com.wisekrakr.wisesecurecomm.communication.proto;
 
 public interface MessageObjectOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:MessageObject)
+    // @@protoc_insertion_point(interface_extends:com.wisekrakr.wisesecurecomm.communication.proto.MessageObject)
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>int32 id = 1;</code>
+   * <code>int64 id = 1;</code>
    * @return The id.
    */
-  int getId();
+  long getId();
 
   /**
-   * <code>.MessageObject.ObjectType objectType = 2;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType object_type = 2;</code>
    * @return The enum numeric value on the wire for objectType.
    */
   int getObjectTypeValue();
   /**
-   * <code>.MessageObject.ObjectType objectType = 2;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType object_type = 2;</code>
    * @return The objectType.
    */
-  MessageObject.ObjectType getObjectType();
+  com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType getObjectType();
 
   /**
-   * <code>.MessageType messageType = 3;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType message_type = 3;</code>
    * @return Whether the messageType field is set.
    */
   boolean hasMessageType();
   /**
-   * <code>.MessageType messageType = 3;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType message_type = 3;</code>
    * @return The messageType.
    */
-  MessageType getMessageType();
+  com.wisekrakr.wisesecurecomm.communication.proto.MessageType getMessageType();
   /**
-   * <code>.MessageType messageType = 3;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType message_type = 3;</code>
    */
-  MessageTypeOrBuilder getMessageTypeOrBuilder();
+  com.wisekrakr.wisesecurecomm.communication.proto.MessageTypeOrBuilder getMessageTypeOrBuilder();
 
   /**
-   * <code>string textMessage = 4;</code>
+   * <code>string text_message = 4;</code>
    * @return The textMessage.
    */
-  String getTextMessage();
+  java.lang.String getTextMessage();
   /**
-   * <code>string textMessage = 4;</code>
+   * <code>string text_message = 4;</code>
    * @return The bytes for textMessage.
    */
   com.google.protobuf.ByteString
       getTextMessageBytes();
 
   /**
-   * <code>bytes voiceMessage = 5;</code>
+   * <code>bytes voice_message = 5;</code>
    * @return The voiceMessage.
    */
   com.google.protobuf.ByteString getVoiceMessage();
 
   /**
-   * <code>.FileInfo fileInfo = 6;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.FileInfo file_info = 6;</code>
    * @return Whether the fileInfo field is set.
    */
   boolean hasFileInfo();
   /**
-   * <code>.FileInfo fileInfo = 6;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.FileInfo file_info = 6;</code>
    * @return The fileInfo.
    */
-  FileInfo getFileInfo();
+  com.wisekrakr.wisesecurecomm.communication.proto.FileInfo getFileInfo();
   /**
-   * <code>.FileInfo fileInfo = 6;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.FileInfo file_info = 6;</code>
    */
-  FileInfoOrBuilder getFileInfoOrBuilder();
+  com.wisekrakr.wisesecurecomm.communication.proto.FileInfoOrBuilder getFileInfoOrBuilder();
 
   /**
-   * <code>.User owner = 7;</code>
-   * @return Whether the owner field is set.
+   * <code>int64 owner_id = 7;</code>
+   * @return The ownerId.
    */
-  boolean hasOwner();
-  /**
-   * <code>.User owner = 7;</code>
-   * @return The owner.
-   */
-  User getOwner();
-  /**
-   * <code>.User owner = 7;</code>
-   */
-  UserOrBuilder getOwnerOrBuilder();
+  long getOwnerId();
 
   /**
-   * <code>repeated .User recipients = 8;</code>
+   * <code>repeated int64 recipients_ids = 8;</code>
+   * @return A list containing the recipientsIds.
    */
-  java.util.List<User>
-      getRecipientsList();
+  java.util.List<java.lang.Long> getRecipientsIdsList();
   /**
-   * <code>repeated .User recipients = 8;</code>
+   * <code>repeated int64 recipients_ids = 8;</code>
+   * @return The count of recipientsIds.
    */
-  User getRecipients(int index);
+  int getRecipientsIdsCount();
   /**
-   * <code>repeated .User recipients = 8;</code>
+   * <code>repeated int64 recipients_ids = 8;</code>
+   * @param index The index of the element to return.
+   * @return The recipientsIds at the given index.
    */
-  int getRecipientsCount();
-  /**
-   * <code>repeated .User recipients = 8;</code>
-   */
-  java.util.List<? extends UserOrBuilder>
-      getRecipientsOrBuilderList();
-  /**
-   * <code>repeated .User recipients = 8;</code>
-   */
-  UserOrBuilder getRecipientsOrBuilder(
-      int index);
+  long getRecipientsIds(int index);
 }

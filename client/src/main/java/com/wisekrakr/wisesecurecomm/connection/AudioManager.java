@@ -2,7 +2,7 @@ package com.wisekrakr.wisesecurecomm.connection;
 
 
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
-import com.wisekrakr.wisesecurecomm.communication.proto.User;
+import com.wisekrakr.wisesecurecomm.communication.user.User;
 import com.wisekrakr.wisesecurecomm.fx.events.EventManager;
 import com.wisekrakr.wisesecurecomm.fx.screens.main.MainController;
 import com.wisekrakr.wisesecurecomm.fx.screens.traynotifications.TrayNotificationType;
@@ -12,7 +12,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 public class AudioManager extends AudioUtil {
 

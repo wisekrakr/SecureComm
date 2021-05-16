@@ -4,9 +4,10 @@ import com.google.protobuf.ByteString;
 import com.wisekrakr.wisesecurecomm.communication.crypto.MessageCryptography;
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageType;
-import com.wisekrakr.wisesecurecomm.communication.proto.User;
-import com.wisekrakr.wisesecurecomm.communication.proto.id.IDMode;
-import com.wisekrakr.wisesecurecomm.communication.proto.id.IntIDGenerator;
+import com.wisekrakr.wisesecurecomm.communication.user.Status;
+import com.wisekrakr.wisesecurecomm.communication.user.User;
+import com.wisekrakr.wisesecurecomm.communication.user.id.IDMode;
+import com.wisekrakr.wisesecurecomm.communication.user.id.LongIDGenerator;
 import com.wisekrakr.wisesecurecomm.connection.FileTransferManager;
 import com.wisekrakr.wisesecurecomm.fx.screens.traynotifications.TrayNotificationType;
 
@@ -14,21 +15,20 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
-import java.io.File;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
-public class Client extends Thread implements ClientTalker {
+public class Client implements ClientTalker {
 
     private ClientListener listener;
-
+    private Thread clientThread;
     private User user;
 
-    private final Map<Integer, User> users = new HashMap<>();
+    private final Map<Long, User> users = new HashMap<>();
     private final HashMap<String, File> queuedFiles = new HashMap<>();
 
     private SSLSocket clientSocket;
@@ -42,7 +42,6 @@ public class Client extends Thread implements ClientTalker {
     private boolean isSecure = false;
     private boolean isVerified = false;
 
-    private Thread communicationThread;
     private double calculatedSentTime;
     private Thread sendThread;
 
@@ -82,19 +81,44 @@ public class Client extends Thread implements ClientTalker {
     }
 
     @Override
-    public User createUser(Integer id, String username, User.Status status, String profilePicture) {
-        IntIDGenerator idGenerator = new IntIDGenerator(1501936765671L, 0, 32, 0, 0, IDMode.SEQUENCE_UID_TIME);
-        return User.newBuilder()
-                .setId(id != null ? id : idGenerator.generateIntId())
-                .setName(username)
-                .setProfilePicture(profilePicture)
-                .setStatus(status)
-                .build();
+    public User createUser(Long id, String username, Status status, String profilePicture) {
+        LongIDGenerator longIdGenerator = new LongIDGenerator(1507141731000L, 0, 41, 10, 13, IDMode.TIME_UID_SEQUENCE);
+
+        return new User(id != null ? id : longIdGenerator.generateLongId(), username, status, profilePicture);
+    }
+
+    @Override
+    public User getUser(Long id) {
+        User u = null;
+
+        if(id != null){
+            for (User otherUser: users.values()){
+                if (otherUser.getId() == id)
+                    u = otherUser;
+            }
+        }
+
+        return u;
+    }
+
+    @Override
+    public List<User> getRecipientList(List<Long> recipientsIds) {
+        List<User> clients = new ArrayList<>();
+
+        for(User u: users.values()){
+            for (Long l: recipientsIds){
+                if(u.getId() == l){
+                    clients.add(u);
+                }
+            }
+        }
+
+        return clients;
     }
 
     @Override
     public void connectClient(String hostname, int port, String username, String profilePicture){
-        this.user = createUser(null, username, User.Status.ONLINE, profilePicture);
+        this.user = createUser(null, username, Status.ONLINE, profilePicture);
 
         try {
             SSLSocketFactory sslSocketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
@@ -119,25 +143,27 @@ public class Client extends Thread implements ClientTalker {
             if(clientSocket.isConnected()) {
                 listener.onConnecting(0.2);
 
+                String userAsString = convertUserToString(user);
+
                 // tell server my identity
                 sendMessage(ClientMessageHandler.createMessage(
-                        username,
-                        user,
-                        new ArrayList<>(Collections.singleton(User.newBuilder().setName("WISE ADMIN").build()))
+                        userAsString,
+                        user.getId(),
+                        new ArrayList<>(Collections.singleton(0L))
                 ));
 
                 // wait for server to accept request, restart if rejected
                 MessageObject messageObject = MessageObject.parseFrom(Base64.getDecoder().decode((byte[]) incoming.readObject()));
 
-                System.out.println("Client: server got my id: " + messageObject.getOwner().getId());
+                System.out.println("Client: server got my id: " + messageObject.getOwnerId());
                 listener.onConnecting(0.2);
 
                 // send response to user if the server denies connection and restart client
-                if(messageObject.getOwner().getId() != user.getId()){
+                if(messageObject.getOwnerId() != user.getId()){
                     System.out.println("Server rejected connection!");
                     listener.onServerRejection();
                 }else{
-                    listener.onAuthenticated(this.user);
+                    listener.onAuthenticated(user);
                 }
             }
         } catch (Throwable t){
@@ -145,67 +171,265 @@ public class Client extends Thread implements ClientTalker {
         }
     }
 
-    @Override
-    public void run() {
-        try {
-            if (systemConnected()) {
-                startCommunication();
+    public void startClientThread() {
+        clientThread = new Thread(() -> {
+            try {
+                if (systemConnected()) {
+                    boolean firstContact = true;
 
-                boolean firstContact = false;
+                    try {
+                        while (!isStopped) {
+                            //Create a secure line
+                            if (firstContact) {
 
-                try {
-                    while (!isStopped) {
-                        //Create a secure line
-                        if (!firstContact) {
-
-                            sendMessage(ClientMessageHandler.createSecurityMessage(
-                                    MessageType.Security.GET_SECURE,
-                                    "[CMD_SECURITY]",
-                                    user,
-                                    User.newBuilder().setName("WISE ADMIN").build()
-                            ));
-                            try {
                                 sendMessage(ClientMessageHandler.createSecurityMessage(
-                                        MessageType.Security.PUBLIC_KEY,
-                                        MessageCryptography.getHex(keyPair.getPublic().getEncoded()),
-                                        user,
-                                        User.newBuilder().setName("WISE ADMIN").build()
+                                        MessageType.Security.GET_SECURE,
+                                        "[CMD_SECURITY]",
+                                        user.getId(),
+                                        0L
                                 ));
+                                try {
+                                    sendMessage(ClientMessageHandler.createSecurityMessage(
+                                            MessageType.Security.PUBLIC_KEY,
+                                            MessageCryptography.getHex(keyPair.getPublic().getEncoded()),
+                                            user.getId(),
+                                            0L
+                                    ));
 
-                                isSecure = true;
-                                firstContact = true;
-                            } catch (Throwable t) {
-                                listener.onNotSecureConnection();
-                                throw new IllegalArgumentException("Failed securing client", t);
+                                    isSecure = true;
+                                    firstContact = false;
+                                } catch (Throwable t) {
+                                    listener.onNotSecureConnection();
+                                    throw new IllegalArgumentException("Failed securing client", t);
+                                }
+                            }
+
+
+                            String line;
+                            MessageObject messageObject;
+
+                            while (!Thread.currentThread().isInterrupted() && incoming != null) {
+                                try {
+                                    if (isSecureConnection()) {
+                                        messageObject = MessageObject.parseFrom(
+                                                MessageCryptography.decryptData(
+                                                        sessionKey,
+                                                        (byte[]) incoming.readObject()
+                                                )
+                                        );
+
+                                        line = new String(
+                                                MessageCryptography.decryptData(
+                                                        sessionKey,
+                                                        MessageCryptography.getBytes(messageObject.getTextMessage())
+                                                )
+                                        );
+                                    }else {
+                                        messageObject = MessageObject.parseFrom(Base64.getDecoder().decode((byte[]) incoming.readObject()));
+                                        line = messageObject.getTextMessage();
+
+                                    }
+                                }catch(Throwable t){
+                                    listener.onNotification(
+                                            "Message Failure",
+                                            "Could not receive message \n" + t.getMessage(),
+                                            TrayNotificationType.ERROR
+                                    );
+                                    throw new IllegalStateException("Error in receiving encrypted secure message", t);
+                                }
+
+                                switch (messageObject.getObjectType()){
+                                    case SECURITY:
+                                        switch (messageObject.getMessageType().getSecurity()){
+                                            case PUBLIC_KEY:
+                                                System.out.println("*** Got public key from server! *** ");
+//                                    encryptionKey = new SecretKeySpec(
+//                                            MessageCryptography.encryptionKey(keyPair.getPublic(),
+//                                                    MessageCryptography.getBytes(line)),
+//                                            Constants.AES);
+                                                break;
+                                            case SESSION_KEY:
+                                                sessionKey = new SecretKeySpec(
+                                                        MessageCryptography.decipherKey(
+                                                                keyPair.getPrivate(),
+                                                                MessageCryptography.getBytes(line)
+                                                        ),
+                                                        Constants.AES
+                                                );
+
+                                                System.out.println("*** Got session key ***");
+                                                try {
+                                                    sendMessage(ClientMessageHandler.createSecurityMessage(
+                                                            MessageType.Security.SESSION_KEY,
+                                                            MessageCryptography.getHex(
+                                                                    MessageCryptography.signedKey(
+                                                                            keyPair.getPrivate(),
+                                                                            sessionKey.getEncoded()
+                                                                    )
+                                                            ),
+                                                            user.getId(),
+                                                            0L
+                                                    ));
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+                                                break;
+                                            case VERIFY:
+                                                isVerified = true;
+                                                System.out.println("*** Got verification from server! ***");
+
+                                                sendMessage(ClientMessageHandler.createSecurityMessage(
+                                                        MessageType.Security.VERIFY,
+                                                        MessageCryptography.getHex(
+                                                                MessageCryptography.encryptData(
+                                                                        sessionKey,
+                                                                        line.getBytes()
+                                                                )
+                                                        ),
+                                                        user.getId(),
+                                                        0L
+                                                ));
+                                                break;
+                                            default:
+                                                throw new IllegalStateException("Unexpected security type: " + messageObject.getMessageType());
+                                        }
+                                        break;
+                                    case COMMAND:
+                                        switch (messageObject.getMessageType().getCommands()){
+                                            case DM_REQUEST:
+                                                listener.onDirectMessageRequestReceived(line, messageObject);
+                                                break;
+                                            case DM_RESPONSE:
+                                                if(line.equals("Yes")){
+                                                    listener.onInitializeDirectMessaging(
+                                                            getUser(messageObject.getRecipientsIds(0)),
+                                                            line,
+                                                            getUser(messageObject.getOwnerId())
+                                                    );
+                                                }else if(line.equals("No")){
+                                                    listener.onMessageReceived(
+                                                            getUser(messageObject.getOwnerId()).getName() + " does not want a private chat",
+                                                            messageObject
+                                                    );
+                                                }
+                                                break;
+                                            case DM_QUIT:
+                                                listener.onDirectMessageQuit(
+                                                        getUser(messageObject.getRecipientsIds(0)),
+                                                        line,
+                                                        getUser(messageObject.getOwnerId())
+                                                );
+                                                break;
+                                            case FILE_REQUEST:
+                                                listener.onFileTransferRequest(line, messageObject);
+                                                break;
+                                            case FILE_OK:
+                                                for (Map.Entry<String, File> file: queuedFiles.entrySet()){
+
+                                                    if(line.equals(file.getKey())){
+                                                        FileTransferManager.createSecureFileMessage(
+                                                                file.getValue(),
+                                                                getUser(messageObject.getOwnerId()) ,
+                                                                getRecipientList(messageObject.getRecipientsIdsList()),
+                                                                Client.this
+                                                        );
+                                                        queuedFiles.remove(file.getKey());
+                                                    }
+                                                }
+                                                break;
+                                            case APP_QUIT:
+                                                terminate();
+                                                break;
+                                            default:
+                                                throw new IllegalStateException("Unexpected command type: " + messageObject.getMessageType());
+                                        }
+                                        break;
+                                    case MESSAGE:
+                                        switch (messageObject.getMessageType().getMessage()){
+                                            case TEXT:
+                                                listener.onMessageReceived(line, messageObject);
+                                                break;
+                                            case DIRECT_CHAT:
+                                                listener.onDirectMessageReceived(line, messageObject);
+                                                break;
+                                            case FILE:
+                                                listener.onFileReceived(line, messageObject);
+
+                                                FileTransferManager.receiveSecureFileMessage(messageObject, incoming, user);
+                                                break;
+                                            case VOICE_CHAT:
+
+                                                listener.onAudioMessagedReceived(line, MessageObject.newBuilder()
+                                                        .setObjectType(messageObject.getObjectType())
+                                                        .setMessageType(messageObject.getMessageType())
+                                                        .setTextMessage(line)
+                                                        .setVoiceMessage(
+                                                                ByteString.copyFrom(MessageCryptography.decryptData(
+                                                                        sessionKey,
+                                                                        messageObject.getVoiceMessage().toByteArray())))
+                                                        .setFileInfo(messageObject.getFileInfo())
+                                                        .setOwnerId(messageObject.getOwnerId())
+                                                        .addAllRecipientsIds(messageObject.getRecipientsIdsList())
+                                                        .build()
+                                                );
+                                                break;
+                                            case COMMENT:
+//                                        listener.onCommentReceived(messageObject.getOwner(), line);
+                                                //todo show in sender gui how long it takes to upload
+                                                System.out.println("GOT SOMETHING " + line);
+                                                break;
+                                            default:
+                                                throw new IllegalStateException("Unexpected message type: " + messageObject.getMessageType());
+                                        }
+                                        break;
+                                    case NOTIFICATION:
+                                        switch (messageObject.getMessageType().getNotifications()){
+                                            case USER_ONLINE: // create user and put into HashMap with user id as key. Show on gui.
+                                                User newUser = convertStringToUser(line);
+
+                                                users.put(newUser.getId(), newUser);
+                                                listener.onGetOnlineUser(users, newUser); // show all users
+                                                break;
+                                            case USER_OFFLINE: // remove user out of HashMap. Remove name from gui.
+                                                User finalUser = getUser(messageObject.getOwnerId());
+                                                users.entrySet().removeIf(u -> u.getKey().equals(finalUser.getId()));
+                                                listener.onGetOnlineUser(users,finalUser);
+                                                break;
+                                            case USER_STATUS: // show status change in gui.
+                                                listener.onGetOnlineUser(users, getUser(messageObject.getOwnerId()));
+                                                break;
+                                            case ERROR:
+                                                listener.onNotification("Server error", line, TrayNotificationType.ERROR);
+                                                break;
+                                            case INFO:
+                                                listener.onServerMessage(line);
+                                                break;
+                                            default:
+                                                throw new IllegalStateException("Unexpected Notification type: " + messageObject.getMessageType());
+                                        }
+                                        break;
+                                    default:
+                                        throw new IllegalStateException("Unexpected object type: " + messageObject.getObjectType());
+                                }
                             }
                         }
-
-
+                    } catch (Throwable t) {
+                        throw new IllegalStateException("Error in securing connection", t);
                     }
-                    closeConnections();
-
-                } catch (Throwable t) {
-                    throw new IllegalStateException("Error in securing connection", t);
                 }
+            } catch (Throwable t) {
+                listener.onNotification(
+                        "Authentication Failure",
+                        "Client Thread Error: " + t.getMessage(),
+                        TrayNotificationType.ERROR
+                );
+
+                throw new IllegalStateException("Error in client thread",t);
             }
-        } catch (Throwable t) {
-            listener.onNotification(
-                    "Authentication Failure",
-                    "Client could not be authenticated: " + t.getMessage(),
-                    TrayNotificationType.ERROR
-            );
+        });
+        clientThread.setDaemon(true);
+        clientThread.start();
 
-            throw new IllegalStateException("Error during authentication protocol",t);
-        }
-    }
-
-    private void startCommunication(){
-        communicationThread = new Thread(new SecureConnectionSession());
-        communicationThread.start();
-    }
-
-    private void closeConnections(){
-        if(!communicationThread.isInterrupted())communicationThread.interrupt();
     }
 
     private boolean systemConnected(){
@@ -214,232 +438,6 @@ public class Client extends Thread implements ClientTalker {
 
     private boolean isSecureConnection(){
         return isSecure && isVerified && sessionKey != null;
-    }
-
-    /**
-     * Start a new SecureConnectionSession Runnable. This will keep going until the isStopped boolean is triggered.
-     * We receive encrypted byte arrays and parse them into Message Objects.
-     * When the incoming array is not encrypted with the session key from the server, it should be decoded with Base64
-     */
-    class SecureConnectionSession implements Runnable{
-
-        @Override
-        public void run() {
-            String line;
-            MessageObject messageObject;
-
-            while (!Thread.currentThread().isInterrupted() && incoming != null) {
-                try {
-                    if (isSecureConnection()) {
-                        messageObject = MessageObject.parseFrom(
-                                MessageCryptography.decryptData(
-                                        sessionKey,
-                                        (byte[]) incoming.readObject()
-                                )
-                        );
-
-                        line = new String(
-                                MessageCryptography.decryptData(
-                                        sessionKey,
-                                        MessageCryptography.getBytes(messageObject.getTextMessage())
-                                )
-                        );
-                    }else {
-                        messageObject = MessageObject.parseFrom(Base64.getDecoder().decode((byte[]) incoming.readObject()));
-                        line = messageObject.getTextMessage();
-
-                    }
-                }catch(Throwable t){
-                    listener.onNotification(
-                            "Message Failure",
-                            "Could not receive message \n" + t.getMessage(),
-                            TrayNotificationType.ERROR
-                    );
-                    throw new IllegalStateException("Error in receiving encrypted secure message", t);
-                }
-
-                switch (messageObject.getObjectType()){
-                    case SECURITY:
-                        switch (messageObject.getMessageType().getSecurity()){
-                            case PUBLIC_KEY:
-                                System.out.println("*** Got public key from server! *** ");
-//                                    encryptionKey = new SecretKeySpec(
-//                                            MessageCryptography.encryptionKey(keyPair.getPublic(),
-//                                                    MessageCryptography.getBytes(line)),
-//                                            Constants.AES);
-                                break;
-                            case SESSION_KEY:
-                                sessionKey = new SecretKeySpec(
-                                        MessageCryptography.decipherKey(
-                                                keyPair.getPrivate(),
-                                                MessageCryptography.getBytes(line)
-                                        ),
-                                        Constants.AES
-                                );
-
-                                System.out.println("*** Got session key ***");
-                                try {
-                                    sendMessage(ClientMessageHandler.createSecurityMessage(
-                                            MessageType.Security.SESSION_KEY,
-                                            MessageCryptography.getHex(
-                                                    MessageCryptography.signedKey(
-                                                            keyPair.getPrivate(),
-                                                            sessionKey.getEncoded()
-                                                    )
-                                            ),
-                                            user,
-                                            User.newBuilder().setId(0).setName("WISE ADMIN").build()
-                                    ));
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                break;
-                            case VERIFY:
-                                isVerified = true;
-                                System.out.println("*** Got verification from server! ***");
-
-                                sendMessage(ClientMessageHandler.createSecurityMessage(
-                                        MessageType.Security.VERIFY,
-                                        MessageCryptography.getHex(
-                                                MessageCryptography.encryptData(
-                                                        sessionKey,
-                                                        line.getBytes()
-                                                )
-                                        ),
-                                        user,
-                                        User.newBuilder().setId(0).setName("WISE ADMIN").build()
-                                ));
-                                break;
-                            default:
-                                throw new IllegalStateException("Unexpected security type: " + messageObject.getMessageType());
-                        }
-                        break;
-                    case COMMAND:
-                        switch (messageObject.getMessageType().getCommands()){
-                            case DM_REQUEST:
-                                System.out.println("GOT DM REQUEST");
-                                listener.onDirectMessageRequestReceived(line, messageObject);
-                                break;
-                            case DM_RESPONSE:
-                                if(line.equals("Yes")){
-                                    listener.onInitializeDirectMessaging(
-                                            messageObject.getRecipients(0),
-                                            line,
-                                            messageObject.getOwner()
-                                    );
-                                }else if(line.equals("No")){
-                                    listener.onMessageReceived(
-                                            messageObject.getOwner().getName() + " does not want a private chat",
-                                            messageObject
-                                    );
-                                }
-                                break;
-                            case DM_QUIT:
-                                listener.onDirectMessageQuit(
-                                        messageObject.getRecipients(0),
-                                        line,
-                                        messageObject.getOwner()
-                                );
-                                break;
-                            case FILE_REQUEST:
-                                listener.onFileTransferRequest(line, messageObject);
-                                break;
-                            case FILE_OK:
-                                for (Map.Entry<String, File> file: queuedFiles.entrySet()){
-
-                                    if(line.equals(file.getKey())){
-                                        FileTransferManager.createSecureFileMessage(
-                                                file.getValue(),
-                                                messageObject.getOwner(),
-                                                messageObject.getRecipientsList(),
-                                                Client.this
-                                        );
-                                        queuedFiles.remove(file.getKey());
-                                    }
-                                }
-                                break;
-                            case APP_QUIT:
-                                terminate();
-                                break;
-                            default:
-                                throw new IllegalStateException("Unexpected command type: " + messageObject.getMessageType());
-                        }
-                        break;
-                    case MESSAGE:
-                        switch (messageObject.getMessageType().getMessage()){
-                            case TEXT:
-                                listener.onMessageReceived(line, messageObject);
-                                break;
-                            case DIRECT_CHAT:
-                                listener.onDirectMessageReceived(line, messageObject);
-                                break;
-                            case FILE:
-                                listener.onFileReceived(line, messageObject);
-
-                                FileTransferManager.receiveSecureFileMessage(messageObject, incoming, user);
-                                break;
-                            case VOICE_CHAT:
-
-                                listener.onAudioMessagedReceived(line, MessageObject.newBuilder()
-                                        .setObjectType(messageObject.getObjectType())
-                                        .setMessageType(messageObject.getMessageType())
-                                        .setTextMessage(line)
-                                        .setVoiceMessage(
-                                                ByteString.copyFrom(MessageCryptography.decryptData(
-                                                        sessionKey,
-                                                        messageObject.getVoiceMessage().toByteArray())))
-                                        .setFileInfo(messageObject.getFileInfo())
-                                        .setOwner(messageObject.getOwner())
-                                        .addAllRecipients(messageObject.getRecipientsList())
-                                        .build()
-                                );
-                                break;
-                            case COMMENT:
-//                                        listener.onCommentReceived(messageObject.getOwner(), line);
-                                //todo show in sender gui how long it takes to upload
-                                System.out.println("GOT SOMETHING " + line);
-                                break;
-                            default:
-                                throw new IllegalStateException("Unexpected message type: " + messageObject.getMessageType());
-                        }
-                        break;
-                    case NOTIFICATION:
-                        switch (messageObject.getMessageType().getNotificiations()){
-                            case USER_ONLINE: // create user and put into HashMap with user id as key. Show on gui.
-                                User newUser = createUser(
-                                        messageObject.getOwner().getId(),
-                                        messageObject.getOwner().getName(),
-                                        messageObject.getOwner().getStatus(),
-                                        messageObject.getOwner().getProfilePicture()
-                                );
-                                users.put(newUser.getId(), newUser);
-                                listener.onGetOnlineUser(users, newUser); // show all users
-                                break;
-                            case USER_OFFLINE: // remove user out of HashMap. Remove name from gui.
-                                User finalUser = messageObject.getOwner();
-                                users.entrySet().removeIf(u -> u.getKey().equals(finalUser.getId()));
-                                listener.onGetOnlineUser(users,finalUser);
-                                break;
-                            case USER_STATUS: // show status change in gui.
-                                listener.onGetOnlineUser(users,messageObject.getOwner());
-
-                                System.out.println("STATUS CHANGE: \n" + messageObject.getOwner().getStatus());
-                                break;
-                            case ERROR:
-                                listener.onNotification("Server error", line, TrayNotificationType.ERROR);
-                                break;
-                            case INFO:
-                                listener.onServerMessage(line);
-                                break;
-                            default:
-                                throw new IllegalStateException("Unexpected Notification type: " + messageObject.getMessageType());
-                        }
-                        break;
-                    default:
-                        throw new IllegalStateException("Unexpected object type: " + messageObject.getObjectType());
-                }
-            }
-        }
     }
 
     @Override
@@ -457,8 +455,8 @@ public class Client extends Thread implements ClientTalker {
                                             file.getName().getBytes()
                                     )
                             ),
-                            owner,
-                            recipients
+                            owner.getId(),
+                            recipients.stream().map(User::getId).collect(Collectors.toList())
                     );
 
                     this.queuedFiles.put(String.valueOf(message.getFileInfo().getId()), file);
@@ -496,8 +494,8 @@ public class Client extends Thread implements ClientTalker {
 
                 sendMessage(ClientMessageHandler.createCommentMessage(
                         "sending file done!",
-                        owner,
-                        recipients
+                        owner.getId(),
+                        recipients.stream().map(User::getId).collect(Collectors.toList())
                 ));
             }
 
@@ -536,7 +534,6 @@ public class Client extends Thread implements ClientTalker {
         try {
             if(isSecureConnection()){
                 try {
-
                     outgoing.writeObject(MessageCryptography.encryptData(
                             sessionKey,
                             ClientMessageHandler.createEncryptedMessage(
@@ -549,8 +546,8 @@ public class Client extends Thread implements ClientTalker {
                                                     messageObject.getTextMessage().getBytes()
                                             )
                                     ),
-                                    messageObject.getOwner(),
-                                    messageObject.getRecipientsList()
+                                    messageObject.getOwnerId(),
+                                    messageObject.getRecipientsIdsList()
                             ).toByteArray()
                     ));
 
@@ -565,7 +562,7 @@ public class Client extends Thread implements ClientTalker {
             }else {
                 outgoing.writeObject(Base64.getEncoder().encode(messageObject.toByteArray()));
             }
-            outgoing.flush();
+//            outgoing.flush();
         }catch (Throwable t){
             listener.onNotification(
                     "Send Message Failure!",
@@ -603,8 +600,8 @@ public class Client extends Thread implements ClientTalker {
                                         messageObject.getVoiceMessage().toByteArray()
                                 )))
                                 .setFileInfo(messageObject.getFileInfo())
-                                .setOwner(messageObject.getOwner())
-                                .addAllRecipients(messageObject.getRecipientsList())
+                                .setOwnerId(messageObject.getOwnerId())
+                                .addAllRecipientsIds(messageObject.getRecipientsIdsList())
                                 .build();
 
 
@@ -615,7 +612,7 @@ public class Client extends Thread implements ClientTalker {
                                         audio.toByteArray()
                                 )
                         );
-                        outgoing.flush();
+//                        outgoing.flush();
                     } catch (Exception e) {
                         listener.onNotification(
                                 "Error while encrypting",
@@ -637,15 +634,134 @@ public class Client extends Thread implements ClientTalker {
         }
     }
 
+    public void sendBufferMessage(MessageObject messageObject){
+        try {
+            if(isSecureConnection()){
+                try {
+
+                    byte[] message = MessageCryptography.encryptData(
+                            sessionKey,
+                            ClientMessageHandler.createEncryptedMessage(
+                                    messageObject.getId(),
+                                    messageObject.getObjectType(),
+                                    messageObject.getMessageType(),
+                                    MessageCryptography.getHex(
+                                            MessageCryptography.encryptData(
+                                                    sessionKey,
+                                                    messageObject.getTextMessage().getBytes()
+                                            )
+                                    ),
+                                    messageObject.getOwnerId(),
+                                    messageObject.getRecipientsIdsList()
+                            ).toByteArray());
+
+                    sendThread = new Thread(() -> {
+                        byte[]buffer = new byte[message.length];
+                        ByteArrayInputStream input = new ByteArrayInputStream(message);
+                        try {
+                            while (!Thread.currentThread().isInterrupted()) {
+                                int numBytesRead;
+
+                                while ((numBytesRead = input.read(buffer,0,buffer.length)) > 0) {
+                                    outgoing.write(buffer,0,numBytesRead);
+                                }
+                                input.close();
+                            }
+
+
+                            System.out.println("Sending thread has stopped");
+                        } catch (Throwable e) {
+                            throw new IllegalStateException("Sending thread has stopped unexpectedly ",e);
+
+                        }
+                    });
+                    sendThread.setDaemon(true);
+                    sendThread.start();
+
+                } catch (Throwable t) {
+                    listener.onNotification(
+                            "Encrypting Failure!",
+                            "Client could not encrypt message \n Please try again ..." + t.getMessage(),
+                            TrayNotificationType.ERROR
+                    );
+                }
+
+            }else {
+                byte[]message = Base64.getEncoder().encode(messageObject.toByteArray());
+
+                sendThread = new Thread(() -> {
+                    byte[]buffer = new byte[message.length];
+                    ByteArrayInputStream input = new ByteArrayInputStream(message);
+                    try {
+                        while (!Thread.currentThread().isInterrupted()) {
+                            int numBytesRead;
+
+                            while ((numBytesRead = input.read(buffer,0,buffer.length)) >= 0) {
+                                outgoing.write(buffer,0,numBytesRead);
+                            }
+                            input.close();
+                        }
+
+
+                        System.out.println("Sending thread has stopped");
+                    } catch (Throwable e) {
+                        throw new IllegalStateException("Sending thread has stopped unexpectedly ",e);
+
+                    }
+                });
+                sendThread.setDaemon(true);
+                sendThread.start();
+            }
+
+            sendThread.interrupt();
+        }catch (Throwable t){
+            listener.onNotification(
+                    "Send Message Failure!",
+                    "Client could not send message \n Please try again ..." + t.getMessage(),
+                    TrayNotificationType.ERROR
+            );
+        }
+    }
+
+
     @Override
     public void disconnectClient(){
         System.out.println("I QUIT!");
         sendMessage(ClientMessageHandler.createCommandMessage(
                 MessageType.Commands.APP_QUIT,
                 "I am quitting!",
-                user,
-                new ArrayList<>(Collections.singleton(User.newBuilder().setName("WISE ADMIN").build()))
-        ));
+                user.getId(),
+                new ArrayList<>(Collections.singleton(0L))
+                )
+        );
+    }
+
+    private User convertStringToUser(String message){
+        User newUser;
+        try {
+            byte[] b = Base64.getDecoder().decode(message);
+            ByteArrayInputStream bi = new ByteArrayInputStream(b);
+            ObjectInputStream si = new ObjectInputStream(bi);
+            newUser = (User) si.readObject();
+        }catch (Throwable t){
+            throw new IllegalStateException("Could not convert string into User",t);
+        }
+
+        return newUser;
+    }
+
+    private String convertUserToString(User user){
+        String userString;
+
+        try {
+            ByteArrayOutputStream bo = new ByteArrayOutputStream();
+            ObjectOutputStream so = new ObjectOutputStream(bo);
+            so.writeObject(user);
+            userString = Base64.getEncoder().encodeToString(bo.toByteArray());
+        }catch (Throwable t){
+            throw new IllegalStateException("Could not convert string into User",t);
+        }
+        return userString;
     }
 
     private void terminate() {
@@ -654,9 +770,12 @@ public class Client extends Thread implements ClientTalker {
         sendMessage(ClientMessageHandler.createCommandMessage(
                 MessageType.Commands.REMOVE_CLIENT,
                 "Remove me from list!",
-                user,
-                new ArrayList<>(Collections.singleton(User.newBuilder().setName("WISE ADMIN").build()))
-        ));
+                user.getId(),
+                new ArrayList<>(Collections.singleton(0L))
+                )
+        );
+
+        clientThread.interrupt();
 
         try {
             incoming.close();

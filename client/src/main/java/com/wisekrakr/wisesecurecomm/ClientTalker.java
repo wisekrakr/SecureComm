@@ -2,7 +2,8 @@ package com.wisekrakr.wisesecurecomm;
 
 
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
-import com.wisekrakr.wisesecurecomm.communication.proto.User;
+import com.wisekrakr.wisesecurecomm.communication.user.Status;
+import com.wisekrakr.wisesecurecomm.communication.user.User;
 
 import java.io.File;
 import java.util.HashMap;
@@ -10,7 +11,11 @@ import java.util.List;
 
 public interface ClientTalker {
 
-    User createUser(Integer id, String username, User.Status status, String profilePicture);
+    User createUser(Long id, String username, Status status, String profilePicture);
+
+    User getUser(Long id);
+
+    List<User> getRecipientList(List<Long>recipientsIds);
 
     /**
      * Connect the client to the server
@@ -39,7 +44,7 @@ public interface ClientTalker {
     void requestFilesToSend(HashMap<String, File> filesToSend, User owner, List<User> recipients);
 
     /**
-     * While {@link Client.SecureConnectionSession} is not interrupted or stopped the client can send message objects
+     * While {@link Client} is not interrupted or stopped the client can send message objects
      * with files attached
      * @param bytes array from the file
      * @param owner sender of the message with files
@@ -48,7 +53,7 @@ public interface ClientTalker {
     void sendSecureFile(byte[] bytes, User owner, List<User> recipients);
 
     /**
-     * While {@link Client.SecureConnectionSession} is not interrupted or stopped the client can receive file object messages
+     * While {@link Client} is not interrupted or stopped the client can receive file object messages
      * @param messageObject file object with encrypted Secure Files contained within
      * @param user name of the receiver
      * @param sender name of the sender
@@ -56,7 +61,7 @@ public interface ClientTalker {
     void receiveFile(MessageObject messageObject, User user, User sender);
 
     /**
-     * While {@link Client.SecureConnectionSession} is not interrupted or stopped the client can send messages
+     * While {@link Client} is not interrupted or stopped the client can send messages
      * The message is encrypted with the session key (SecretKey) and send to the server with a ObjectOutputStream.
      * If the RunningChatConnection Thread is stopped, incoming and outgoing stream are stopped and well as
      * the thread itself.

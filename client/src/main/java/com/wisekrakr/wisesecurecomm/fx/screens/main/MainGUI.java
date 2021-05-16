@@ -1,6 +1,6 @@
 package com.wisekrakr.wisesecurecomm.fx.screens.main;
 
-import com.wisekrakr.wisesecurecomm.communication.proto.User;
+import com.wisekrakr.wisesecurecomm.communication.user.User;
 import com.wisekrakr.wisesecurecomm.connection.AudioManager;
 import com.wisekrakr.wisesecurecomm.fx.AbstractGUI;
 import com.wisekrakr.wisesecurecomm.fx.events.EventManager;

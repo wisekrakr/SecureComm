@@ -6,12 +6,15 @@ import com.google.protobuf.ByteString;
 import com.wisekrakr.wisesecurecomm.communication.crypto.MessageCryptography;
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageType;
-import com.wisekrakr.wisesecurecomm.communication.proto.User;
+import com.wisekrakr.wisesecurecomm.communication.user.User;
 
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.Executor;
@@ -19,14 +22,12 @@ import java.util.concurrent.Executors;
 
 import static com.wisekrakr.wisesecurecomm.ClientThreadMessageHandler.*;
 
-
 public class Server  {
 
-
     private static Thread serverThread;
-    private final Map<User, ClientHandler> clientHandlers = new HashMap<>();
+    private final Map<Long, ClientHandler> clientHandlers = new HashMap<>();
     private final List<User> clients = new ArrayList<>();
-    private final List<Integer> iDs = new ArrayList<>();
+    private final List<Long> iDs = new ArrayList<>();
 
     public static void main(String[] args) {
         if (System.getProperty("javax.net.ssl.keyStore") == null || System.getProperty("javax.net.ssl.keyStorePassword") == null) {
@@ -105,32 +106,26 @@ public class Server  {
             // Get user from client
             MessageObject messageObject = MessageObject.parseFrom(Base64.getDecoder().decode((byte[]) in.readObject()));
 
-            System.out.println("FIRST MESSAGE USER == " + messageObject.getOwner());
+            User newUser = convertStringToUser(messageObject.getTextMessage());
 
-            User user = User.newBuilder()
-                    .setId(messageObject.getOwner().getId())
-                    .setName(messageObject.getOwner().getName())
-                    .setProfilePicture(messageObject.getOwner().getProfilePicture())
-                    .setStatus(messageObject.getOwner().getStatus())
-                    .build();
+            System.out.println("FIRST MESSAGE USER == " + newUser);
 
-            clients.forEach(client -> iDs.add(client.getId()));
+            if (!iDs.contains(newUser.getId())) {
 
-            if (!iDs.contains(user.getId())) {
-                clients.add(user);
-                // Send back username so client knows the server has accepted them
+                iDs.add(newUser.getId());
+
+                // Send back client id so client knows the server has accepted them
                 out.writeObject(Base64.getEncoder().encode(messageObject.toByteArray()));
 
-                // If next message is true begin the authentication protocol
-                runClientHandler(clientSocket, in, out, user);
+                startClientHandlerThread(clientSocket, in, out, newUser);
             } else {
                 out.writeObject(
                         Base64.getEncoder().encode(
                                 ClientThreadMessageHandler.createNotificationMessage(
                                         MessageType.Notifications.ERROR,
                                         "This username cannot be registered, try again.",
-                                        messageObject.getOwner(),
-                                        messageObject.getOwner()
+                                        messageObject.getOwnerId(),
+                                        messageObject.getOwnerId()
                                 ).toByteArray())
                 );
             }
@@ -140,43 +135,44 @@ public class Server  {
         }
     }
 
-    private void runClientHandler(SSLSocket clientSocket, ObjectInputStream in, ObjectOutputStream out, User user) {
+    private void startClientHandlerThread(SSLSocket clientSocket, ObjectInputStream in, ObjectOutputStream out, User user) {
         try {
             ClientHandler clientHandlerAlpha = new ClientHandler(clientSocket, user, in, out);
 
-            if (add2Pool(user, clientHandlerAlpha)) {
+            if (clientAddedSuccessfully(user, clientHandlerAlpha)) {
+
                 clientHandlerAlpha.initializeClientHandler(new ClientHandlerListener() {
 
                     @Override
-                    public void onGettingSecurity(int id, String encodedPublicKey) {
+                    public void onGettingSecurity(long id, String encodedPublicKey) {
                         sendMessage(
                                 createSecurityMessage(
                                         id,
                                         MessageType.Security.PUBLIC_KEY,
                                         encodedPublicKey,
-                                        clientHandlerAlpha.getUser(),
-                                        clientHandlerAlpha.getUser()
+                                        clientHandlerAlpha.getUser().getId(),
+                                        clientHandlerAlpha.getUser().getId()
                                 ),
                                 clientHandlerAlpha
                         );
                     }
 
                     @Override
-                    public void onStoringPublicKey(int id, String encodedSessionKey) {
+                    public void onStoringPublicKey(long id, String encodedSessionKey) {
                         sendMessage(
                                 createSecurityMessage(
                                         id,
                                         MessageType.Security.SESSION_KEY,
                                         encodedSessionKey,
-                                        clientHandlerAlpha.getUser(),
-                                        clientHandlerAlpha.getUser()
+                                        clientHandlerAlpha.getUser().getId(),
+                                        clientHandlerAlpha.getUser().getId()
                                 ),
                                 clientHandlerAlpha
                         );
                     }
 
                     @Override
-                    public void onStoringSessionKey(int id, String sessionKey) {
+                    public void onStoringSessionKey(long id, String sessionKey) {
                         try {
                             out.writeObject(
                                     Base64.getEncoder().encode(
@@ -184,8 +180,8 @@ public class Server  {
                                                     id,
                                                     MessageType.Security.VERIFY,
                                                     sessionKey,
-                                                    clientHandlerAlpha.getUser(),
-                                                    clientHandlerAlpha.getUser()
+                                                    clientHandlerAlpha.getUser().getId(),
+                                                    clientHandlerAlpha.getUser().getId()
                                             ).toByteArray())
                             );
                         } catch (Throwable t) {
@@ -200,6 +196,34 @@ public class Server  {
                     }
 
                     @Override
+                    public User getUser(Long id) {
+                        User u = null;
+
+                        if(id != null){
+                            for (User otherUser: clients){
+                                if (otherUser.getId() == id)
+                                    u = otherUser;
+                            }
+                        }
+                        return u;
+                    }
+
+                    @Override
+                    public List<User> getUserList(List<Long> recipientsIds) {
+                        List<User> users = new ArrayList<>();
+
+                        for(User u: clients){
+                            for (Long l: recipientsIds){
+                                if(u.getId() == l){
+                                    users.add(u);
+                                }
+                            }
+                        }
+
+                        return users;
+                    }
+
+                    @Override
                     public void onTextMessage(String lineToSend, MessageObject messageObject) {
                         for (ClientHandler clientHandler : clientHandlers.values()) {
                             if (clientHandler != null) {
@@ -207,7 +231,7 @@ public class Server  {
                                         createMessage(
                                                 messageObject.getId(),
                                                 lineToSend,
-                                                clientHandlerAlpha.getUser(),
+                                                clientHandlerAlpha.getUser().getId(),
                                                 new ArrayList<>(clientHandlers.keySet())
                                         ),
                                         clientHandler
@@ -219,15 +243,17 @@ public class Server  {
                     @Override
                     public void onDirectMessage(String lineToSend, MessageObject messageObject) {
                         for (ClientHandler clientHandler : clientHandlers.values()) {
-                            if (clientHandler == clientHandlerAlpha ||
-                                    clientHandler.getUser().getId() == messageObject.getRecipients(0).getId()) {
+                            if (clientHandler.getUser().getId() == messageObject.getOwnerId() ||
+                                    clientHandler.getUser().getId() == messageObject.getRecipientsIds(0)) {
+
+//                                System.out.println("SEND DM MESSAGE: " + clientHandler.getUser());
 
                                 sendMessage(
                                         createDirectChatMessage(
                                                 messageObject.getId(),
                                                 lineToSend,
-                                                messageObject.getOwner(),
-                                                messageObject.getRecipients(0)
+                                                messageObject.getOwnerId(),
+                                                messageObject.getRecipientsIds(0)
                                         ),
                                         clientHandler
                                 );
@@ -238,9 +264,9 @@ public class Server  {
                     @Override
                     public void onVoiceMessage(String lineToSend, MessageObject messageObject) {
                         for (ClientHandler clientHandler : clientHandlers.values()) {
-                            for (User recipient : messageObject.getRecipientsList()) {
+                            for (Long recipientId : messageObject.getRecipientsIdsList()) {
                                 // send audio message to self as well as all recipients
-                                if (clientHandler.getUser().getId() == recipient.getId()) {
+                                if (clientHandler.getUser().getId() == recipientId) {
                                     //decrypt the files in this message object
                                     sendVoiceMessage(
                                             createVoiceMessage(
@@ -251,8 +277,8 @@ public class Server  {
                                                             messageObject.getVoiceMessage().toByteArray()
                                                     )),
                                                     messageObject.getFileInfo(),
-                                                    messageObject.getOwner(),
-                                                    messageObject.getRecipientsList()
+                                                    messageObject.getOwnerId(),
+                                                    messageObject.getRecipientsIdsList()
                                             ),
                                             clientHandler
                                     );
@@ -264,9 +290,9 @@ public class Server  {
                     @Override
                     public void onFileTransfer(String lineToSend, MessageObject messageObject) {
                         for (ClientHandler clientHandler : clientHandlers.values()) {
-                            for (User recipient : messageObject.getRecipientsList()) {
+                            for (Long recipientId : messageObject.getRecipientsIdsList()) {
                                 // don't send file message to self
-                                if (/*clientHandler != this && */ clientHandler.getUser().getId() == recipient.getId()) {
+                                if (/*clientHandler != this && */ clientHandler.getUser().getId() == recipientId) {
                                     //decrypt the files in this message object
                                     sendFileMessage(
                                             createFileMessage(
@@ -274,8 +300,8 @@ public class Server  {
                                                     lineToSend,
                                                     messageObject.getFileInfo().getName(),
                                                     messageObject.getFileInfo().getSize(),
-                                                    messageObject.getOwner(),
-                                                    messageObject.getRecipientsList()
+                                                    messageObject.getOwnerId(),
+                                                    messageObject.getRecipientsIdsList()
                                             ),
                                             clientHandler
                                     );
@@ -287,14 +313,14 @@ public class Server  {
                     @Override
                     public void onCommentMessage(String lineToSend, MessageObject messageObject) {
                         for (ClientHandler clientHandler : clientHandlers.values()) {
-                            for (User recipient : messageObject.getRecipientsList()) {
-                                if (clientHandler == clientHandlerAlpha && clientHandler.getUser().getId() == recipient.getId()) {
+                            for (Long recipientId : messageObject.getRecipientsIdsList()) {
+                                if (clientHandler == clientHandlerAlpha && clientHandler.getUser().getId() == recipientId) {
                                     sendMessage(
                                             createCommentMessage(
                                                     messageObject.getId(),
                                                     lineToSend,
-                                                    messageObject.getOwner(),
-                                                    messageObject.getRecipientsList()
+                                                    messageObject.getOwnerId(),
+                                                    messageObject.getRecipientsIdsList()
                                             ),
                                             clientHandler
                                     );
@@ -305,21 +331,16 @@ public class Server  {
 
                     @Override
                     public void onDMCommand(String line, MessageObject messageObject) {
-                        System.out.println("GOT DM COMMAND == " + messageObject.getRecipients(0));
-
                         for (ClientHandler clientHandler : clientHandlers.values()) {
-
-                            System.out.println("ID's " + clientHandler.getUser().getId());
-
-                            if (clientHandler.getUser().getId() == messageObject.getRecipients(0).getId()) {
+                            if (clientHandler.getUser().getId() == messageObject.getRecipientsIds(0)) {
 
                                 sendMessage(
                                         createCommandMessage(
                                                 messageObject.getId(),
                                                 messageObject.getMessageType().getCommands(),
                                                 line,
-                                                messageObject.getOwner(),
-                                                clientHandler.getUser()
+                                                messageObject.getOwnerId(),
+                                                clientHandler.getUser().getId()
                                         ),
                                         clientHandler
                                 );
@@ -335,7 +356,7 @@ public class Server  {
                     }
 
                     @Override
-                    public void onQuit(int id) {
+                    public void onQuit(long id) {
                         // Inform other clients that this client has left
                         for (ClientHandler clientHandler : clientHandlers.values()) {
                             if (clientHandler != clientHandlerAlpha) {
@@ -344,8 +365,8 @@ public class Server  {
                                         createNotificationMessage(
                                                 MessageType.Notifications.INFO,
                                                 "//// User " + clientHandlerAlpha.getUser().getName() + " has left ////",
-                                                clientHandlerAlpha.getUser(),
-                                                clientHandler.getUser()
+                                                clientHandlerAlpha.getUser().getId(),
+                                                clientHandler.getUser().getId()
                                         ),
                                         clientHandler
                                 );
@@ -354,8 +375,8 @@ public class Server  {
                                         createNotificationMessage(
                                                 MessageType.Notifications.USER_OFFLINE,
                                                 clientHandlerAlpha.getUser().getName(),
-                                                clientHandlerAlpha.getUser(),
-                                                clientHandler.getUser()
+                                                clientHandlerAlpha.getUser().getId(),
+                                                clientHandler.getUser().getId()
                                         ),
                                         clientHandler
                                 );
@@ -367,8 +388,8 @@ public class Server  {
                                                 id,
                                                 MessageType.Commands.APP_QUIT,
                                                 "Adios " + clientHandlerAlpha.getUser().getName(),
-                                                clientHandlerAlpha.getUser(),
-                                                clientHandlerAlpha.getUser()
+                                                clientHandlerAlpha.getUser().getId(),
+                                                clientHandlerAlpha.getUser().getId()
                                         ),
                                         clientHandlerAlpha
                                 );
@@ -382,8 +403,8 @@ public class Server  {
                         // Set this thread to null in client handler pool
                         if (clientHandlerAlpha.getUser() != null) {
 
-                            clientHandlers.remove(clientHandlerAlpha.getUser());
-                            clients.remove(clientHandlerAlpha.getUser());
+                            clientHandlers.keySet().removeIf(id -> id.equals(clientHandlerAlpha.getUser().getId()));
+                            clients.removeIf(user -> user.getId() == clientHandlerAlpha.getUser().getId());
                             iDs.removeIf(id -> id.equals(clientHandlerAlpha.getUser().getId()));
 
                             try {
@@ -410,8 +431,8 @@ public class Server  {
                                 createNotificationMessage(
                                         MessageType.Notifications.ERROR,
                                         errorMessage,
-                                        null,
-                                        user
+                                        0L,
+                                        user.getId()
                                 ),
                                 clientHandlerAlpha
                         );
@@ -428,6 +449,8 @@ public class Server  {
         } catch (Throwable t) {
             throw new IllegalStateException("Could not create new Client Handler", t);
         }
+
+        clients.add(user);
     }
 
     /**
@@ -457,8 +480,8 @@ public class Server  {
                                                 messageObject.getObjectType(),
                                                 messageObject.getMessageType(),
                                                 newMessage,
-                                                messageObject.getOwner(),
-                                                messageObject.getRecipientsList()
+                                                messageObject.getOwnerId(),
+                                                messageObject.getRecipientsIdsList()
                                         ).toByteArray()
                                 )
                         );
@@ -504,8 +527,8 @@ public class Server  {
                                     audioMessage.getVoiceMessage().toByteArray()
                             )))
                             .setFileInfo(audioMessage.getFileInfo())
-                            .setOwner(audioMessage.getOwner())
-                            .addAllRecipients(audioMessage.getRecipientsList())
+                            .setOwnerId(audioMessage.getOwnerId())
+                            .addAllRecipientsIds(audioMessage.getRecipientsIdsList())
                             .build();
 
                     // encrypt the message object and send
@@ -522,8 +545,8 @@ public class Server  {
                             createNotificationMessage(
                                     MessageType.Notifications.ERROR,
                                     "There was an error while sending encrypted audio \n" + e.getMessage(),
-                                    null,
-                                    clientHandler.getUser()
+                                    0L,
+                                    clientHandler.getUser().getId()
                             ),
                             clientHandler
                     );
@@ -557,8 +580,8 @@ public class Server  {
                             ),
                             message.getFileInfo().getName(),
                             message.getFileInfo().getSize(),
-                            message.getOwner(),
-                            message.getRecipientsList()
+                            message.getOwnerId(),
+                            message.getRecipientsIdsList()
                     );
 
                     // encrypt the message object and send
@@ -594,8 +617,8 @@ public class Server  {
                             createNotificationMessage(
                                     MessageType.Notifications.ERROR,
                                     "There was an error while sending encrypted audio \n" + e.getMessage(),
-                                    null,
-                                    clientHandler.getUser()
+                                    0L,
+                                    clientHandler.getUser().getId()
                             ),
                             clientHandler
                     );
@@ -610,18 +633,13 @@ public class Server  {
      * @param clientHandler The new thread of a client
      * @return True if a slot was free, otherwise false
      */
-    private boolean add2Pool(User user, ClientHandler clientHandler) {
-        if (clientHandler != null) {
-            try {
-                clientHandlers.put(user, clientHandler);
-            } catch (Throwable t) {
-                // todo catch errors ====> show message and let  user do something or let system do something
-                throw new IllegalArgumentException("Could not create new User", t);
-            }
-
-            return true;
+    private boolean clientAddedSuccessfully(User user, ClientHandler clientHandler) {
+        try {
+            clientHandlers.put(user.getId(), clientHandler);
+        } catch (Throwable t) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     private void welcomeMessage(ClientHandler clientHandler) {
@@ -634,8 +652,8 @@ public class Server  {
                         "Welcome to WiseSecComm " + clientHandler.getUser().getName() + "\n" +
                                 "A secure chat and file transfer environment" + "\n" +
                                 "Today's date: " + dateString,
-                        clientHandler.getUser(),
-                        clientHandler.getUser()
+                        clientHandler.getUser().getId(),
+                        clientHandler.getUser().getId()
                 ),
                 clientHandler
         );
@@ -647,16 +665,15 @@ public class Server  {
      * @param newClientHandler client handler that handles the message
      */
     private void giveUsers(ClientHandler newClientHandler) {
-
         for (ClientHandler clientHandler : clientHandlers.values()) {
             if (clientHandler != null) {
                 try {
                     sendMessage(
                             createNotificationMessage(
                                     MessageType.Notifications.USER_ONLINE,
-                                    clientHandler.getUser().getName(),
-                                    clientHandler.getUser(),
-                                    newClientHandler.getUser()
+                                    convertUserToString(clientHandler.getUser()),
+                                    clientHandler.getUser().getId(),
+                                    newClientHandler.getUser().getId()
                             ),
                             newClientHandler
                     );
@@ -665,9 +682,9 @@ public class Server  {
                         sendMessage(
                                 createNotificationMessage(
                                         MessageType.Notifications.USER_ONLINE,
-                                        newClientHandler.getUser().getName(),
-                                        newClientHandler.getUser(),
-                                        clientHandler.getUser()
+                                        convertUserToString(newClientHandler.getUser()),
+                                        newClientHandler.getUser().getId(),
+                                        clientHandler.getUser().getId()
                                 ),
                                 clientHandler
                         );
@@ -679,6 +696,34 @@ public class Server  {
                 }
             }
         }
+    }
+
+    private User convertStringToUser(String message){
+        User newUser;
+        try {
+            byte[] b = Base64.getDecoder().decode(message);
+            ByteArrayInputStream bi = new ByteArrayInputStream(b);
+            ObjectInputStream si = new ObjectInputStream(bi);
+            newUser = (User) si.readObject();
+        }catch (Throwable t){
+            throw new IllegalStateException("Could not convert string into User",t);
+        }
+
+        return newUser;
+    }
+
+    private String convertUserToString(User user){
+        String userString;
+
+        try {
+            ByteArrayOutputStream bo = new ByteArrayOutputStream();
+            ObjectOutputStream so = new ObjectOutputStream(bo);
+            so.writeObject(user);
+            userString = Base64.getEncoder().encodeToString(bo.toByteArray());
+        }catch (Throwable t){
+            throw new IllegalStateException("Could not convert string into User",t);
+        }
+        return userString;
     }
 }
 

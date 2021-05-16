@@ -1,7 +1,7 @@
 package com.wisekrakr.wisesecurecomm.fx.screens.dm;
 
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
-import com.wisekrakr.wisesecurecomm.communication.proto.User;
+import com.wisekrakr.wisesecurecomm.communication.user.User;
 import com.wisekrakr.wisesecurecomm.connection.AudioUtil;
 import com.wisekrakr.wisesecurecomm.fx.AbstractGUI;
 import com.wisekrakr.wisesecurecomm.fx.AbstractJFXPanel;
@@ -124,7 +124,10 @@ public class DirectMessagingController extends AbstractJFXPanel implements Contr
                 bubbledLabel.setBubbleSpec(BubbleSpec.FACE_LEFT_CENTER);
 
                 Circle pic = new Circle(12);
-                Image image = new Image(messageObject.getOwner().getProfilePicture());
+                Image image = new Image(eventManager.chatAPI()
+                        .getUser(messageObject.getOwnerId(), new ArrayList<>(Collections.singleton(other)))
+                        .getProfilePicture());
+
                 pic.setFill(new ImagePattern(image));
 
                 switch (messageObject.getMessageType().getMessage()){
@@ -134,7 +137,8 @@ public class DirectMessagingController extends AbstractJFXPanel implements Contr
                     case VOICE_CHAT:
                         bubbledLabel.setText(messageToShow);
                         audioToListenTo.put(numberOfMessages, messageObject);
-                        bubbledLabel.setGraphic(new ImageView(new Image(getClass().getClassLoader().getResource("images/sound.png").toExternalForm())));
+                        bubbledLabel.setGraphic(new ImageView(
+                                new Image(getClass().getClassLoader().getResource("images/sound.png").toExternalForm())));
 
                         break;
                     case COMMENT:
@@ -161,11 +165,14 @@ public class DirectMessagingController extends AbstractJFXPanel implements Contr
                 bubbledLabel.setBubbleSpec(BubbleSpec.FACE_RIGHT_CENTER);
 
                 Circle pic = new Circle(12);
-                Image image = new Image(messageObject.getOwner().getProfilePicture());
+                Image image = new Image(eventManager.chatAPI()
+                        .getUser(messageObject.getOwnerId(), new ArrayList<>(Collections.singleton(user)))
+                        .getProfilePicture());
                 pic.setFill(new ImagePattern(image));
 
                 switch (messageObject.getMessageType().getMessage()){
                     case DIRECT_CHAT:
+                        System.out.println("SET DM MESSAGE FROM MYSELF PLS");
                         bubbledLabel.setText(messageToShow);
                         break;
                     case VOICE_CHAT:
@@ -186,7 +193,7 @@ public class DirectMessagingController extends AbstractJFXPanel implements Contr
         };
         myMessages.setOnSucceeded(event -> chatPane.getItems().add(myMessages.getValue()));
 
-        if (messageObject.getOwner().getName().equals(user.getName())) {
+        if (messageObject.getOwnerId() == user.getId()) {
             Thread t2 = new Thread(myMessages);
             t2.setDaemon(true);
             t2.start();

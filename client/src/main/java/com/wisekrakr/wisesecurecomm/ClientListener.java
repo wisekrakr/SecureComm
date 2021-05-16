@@ -1,7 +1,7 @@
 package com.wisekrakr.wisesecurecomm;
 
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
-import com.wisekrakr.wisesecurecomm.communication.proto.User;
+import com.wisekrakr.wisesecurecomm.communication.user.User;
 import com.wisekrakr.wisesecurecomm.fx.screens.traynotifications.TrayNotificationType;
 
 import java.util.Map;
@@ -12,7 +12,7 @@ public interface ClientListener {
     void onMessageReceived(String line, MessageObject messageObject);
     void onNotSecureConnection();
 
-    void onGetOnlineUser(Map<Integer, User> users, User activeUser);
+    void onGetOnlineUser(Map<Long, User> users, User activeUser);
     void onNotification(String title, String body, TrayNotificationType trayNotificationType);
 
     void onDirectMessageRequestReceived(String line, MessageObject messageObject);

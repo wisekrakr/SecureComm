@@ -2,7 +2,8 @@ package com.wisekrakr.wisesecurecomm.fx.events;
 
 
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
-import com.wisekrakr.wisesecurecomm.communication.proto.User;
+import com.wisekrakr.wisesecurecomm.communication.user.Status;
+import com.wisekrakr.wisesecurecomm.communication.user.User;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -18,10 +19,13 @@ public interface ChatApi {
     void sendChatMessage(String msg, User user, ArrayList<User> recipientsList);
     void addMessageToShow(String line, MessageObject messageObject);
 
-    void getUsersOnline(Map<Integer, User> users, User activeUser);
+    void getUsersOnline(Map<Long, User> users, User activeUser);
 
     void getServerMessage(String message);
 
 
-    void sendStatusMessage(User.Status status, User user, ArrayList<User> recipients);
+    void sendStatusMessage(Status status, User user, ArrayList<User> recipients);
+
+    User refreshUser(Status status,User user);
+    User getUser(Long id,ArrayList<User> users);
 }

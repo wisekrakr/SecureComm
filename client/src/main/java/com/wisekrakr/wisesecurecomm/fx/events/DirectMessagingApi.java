@@ -1,7 +1,7 @@
 package com.wisekrakr.wisesecurecomm.fx.events;
 
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
-import com.wisekrakr.wisesecurecomm.communication.proto.User;
+import com.wisekrakr.wisesecurecomm.communication.user.User;
 
 /**
  * This API works as a bridge between the client and JFX.

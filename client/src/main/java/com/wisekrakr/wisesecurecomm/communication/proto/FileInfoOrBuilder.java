@@ -4,20 +4,20 @@
 package com.wisekrakr.wisesecurecomm.communication.proto;
 
 public interface FileInfoOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:FileInfo)
+    // @@protoc_insertion_point(interface_extends:com.wisekrakr.wisesecurecomm.communication.proto.FileInfo)
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>int32 id = 1;</code>
+   * <code>int64 id = 1;</code>
    * @return The id.
    */
-  int getId();
+  long getId();
 
   /**
    * <code>string name = 2;</code>
    * @return The name.
    */
-  String getName();
+  java.lang.String getName();
   /**
    * <code>string name = 2;</code>
    * @return The bytes for name.

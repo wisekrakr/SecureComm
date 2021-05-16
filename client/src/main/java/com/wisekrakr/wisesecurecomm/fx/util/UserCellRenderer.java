@@ -1,7 +1,7 @@
 package com.wisekrakr.wisesecurecomm.fx.util;
 
 
-import com.wisekrakr.wisesecurecomm.communication.proto.User;
+import com.wisekrakr.wisesecurecomm.communication.user.User;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.ListCell;
@@ -41,9 +41,6 @@ public class UserCellRenderer implements Callback<ListView<User>,ListCell<User>>
                         switch (user.getStatus()){
                             case ONLINE:
                                 pictureImage.setStroke(Color.GREEN);
-                                break;
-                            case OFFLINE:
-                                pictureImage.setStroke(Color.RED);
                                 break;
                             case BUSY:
                                 pictureImage.setStroke(Color.BEIGE);

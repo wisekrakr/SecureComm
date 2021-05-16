@@ -4,50 +4,50 @@
 package com.wisekrakr.wisesecurecomm.communication.proto;
 
 public interface MessageTypeOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:MessageType)
+    // @@protoc_insertion_point(interface_extends:com.wisekrakr.wisesecurecomm.communication.proto.MessageType)
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>.MessageType.Message message = 1;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message message = 1;</code>
    * @return The enum numeric value on the wire for message.
    */
   int getMessageValue();
   /**
-   * <code>.MessageType.Message message = 1;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message message = 1;</code>
    * @return The message.
    */
-  MessageType.Message getMessage();
+  com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message getMessage();
 
   /**
-   * <code>.MessageType.Notifications notificiations = 2;</code>
-   * @return The enum numeric value on the wire for notificiations.
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications notifications = 2;</code>
+   * @return The enum numeric value on the wire for notifications.
    */
-  int getNotificiationsValue();
+  int getNotificationsValue();
   /**
-   * <code>.MessageType.Notifications notificiations = 2;</code>
-   * @return The notificiations.
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications notifications = 2;</code>
+   * @return The notifications.
    */
-  MessageType.Notifications getNotificiations();
+  com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications getNotifications();
 
   /**
-   * <code>.MessageType.Commands commands = 3;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands commands = 3;</code>
    * @return The enum numeric value on the wire for commands.
    */
   int getCommandsValue();
   /**
-   * <code>.MessageType.Commands commands = 3;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands commands = 3;</code>
    * @return The commands.
    */
-  MessageType.Commands getCommands();
+  com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands getCommands();
 
   /**
-   * <code>.MessageType.Security security = 4;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security security = 4;</code>
    * @return The enum numeric value on the wire for security.
    */
   int getSecurityValue();
   /**
-   * <code>.MessageType.Security security = 4;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security security = 4;</code>
    * @return The security.
    */
-  MessageType.Security getSecurity();
+  com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security getSecurity();
 }

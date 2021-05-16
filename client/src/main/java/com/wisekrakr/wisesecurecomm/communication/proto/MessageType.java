@@ -4,11 +4,11 @@
 package com.wisekrakr.wisesecurecomm.communication.proto;
 
 /**
- * Protobuf type {@code MessageType}
+ * Protobuf type {@code com.wisekrakr.wisesecurecomm.communication.proto.MessageType}
  */
 public final class MessageType extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:MessageType)
+    // @@protoc_insertion_point(message_implements:com.wisekrakr.wisesecurecomm.communication.proto.MessageType)
     MessageTypeOrBuilder {
 private static final long serialVersionUID = 0L;
   // Use MessageType.newBuilder() to construct.
@@ -17,19 +17,19 @@ private static final long serialVersionUID = 0L;
   }
   private MessageType() {
     message_ = 0;
-    notificiations_ = 0;
+    notifications_ = 0;
     commands_ = 0;
     security_ = 0;
   }
 
-  @Override
+  @java.lang.Override
   @SuppressWarnings({"unused"})
-  protected Object newInstance(
+  protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
     return new MessageType();
   }
 
-  @Override
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet
   getUnknownFields() {
     return this.unknownFields;
@@ -40,7 +40,7 @@ private static final long serialVersionUID = 0L;
       throws com.google.protobuf.InvalidProtocolBufferException {
     this();
     if (extensionRegistry == null) {
-      throw new NullPointerException();
+      throw new java.lang.NullPointerException();
     }
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -61,7 +61,7 @@ private static final long serialVersionUID = 0L;
           case 16: {
             int rawValue = input.readEnum();
 
-            notificiations_ = rawValue;
+            notifications_ = rawValue;
             break;
           }
           case 24: {
@@ -97,19 +97,19 @@ private static final long serialVersionUID = 0L;
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return MessageObjectOuterClass.internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_MessageType_descriptor;
+    return com.wisekrakr.wisesecurecomm.communication.proto.MessageObjectOuterClass.internal_static_com_wisekrakr_wisesecurecomm_communication_proto_MessageType_descriptor;
   }
 
-  @Override
-  protected FieldAccessorTable
+  @java.lang.Override
+  protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return MessageObjectOuterClass.internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_MessageType_fieldAccessorTable
+    return com.wisekrakr.wisesecurecomm.communication.proto.MessageObjectOuterClass.internal_static_com_wisekrakr_wisesecurecomm_communication_proto_MessageType_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            MessageType.class, Builder.class);
+            com.wisekrakr.wisesecurecomm.communication.proto.MessageType.class, com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Builder.class);
   }
 
   /**
-   * Protobuf enum {@code MessageType.Message}
+   * Protobuf enum {@code com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message}
    */
   public enum Message
       implements com.google.protobuf.ProtocolMessageEnum {
@@ -160,7 +160,7 @@ private static final long serialVersionUID = 0L;
 
     public final int getNumber() {
       if (this == UNRECOGNIZED) {
-        throw new IllegalArgumentException(
+        throw new java.lang.IllegalArgumentException(
             "Can't get the number of an unknown enum value.");
       }
       return value;
@@ -171,7 +171,7 @@ private static final long serialVersionUID = 0L;
      * @return The enum associated with the given numeric wire value.
      * @deprecated Use {@link #forNumber(int)} instead.
      */
-    @Deprecated
+    @java.lang.Deprecated
     public static Message valueOf(int value) {
       return forNumber(value);
     }
@@ -206,7 +206,7 @@ private static final long serialVersionUID = 0L;
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
       if (this == UNRECOGNIZED) {
-        throw new IllegalStateException(
+        throw new java.lang.IllegalStateException(
             "Can't get the descriptor of an unrecognized enum value.");
       }
       return getDescriptor().getValues().get(ordinal());
@@ -217,7 +217,7 @@ private static final long serialVersionUID = 0L;
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return MessageType.getDescriptor().getEnumTypes().get(0);
+      return com.wisekrakr.wisesecurecomm.communication.proto.MessageType.getDescriptor().getEnumTypes().get(0);
     }
 
     private static final Message[] VALUES = values();
@@ -225,7 +225,7 @@ private static final long serialVersionUID = 0L;
     public static Message valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
-        throw new IllegalArgumentException(
+        throw new java.lang.IllegalArgumentException(
           "EnumValueDescriptor is not for this type.");
       }
       if (desc.getIndex() == -1) {
@@ -240,11 +240,11 @@ private static final long serialVersionUID = 0L;
       this.value = value;
     }
 
-    // @@protoc_insertion_point(enum_scope:MessageType.Message)
+    // @@protoc_insertion_point(enum_scope:com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message)
   }
 
   /**
-   * Protobuf enum {@code MessageType.Commands}
+   * Protobuf enum {@code com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands}
    */
   public enum Commands
       implements com.google.protobuf.ProtocolMessageEnum {
@@ -311,7 +311,7 @@ private static final long serialVersionUID = 0L;
 
     public final int getNumber() {
       if (this == UNRECOGNIZED) {
-        throw new IllegalArgumentException(
+        throw new java.lang.IllegalArgumentException(
             "Can't get the number of an unknown enum value.");
       }
       return value;
@@ -322,7 +322,7 @@ private static final long serialVersionUID = 0L;
      * @return The enum associated with the given numeric wire value.
      * @deprecated Use {@link #forNumber(int)} instead.
      */
-    @Deprecated
+    @java.lang.Deprecated
     public static Commands valueOf(int value) {
       return forNumber(value);
     }
@@ -359,7 +359,7 @@ private static final long serialVersionUID = 0L;
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
       if (this == UNRECOGNIZED) {
-        throw new IllegalStateException(
+        throw new java.lang.IllegalStateException(
             "Can't get the descriptor of an unrecognized enum value.");
       }
       return getDescriptor().getValues().get(ordinal());
@@ -370,7 +370,7 @@ private static final long serialVersionUID = 0L;
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return MessageType.getDescriptor().getEnumTypes().get(1);
+      return com.wisekrakr.wisesecurecomm.communication.proto.MessageType.getDescriptor().getEnumTypes().get(1);
     }
 
     private static final Commands[] VALUES = values();
@@ -378,7 +378,7 @@ private static final long serialVersionUID = 0L;
     public static Commands valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
-        throw new IllegalArgumentException(
+        throw new java.lang.IllegalArgumentException(
           "EnumValueDescriptor is not for this type.");
       }
       if (desc.getIndex() == -1) {
@@ -393,11 +393,11 @@ private static final long serialVersionUID = 0L;
       this.value = value;
     }
 
-    // @@protoc_insertion_point(enum_scope:MessageType.Commands)
+    // @@protoc_insertion_point(enum_scope:com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands)
   }
 
   /**
-   * Protobuf enum {@code MessageType.Notifications}
+   * Protobuf enum {@code com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications}
    */
   public enum Notifications
       implements com.google.protobuf.ProtocolMessageEnum {
@@ -448,7 +448,7 @@ private static final long serialVersionUID = 0L;
 
     public final int getNumber() {
       if (this == UNRECOGNIZED) {
-        throw new IllegalArgumentException(
+        throw new java.lang.IllegalArgumentException(
             "Can't get the number of an unknown enum value.");
       }
       return value;
@@ -459,7 +459,7 @@ private static final long serialVersionUID = 0L;
      * @return The enum associated with the given numeric wire value.
      * @deprecated Use {@link #forNumber(int)} instead.
      */
-    @Deprecated
+    @java.lang.Deprecated
     public static Notifications valueOf(int value) {
       return forNumber(value);
     }
@@ -494,7 +494,7 @@ private static final long serialVersionUID = 0L;
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
       if (this == UNRECOGNIZED) {
-        throw new IllegalStateException(
+        throw new java.lang.IllegalStateException(
             "Can't get the descriptor of an unrecognized enum value.");
       }
       return getDescriptor().getValues().get(ordinal());
@@ -505,7 +505,7 @@ private static final long serialVersionUID = 0L;
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return MessageType.getDescriptor().getEnumTypes().get(2);
+      return com.wisekrakr.wisesecurecomm.communication.proto.MessageType.getDescriptor().getEnumTypes().get(2);
     }
 
     private static final Notifications[] VALUES = values();
@@ -513,7 +513,7 @@ private static final long serialVersionUID = 0L;
     public static Notifications valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
-        throw new IllegalArgumentException(
+        throw new java.lang.IllegalArgumentException(
           "EnumValueDescriptor is not for this type.");
       }
       if (desc.getIndex() == -1) {
@@ -528,11 +528,11 @@ private static final long serialVersionUID = 0L;
       this.value = value;
     }
 
-    // @@protoc_insertion_point(enum_scope:MessageType.Notifications)
+    // @@protoc_insertion_point(enum_scope:com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications)
   }
 
   /**
-   * Protobuf enum {@code MessageType.Security}
+   * Protobuf enum {@code com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security}
    */
   public enum Security
       implements com.google.protobuf.ProtocolMessageEnum {
@@ -575,7 +575,7 @@ private static final long serialVersionUID = 0L;
 
     public final int getNumber() {
       if (this == UNRECOGNIZED) {
-        throw new IllegalArgumentException(
+        throw new java.lang.IllegalArgumentException(
             "Can't get the number of an unknown enum value.");
       }
       return value;
@@ -586,7 +586,7 @@ private static final long serialVersionUID = 0L;
      * @return The enum associated with the given numeric wire value.
      * @deprecated Use {@link #forNumber(int)} instead.
      */
-    @Deprecated
+    @java.lang.Deprecated
     public static Security valueOf(int value) {
       return forNumber(value);
     }
@@ -620,7 +620,7 @@ private static final long serialVersionUID = 0L;
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
       if (this == UNRECOGNIZED) {
-        throw new IllegalStateException(
+        throw new java.lang.IllegalStateException(
             "Can't get the descriptor of an unrecognized enum value.");
       }
       return getDescriptor().getValues().get(ordinal());
@@ -631,7 +631,7 @@ private static final long serialVersionUID = 0L;
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return MessageType.getDescriptor().getEnumTypes().get(3);
+      return com.wisekrakr.wisesecurecomm.communication.proto.MessageType.getDescriptor().getEnumTypes().get(3);
     }
 
     private static final Security[] VALUES = values();
@@ -639,7 +639,7 @@ private static final long serialVersionUID = 0L;
     public static Security valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
-        throw new IllegalArgumentException(
+        throw new java.lang.IllegalArgumentException(
           "EnumValueDescriptor is not for this type.");
       }
       if (desc.getIndex() == -1) {
@@ -654,87 +654,87 @@ private static final long serialVersionUID = 0L;
       this.value = value;
     }
 
-    // @@protoc_insertion_point(enum_scope:MessageType.Security)
+    // @@protoc_insertion_point(enum_scope:com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security)
   }
 
   public static final int MESSAGE_FIELD_NUMBER = 1;
   private int message_;
   /**
-   * <code>.MessageType.Message message = 1;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message message = 1;</code>
    * @return The enum numeric value on the wire for message.
    */
-  @Override public int getMessageValue() {
+  @java.lang.Override public int getMessageValue() {
     return message_;
   }
   /**
-   * <code>.MessageType.Message message = 1;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message message = 1;</code>
    * @return The message.
    */
-  @Override public Message getMessage() {
+  @java.lang.Override public com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message getMessage() {
     @SuppressWarnings("deprecation")
-    Message result = Message.valueOf(message_);
-    return result == null ? Message.UNRECOGNIZED : result;
+    com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message result = com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message.valueOf(message_);
+    return result == null ? com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message.UNRECOGNIZED : result;
   }
 
-  public static final int NOTIFICIATIONS_FIELD_NUMBER = 2;
-  private int notificiations_;
+  public static final int NOTIFICATIONS_FIELD_NUMBER = 2;
+  private int notifications_;
   /**
-   * <code>.MessageType.Notifications notificiations = 2;</code>
-   * @return The enum numeric value on the wire for notificiations.
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications notifications = 2;</code>
+   * @return The enum numeric value on the wire for notifications.
    */
-  @Override public int getNotificiationsValue() {
-    return notificiations_;
+  @java.lang.Override public int getNotificationsValue() {
+    return notifications_;
   }
   /**
-   * <code>.MessageType.Notifications notificiations = 2;</code>
-   * @return The notificiations.
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications notifications = 2;</code>
+   * @return The notifications.
    */
-  @Override public Notifications getNotificiations() {
+  @java.lang.Override public com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications getNotifications() {
     @SuppressWarnings("deprecation")
-    Notifications result = Notifications.valueOf(notificiations_);
-    return result == null ? Notifications.UNRECOGNIZED : result;
+    com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications result = com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications.valueOf(notifications_);
+    return result == null ? com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications.UNRECOGNIZED : result;
   }
 
   public static final int COMMANDS_FIELD_NUMBER = 3;
   private int commands_;
   /**
-   * <code>.MessageType.Commands commands = 3;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands commands = 3;</code>
    * @return The enum numeric value on the wire for commands.
    */
-  @Override public int getCommandsValue() {
+  @java.lang.Override public int getCommandsValue() {
     return commands_;
   }
   /**
-   * <code>.MessageType.Commands commands = 3;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands commands = 3;</code>
    * @return The commands.
    */
-  @Override public Commands getCommands() {
+  @java.lang.Override public com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands getCommands() {
     @SuppressWarnings("deprecation")
-    Commands result = Commands.valueOf(commands_);
-    return result == null ? Commands.UNRECOGNIZED : result;
+    com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands result = com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands.valueOf(commands_);
+    return result == null ? com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands.UNRECOGNIZED : result;
   }
 
   public static final int SECURITY_FIELD_NUMBER = 4;
   private int security_;
   /**
-   * <code>.MessageType.Security security = 4;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security security = 4;</code>
    * @return The enum numeric value on the wire for security.
    */
-  @Override public int getSecurityValue() {
+  @java.lang.Override public int getSecurityValue() {
     return security_;
   }
   /**
-   * <code>.MessageType.Security security = 4;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security security = 4;</code>
    * @return The security.
    */
-  @Override public Security getSecurity() {
+  @java.lang.Override public com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security getSecurity() {
     @SuppressWarnings("deprecation")
-    Security result = Security.valueOf(security_);
-    return result == null ? Security.UNRECOGNIZED : result;
+    com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security result = com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security.valueOf(security_);
+    return result == null ? com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security.UNRECOGNIZED : result;
   }
 
   private byte memoizedIsInitialized = -1;
-  @Override
+  @java.lang.Override
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
     if (isInitialized == 1) return true;
@@ -744,43 +744,43 @@ private static final long serialVersionUID = 0L;
     return true;
   }
 
-  @Override
+  @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (message_ != Message.DIRECT_CHAT.getNumber()) {
+    if (message_ != com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message.DIRECT_CHAT.getNumber()) {
       output.writeEnum(1, message_);
     }
-    if (notificiations_ != Notifications.USER_ONLINE.getNumber()) {
-      output.writeEnum(2, notificiations_);
+    if (notifications_ != com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications.USER_ONLINE.getNumber()) {
+      output.writeEnum(2, notifications_);
     }
-    if (commands_ != Commands.DM_REQUEST.getNumber()) {
+    if (commands_ != com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands.DM_REQUEST.getNumber()) {
       output.writeEnum(3, commands_);
     }
-    if (security_ != Security.GET_SECURE.getNumber()) {
+    if (security_ != com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security.GET_SECURE.getNumber()) {
       output.writeEnum(4, security_);
     }
     unknownFields.writeTo(output);
   }
 
-  @Override
+  @java.lang.Override
   public int getSerializedSize() {
     int size = memoizedSize;
     if (size != -1) return size;
 
     size = 0;
-    if (message_ != Message.DIRECT_CHAT.getNumber()) {
+    if (message_ != com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message.DIRECT_CHAT.getNumber()) {
       size += com.google.protobuf.CodedOutputStream
         .computeEnumSize(1, message_);
     }
-    if (notificiations_ != Notifications.USER_ONLINE.getNumber()) {
+    if (notifications_ != com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications.USER_ONLINE.getNumber()) {
       size += com.google.protobuf.CodedOutputStream
-        .computeEnumSize(2, notificiations_);
+        .computeEnumSize(2, notifications_);
     }
-    if (commands_ != Commands.DM_REQUEST.getNumber()) {
+    if (commands_ != com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands.DM_REQUEST.getNumber()) {
       size += com.google.protobuf.CodedOutputStream
         .computeEnumSize(3, commands_);
     }
-    if (security_ != Security.GET_SECURE.getNumber()) {
+    if (security_ != com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security.GET_SECURE.getNumber()) {
       size += com.google.protobuf.CodedOutputStream
         .computeEnumSize(4, security_);
     }
@@ -789,25 +789,25 @@ private static final long serialVersionUID = 0L;
     return size;
   }
 
-  @Override
-  public boolean equals(final Object obj) {
+  @java.lang.Override
+  public boolean equals(final java.lang.Object obj) {
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof MessageType)) {
+    if (!(obj instanceof com.wisekrakr.wisesecurecomm.communication.proto.MessageType)) {
       return super.equals(obj);
     }
-    MessageType other = (MessageType) obj;
+    com.wisekrakr.wisesecurecomm.communication.proto.MessageType other = (com.wisekrakr.wisesecurecomm.communication.proto.MessageType) obj;
 
     if (message_ != other.message_) return false;
-    if (notificiations_ != other.notificiations_) return false;
+    if (notifications_ != other.notifications_) return false;
     if (commands_ != other.commands_) return false;
     if (security_ != other.security_) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
 
-  @Override
+  @java.lang.Override
   public int hashCode() {
     if (memoizedHashCode != 0) {
       return memoizedHashCode;
@@ -816,8 +816,8 @@ private static final long serialVersionUID = 0L;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
     hash = (53 * hash) + message_;
-    hash = (37 * hash) + NOTIFICIATIONS_FIELD_NUMBER;
-    hash = (53 * hash) + notificiations_;
+    hash = (37 * hash) + NOTIFICATIONS_FIELD_NUMBER;
+    hash = (53 * hash) + notifications_;
     hash = (37 * hash) + COMMANDS_FIELD_NUMBER;
     hash = (53 * hash) + commands_;
     hash = (37 * hash) + SECURITY_FIELD_NUMBER;
@@ -827,69 +827,69 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static MessageType parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageType parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static MessageType parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageType parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static MessageType parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageType parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static MessageType parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageType parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static MessageType parseFrom(byte[] data)
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageType parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static MessageType parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageType parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static MessageType parseFrom(java.io.InputStream input)
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageType parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static MessageType parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageType parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static MessageType parseDelimitedFrom(java.io.InputStream input)
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageType parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static MessageType parseDelimitedFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageType parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static MessageType parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageType parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static MessageType parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageType parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -897,53 +897,53 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  @Override
+  @java.lang.Override
   public Builder newBuilderForType() { return newBuilder(); }
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(MessageType prototype) {
+  public static Builder newBuilder(com.wisekrakr.wisesecurecomm.communication.proto.MessageType prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
-  @Override
+  @java.lang.Override
   public Builder toBuilder() {
     return this == DEFAULT_INSTANCE
         ? new Builder() : new Builder().mergeFrom(this);
   }
 
-  @Override
+  @java.lang.Override
   protected Builder newBuilderForType(
-      BuilderParent parent) {
+      com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
     Builder builder = new Builder(parent);
     return builder;
   }
   /**
-   * Protobuf type {@code MessageType}
+   * Protobuf type {@code com.wisekrakr.wisesecurecomm.communication.proto.MessageType}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:MessageType)
-          MessageTypeOrBuilder {
+      // @@protoc_insertion_point(builder_implements:com.wisekrakr.wisesecurecomm.communication.proto.MessageType)
+      com.wisekrakr.wisesecurecomm.communication.proto.MessageTypeOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return MessageObjectOuterClass.internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_MessageType_descriptor;
+      return com.wisekrakr.wisesecurecomm.communication.proto.MessageObjectOuterClass.internal_static_com_wisekrakr_wisesecurecomm_communication_proto_MessageType_descriptor;
     }
 
-    @Override
-    protected FieldAccessorTable
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return MessageObjectOuterClass.internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_MessageType_fieldAccessorTable
+      return com.wisekrakr.wisesecurecomm.communication.proto.MessageObjectOuterClass.internal_static_com_wisekrakr_wisesecurecomm_communication_proto_MessageType_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              MessageType.class, Builder.class);
+              com.wisekrakr.wisesecurecomm.communication.proto.MessageType.class, com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Builder.class);
     }
 
-    // Construct using MessageType.newBuilder()
+    // Construct using com.wisekrakr.wisesecurecomm.communication.proto.MessageType.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
 
     private Builder(
-        BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
       maybeForceBuilderInitialization();
     }
@@ -952,12 +952,12 @@ private static final long serialVersionUID = 0L;
               .alwaysUseFieldBuilders) {
       }
     }
-    @Override
+    @java.lang.Override
     public Builder clear() {
       super.clear();
       message_ = 0;
 
-      notificiations_ = 0;
+      notifications_ = 0;
 
       commands_ = 0;
 
@@ -966,86 +966,86 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return MessageObjectOuterClass.internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_MessageType_descriptor;
+      return com.wisekrakr.wisesecurecomm.communication.proto.MessageObjectOuterClass.internal_static_com_wisekrakr_wisesecurecomm_communication_proto_MessageType_descriptor;
     }
 
-    @Override
-    public MessageType getDefaultInstanceForType() {
-      return MessageType.getDefaultInstance();
+    @java.lang.Override
+    public com.wisekrakr.wisesecurecomm.communication.proto.MessageType getDefaultInstanceForType() {
+      return com.wisekrakr.wisesecurecomm.communication.proto.MessageType.getDefaultInstance();
     }
 
-    @Override
-    public MessageType build() {
-      MessageType result = buildPartial();
+    @java.lang.Override
+    public com.wisekrakr.wisesecurecomm.communication.proto.MessageType build() {
+      com.wisekrakr.wisesecurecomm.communication.proto.MessageType result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
       return result;
     }
 
-    @Override
-    public MessageType buildPartial() {
-      MessageType result = new MessageType(this);
+    @java.lang.Override
+    public com.wisekrakr.wisesecurecomm.communication.proto.MessageType buildPartial() {
+      com.wisekrakr.wisesecurecomm.communication.proto.MessageType result = new com.wisekrakr.wisesecurecomm.communication.proto.MessageType(this);
       result.message_ = message_;
-      result.notificiations_ = notificiations_;
+      result.notifications_ = notifications_;
       result.commands_ = commands_;
       result.security_ = security_;
       onBuilt();
       return result;
     }
 
-    @Override
+    @java.lang.Override
     public Builder clone() {
       return super.clone();
     }
-    @Override
+    @java.lang.Override
     public Builder setField(
         com.google.protobuf.Descriptors.FieldDescriptor field,
-        Object value) {
+        java.lang.Object value) {
       return super.setField(field, value);
     }
-    @Override
+    @java.lang.Override
     public Builder clearField(
         com.google.protobuf.Descriptors.FieldDescriptor field) {
       return super.clearField(field);
     }
-    @Override
+    @java.lang.Override
     public Builder clearOneof(
         com.google.protobuf.Descriptors.OneofDescriptor oneof) {
       return super.clearOneof(oneof);
     }
-    @Override
+    @java.lang.Override
     public Builder setRepeatedField(
         com.google.protobuf.Descriptors.FieldDescriptor field,
-        int index, Object value) {
+        int index, java.lang.Object value) {
       return super.setRepeatedField(field, index, value);
     }
-    @Override
+    @java.lang.Override
     public Builder addRepeatedField(
         com.google.protobuf.Descriptors.FieldDescriptor field,
-        Object value) {
+        java.lang.Object value) {
       return super.addRepeatedField(field, value);
     }
-    @Override
+    @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof MessageType) {
-        return mergeFrom((MessageType)other);
+      if (other instanceof com.wisekrakr.wisesecurecomm.communication.proto.MessageType) {
+        return mergeFrom((com.wisekrakr.wisesecurecomm.communication.proto.MessageType)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(MessageType other) {
-      if (other == MessageType.getDefaultInstance()) return this;
+    public Builder mergeFrom(com.wisekrakr.wisesecurecomm.communication.proto.MessageType other) {
+      if (other == com.wisekrakr.wisesecurecomm.communication.proto.MessageType.getDefaultInstance()) return this;
       if (other.message_ != 0) {
         setMessageValue(other.getMessageValue());
       }
-      if (other.notificiations_ != 0) {
-        setNotificiationsValue(other.getNotificiationsValue());
+      if (other.notifications_ != 0) {
+        setNotificationsValue(other.getNotificationsValue());
       }
       if (other.commands_ != 0) {
         setCommandsValue(other.getCommandsValue());
@@ -1058,21 +1058,21 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    @Override
+    @java.lang.Override
     public final boolean isInitialized() {
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public Builder mergeFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      MessageType parsedMessage = null;
+      com.wisekrakr.wisesecurecomm.communication.proto.MessageType parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (MessageType) e.getUnfinishedMessage();
+        parsedMessage = (com.wisekrakr.wisesecurecomm.communication.proto.MessageType) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -1084,161 +1084,161 @@ private static final long serialVersionUID = 0L;
 
     private int message_ = 0;
     /**
-     * <code>.MessageType.Message message = 1;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message message = 1;</code>
      * @return The enum numeric value on the wire for message.
      */
-    @Override public int getMessageValue() {
+    @java.lang.Override public int getMessageValue() {
       return message_;
     }
     /**
-     * <code>.MessageType.Message message = 1;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message message = 1;</code>
      * @param value The enum numeric value on the wire for message to set.
      * @return This builder for chaining.
      */
     public Builder setMessageValue(int value) {
-
+      
       message_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>.MessageType.Message message = 1;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message message = 1;</code>
      * @return The message.
      */
-    @Override
-    public Message getMessage() {
+    @java.lang.Override
+    public com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message getMessage() {
       @SuppressWarnings("deprecation")
-      Message result = Message.valueOf(message_);
-      return result == null ? Message.UNRECOGNIZED : result;
+      com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message result = com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message.valueOf(message_);
+      return result == null ? com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message.UNRECOGNIZED : result;
     }
     /**
-     * <code>.MessageType.Message message = 1;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message message = 1;</code>
      * @param value The message to set.
      * @return This builder for chaining.
      */
-    public Builder setMessage(Message value) {
+    public Builder setMessage(com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message value) {
       if (value == null) {
         throw new NullPointerException();
       }
-
+      
       message_ = value.getNumber();
       onChanged();
       return this;
     }
     /**
-     * <code>.MessageType.Message message = 1;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Message message = 1;</code>
      * @return This builder for chaining.
      */
     public Builder clearMessage() {
-
+      
       message_ = 0;
       onChanged();
       return this;
     }
 
-    private int notificiations_ = 0;
+    private int notifications_ = 0;
     /**
-     * <code>.MessageType.Notifications notificiations = 2;</code>
-     * @return The enum numeric value on the wire for notificiations.
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications notifications = 2;</code>
+     * @return The enum numeric value on the wire for notifications.
      */
-    @Override public int getNotificiationsValue() {
-      return notificiations_;
+    @java.lang.Override public int getNotificationsValue() {
+      return notifications_;
     }
     /**
-     * <code>.MessageType.Notifications notificiations = 2;</code>
-     * @param value The enum numeric value on the wire for notificiations to set.
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications notifications = 2;</code>
+     * @param value The enum numeric value on the wire for notifications to set.
      * @return This builder for chaining.
      */
-    public Builder setNotificiationsValue(int value) {
-
-      notificiations_ = value;
+    public Builder setNotificationsValue(int value) {
+      
+      notifications_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>.MessageType.Notifications notificiations = 2;</code>
-     * @return The notificiations.
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications notifications = 2;</code>
+     * @return The notifications.
      */
-    @Override
-    public Notifications getNotificiations() {
+    @java.lang.Override
+    public com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications getNotifications() {
       @SuppressWarnings("deprecation")
-      Notifications result = Notifications.valueOf(notificiations_);
-      return result == null ? Notifications.UNRECOGNIZED : result;
+      com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications result = com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications.valueOf(notifications_);
+      return result == null ? com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications.UNRECOGNIZED : result;
     }
     /**
-     * <code>.MessageType.Notifications notificiations = 2;</code>
-     * @param value The notificiations to set.
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications notifications = 2;</code>
+     * @param value The notifications to set.
      * @return This builder for chaining.
      */
-    public Builder setNotificiations(Notifications value) {
+    public Builder setNotifications(com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications value) {
       if (value == null) {
         throw new NullPointerException();
       }
-
-      notificiations_ = value.getNumber();
+      
+      notifications_ = value.getNumber();
       onChanged();
       return this;
     }
     /**
-     * <code>.MessageType.Notifications notificiations = 2;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Notifications notifications = 2;</code>
      * @return This builder for chaining.
      */
-    public Builder clearNotificiations() {
-
-      notificiations_ = 0;
+    public Builder clearNotifications() {
+      
+      notifications_ = 0;
       onChanged();
       return this;
     }
 
     private int commands_ = 0;
     /**
-     * <code>.MessageType.Commands commands = 3;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands commands = 3;</code>
      * @return The enum numeric value on the wire for commands.
      */
-    @Override public int getCommandsValue() {
+    @java.lang.Override public int getCommandsValue() {
       return commands_;
     }
     /**
-     * <code>.MessageType.Commands commands = 3;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands commands = 3;</code>
      * @param value The enum numeric value on the wire for commands to set.
      * @return This builder for chaining.
      */
     public Builder setCommandsValue(int value) {
-
+      
       commands_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>.MessageType.Commands commands = 3;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands commands = 3;</code>
      * @return The commands.
      */
-    @Override
-    public Commands getCommands() {
+    @java.lang.Override
+    public com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands getCommands() {
       @SuppressWarnings("deprecation")
-      Commands result = Commands.valueOf(commands_);
-      return result == null ? Commands.UNRECOGNIZED : result;
+      com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands result = com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands.valueOf(commands_);
+      return result == null ? com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands.UNRECOGNIZED : result;
     }
     /**
-     * <code>.MessageType.Commands commands = 3;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands commands = 3;</code>
      * @param value The commands to set.
      * @return This builder for chaining.
      */
-    public Builder setCommands(Commands value) {
+    public Builder setCommands(com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands value) {
       if (value == null) {
         throw new NullPointerException();
       }
-
+      
       commands_ = value.getNumber();
       onChanged();
       return this;
     }
     /**
-     * <code>.MessageType.Commands commands = 3;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Commands commands = 3;</code>
      * @return This builder for chaining.
      */
     public Builder clearCommands() {
-
+      
       commands_ = 0;
       onChanged();
       return this;
@@ -1246,86 +1246,86 @@ private static final long serialVersionUID = 0L;
 
     private int security_ = 0;
     /**
-     * <code>.MessageType.Security security = 4;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security security = 4;</code>
      * @return The enum numeric value on the wire for security.
      */
-    @Override public int getSecurityValue() {
+    @java.lang.Override public int getSecurityValue() {
       return security_;
     }
     /**
-     * <code>.MessageType.Security security = 4;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security security = 4;</code>
      * @param value The enum numeric value on the wire for security to set.
      * @return This builder for chaining.
      */
     public Builder setSecurityValue(int value) {
-
+      
       security_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>.MessageType.Security security = 4;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security security = 4;</code>
      * @return The security.
      */
-    @Override
-    public Security getSecurity() {
+    @java.lang.Override
+    public com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security getSecurity() {
       @SuppressWarnings("deprecation")
-      Security result = Security.valueOf(security_);
-      return result == null ? Security.UNRECOGNIZED : result;
+      com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security result = com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security.valueOf(security_);
+      return result == null ? com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security.UNRECOGNIZED : result;
     }
     /**
-     * <code>.MessageType.Security security = 4;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security security = 4;</code>
      * @param value The security to set.
      * @return This builder for chaining.
      */
-    public Builder setSecurity(Security value) {
+    public Builder setSecurity(com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security value) {
       if (value == null) {
         throw new NullPointerException();
       }
-
+      
       security_ = value.getNumber();
       onChanged();
       return this;
     }
     /**
-     * <code>.MessageType.Security security = 4;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Security security = 4;</code>
      * @return This builder for chaining.
      */
     public Builder clearSecurity() {
-
+      
       security_ = 0;
       onChanged();
       return this;
     }
-    @Override
+    @java.lang.Override
     public final Builder setUnknownFields(
         final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
     }
 
-    @Override
+    @java.lang.Override
     public final Builder mergeUnknownFields(
         final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.mergeUnknownFields(unknownFields);
     }
 
 
-    // @@protoc_insertion_point(builder_scope:MessageType)
+    // @@protoc_insertion_point(builder_scope:com.wisekrakr.wisesecurecomm.communication.proto.MessageType)
   }
 
-  // @@protoc_insertion_point(class_scope:MessageType)
-  private static final MessageType DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:com.wisekrakr.wisesecurecomm.communication.proto.MessageType)
+  private static final com.wisekrakr.wisesecurecomm.communication.proto.MessageType DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new MessageType();
+    DEFAULT_INSTANCE = new com.wisekrakr.wisesecurecomm.communication.proto.MessageType();
   }
 
-  public static MessageType getDefaultInstance() {
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageType getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
   private static final com.google.protobuf.Parser<MessageType>
       PARSER = new com.google.protobuf.AbstractParser<MessageType>() {
-    @Override
+    @java.lang.Override
     public MessageType parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1338,13 +1338,13 @@ private static final long serialVersionUID = 0L;
     return PARSER;
   }
 
-  @Override
+  @java.lang.Override
   public com.google.protobuf.Parser<MessageType> getParserForType() {
     return PARSER;
   }
 
-  @Override
-  public MessageType getDefaultInstanceForType() {
+  @java.lang.Override
+  public com.wisekrakr.wisesecurecomm.communication.proto.MessageType getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

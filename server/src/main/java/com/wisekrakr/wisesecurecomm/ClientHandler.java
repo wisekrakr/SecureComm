@@ -3,7 +3,7 @@ package com.wisekrakr.wisesecurecomm;
 import com.wisekrakr.wisesecurecomm.communication.crypto.MessageCryptography;
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageType;
-import com.wisekrakr.wisesecurecomm.communication.proto.User;
+import com.wisekrakr.wisesecurecomm.communication.user.User;
 import com.wisekrakr.wisesecurecomm.util.Constants;
 
 import javax.crypto.KeyGenerator;
@@ -210,20 +210,29 @@ public class ClientHandler {
 								case DIRECT_CHAT:
 									// send message to specific client and self
 									listener.onDirectMessage(
-											dateFormat.format(new Date()) + "<" + messageObject.getOwner().getName() + "> " + line,
+											dateFormat.format(
+													new Date()) +
+													"<" + listener.getUser(messageObject.getOwnerId()).getName() + "> " +
+													line,
 											messageObject
 									);
 									break;
 								case FILE:
 									listener.onFileTransfer(
-											dateFormat.format(new Date()) + "<" + messageObject.getOwner().getName() + "> " + line,
+											dateFormat.format(
+													new Date()) +
+													"<" + listener.getUser(messageObject.getId()).getName() + "> " +
+													line,
 											messageObject
 									);
 
 									break;
 								case VOICE_CHAT:
 									listener.onVoiceMessage(
-											dateFormat.format(new Date()) + "<" + messageObject.getOwner().getName() + "> " +line,
+											dateFormat.format(
+													new Date()) +
+													"<" + listener.getUser(messageObject.getOwnerId()).getName() + "> " +
+													line,
 											messageObject
 									);
 
@@ -236,9 +245,7 @@ public class ClientHandler {
 							}
 							break;
 						case NOTIFICATION:
-							if (messageObject.getMessageType().getNotificiations() == MessageType.Notifications.USER_STATUS) {
-								System.out.println("STATUS CHANGE: \n"+ messageObject.getOwner().getStatus());
-
+							if (messageObject.getMessageType().getNotifications() == MessageType.Notifications.USER_STATUS) {
 								listener.onClientStatusUpdate(messageObject);
 							} else {
 								throw new IllegalStateException("Unexpected message type: " + messageObject.getMessageType());
@@ -291,7 +298,7 @@ public class ClientHandler {
 	 * Activate secure transfer of data!
 	 * @param id current message object id
 	 */
-	private void secureChat(int id){
+	private void secureChat(long id){
 		isSecure = true;
 		try {
 			System.out.println( user.getName() + " send public key!");
@@ -306,7 +313,7 @@ public class ClientHandler {
 	 * @param id user id
 	 * @param keyString string
 	 */
-	private void storeClientPublicKey(int id, String keyString){
+	private void storeClientPublicKey(long id, String keyString){
 		System.out.println(user.getName() + " Got public key: " + keyString);
 		if (!keyString.startsWith("FAIL")){
 
@@ -337,7 +344,7 @@ public class ClientHandler {
 	 * @param id
 	 * @param signedKey string
 	 */
-	private void storeSignedSessionKey(int id, String signedKey){
+	private void storeSignedSessionKey(long id, String signedKey){
 		isCryptoVerified = MessageCryptography.verifySignedKey(clientPublicKey, sessionKey.getEncoded(),
 				MessageCryptography.getBytes(signedKey));
 

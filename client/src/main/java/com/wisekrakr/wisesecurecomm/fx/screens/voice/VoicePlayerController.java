@@ -1,7 +1,7 @@
 package com.wisekrakr.wisesecurecomm.fx.screens.voice;
 
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
-import com.wisekrakr.wisesecurecomm.communication.proto.User;
+import com.wisekrakr.wisesecurecomm.communication.user.User;
 import com.wisekrakr.wisesecurecomm.connection.AudioUtil;
 import com.wisekrakr.wisesecurecomm.connection.FileTransferManager;
 import com.wisekrakr.wisesecurecomm.fx.AbstractGUI;

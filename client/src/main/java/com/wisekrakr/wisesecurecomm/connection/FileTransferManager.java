@@ -3,7 +3,7 @@ package com.wisekrakr.wisesecurecomm.connection;
 
 import com.wisekrakr.wisesecurecomm.Client;
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
-import com.wisekrakr.wisesecurecomm.communication.proto.User;
+import com.wisekrakr.wisesecurecomm.communication.user.User;
 
 import java.io.*;
 import java.util.List;

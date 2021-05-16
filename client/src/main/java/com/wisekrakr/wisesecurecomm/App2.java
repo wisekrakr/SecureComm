@@ -1,7 +1,7 @@
 package com.wisekrakr.wisesecurecomm;
 
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
-import com.wisekrakr.wisesecurecomm.communication.proto.User;
+import com.wisekrakr.wisesecurecomm.communication.user.User;
 import com.wisekrakr.wisesecurecomm.fx.events.EventManager;
 import com.wisekrakr.wisesecurecomm.fx.screens.traynotifications.TrayNotificationType;
 
@@ -65,7 +65,7 @@ public class App2 implements Serializable {
                     }
 
                     @Override
-                    public void onGetOnlineUser(Map<Integer, User> users, User activeUser) {
+                    public void onGetOnlineUser(Map<Long, User> users, User activeUser) {
                         eventManager.chatAPI().getUsersOnline(users, activeUser);
                     }
 

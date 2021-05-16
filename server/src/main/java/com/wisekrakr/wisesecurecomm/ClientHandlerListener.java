@@ -1,14 +1,17 @@
 package com.wisekrakr.wisesecurecomm;
 
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
+import com.wisekrakr.wisesecurecomm.communication.user.User;
+
+import java.util.List;
 
 public interface ClientHandlerListener {
     void onError(String errorMessage);
 
     // security methods
-    void onGettingSecurity(int id, String encodedPublicKey);
-    void onStoringPublicKey(int id, String encodedSessionKey);
-    void onStoringSessionKey(int id, String sessionKey);
+    void onGettingSecurity(long id, String encodedPublicKey);
+    void onStoringPublicKey(long id, String encodedSessionKey);
+    void onStoringSessionKey(long id, String sessionKey);
     void onVerified(boolean secureConnection);
 
     // command methods
@@ -23,7 +26,7 @@ public interface ClientHandlerListener {
      * Send a bye message to this client and finally closes all connections
      * @param id user id
      */
-    void onQuit(int id);
+    void onQuit(long id);
 
     /**
      * General cleaning up of client thread pool and all open streams!
@@ -37,4 +40,6 @@ public interface ClientHandlerListener {
     void onVoiceMessage(String lineToSend, MessageObject messageObject);
     void onCommentMessage(String lineToSend, MessageObject messageObject);
 
+    User getUser(Long id);
+    List<User>getUserList(List<Long>recipientsIds);
 }

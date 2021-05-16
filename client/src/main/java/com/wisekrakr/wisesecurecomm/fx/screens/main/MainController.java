@@ -1,7 +1,8 @@
 package com.wisekrakr.wisesecurecomm.fx.screens.main;
 
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
-import com.wisekrakr.wisesecurecomm.communication.proto.User;
+import com.wisekrakr.wisesecurecomm.communication.user.Status;
+import com.wisekrakr.wisesecurecomm.communication.user.User;
 import com.wisekrakr.wisesecurecomm.connection.AudioUtil;
 import com.wisekrakr.wisesecurecomm.fx.AbstractGUI;
 import com.wisekrakr.wisesecurecomm.fx.AbstractJFXPanel;
@@ -89,41 +90,31 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
         statusComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             switch (newValue){
                 case "Online":
+                    if(!user.getStatus().equals(Status.ONLINE)){
+                        user = eventManager.chatAPI().refreshUser(Status.ONLINE,user);
 
-                    if(!user.getStatus().equals(User.Status.ONLINE)){
-                        user = refreshUser(User.Status.ONLINE);
-
-                        Thread thread = new Thread(sendStatus(User.Status.ONLINE));
+                        Thread thread = new Thread(sendStatus(Status.ONLINE));
                         thread.start();
                         thread.interrupt();
                     }
 
-                    break;
-                case "Offline":
-                    if(!user.getStatus().equals(User.Status.OFFLINE)){
-                        user = refreshUser(User.Status.OFFLINE);
-
-                        Thread thread = new Thread(sendStatus(User.Status.OFFLINE));
-                        thread.start();
-                        thread.interrupt();
-                    }
                     break;
                 case "Away":
 
-                    if(!user.getStatus().equals(User.Status.AWAY)){
-                        user = refreshUser(User.Status.AWAY);
+                    if(!user.getStatus().equals(Status.AWAY)){
+                        user = eventManager.chatAPI().refreshUser(Status.AWAY,user);
 
-                        Thread thread = new Thread(sendStatus(User.Status.AWAY));
+                        Thread thread = new Thread(sendStatus(Status.AWAY));
                         thread.start();
                         thread.interrupt();
                     }
                     break;
                 case "Busy":
 
-                    if(!user.getStatus().equals(User.Status.BUSY)){
-                        user = refreshUser(User.Status.BUSY);
+                    if(!user.getStatus().equals(Status.BUSY)){
+                        user = eventManager.chatAPI().refreshUser(Status.BUSY,user);
 
-                        Thread thread = new Thread(sendStatus(User.Status.BUSY));
+                        Thread thread = new Thread(sendStatus(Status.BUSY));
                         thread.start();
                         thread.interrupt();
                     }
@@ -156,16 +147,6 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
 
 // ## Begin AppListener Methods
     @Override
-    public User refreshUser(User.Status status) {
-        return User.newBuilder()
-                .setId(user.getId())
-                .setName(user.getName())
-                .setStatus(status)
-                .setProfilePicture(user.getProfilePicture())
-                .build();
-    }
-
-    @Override
     public Runnable sendInvite(User invitee) {
         return ()-> eventManager.directMessageAPI().inviteToPrivateConversation(
                 user,
@@ -180,7 +161,7 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
     }
 
     @Override
-    public Runnable sendStatus(User.Status status) {
+    public Runnable sendStatus(Status status) {
         return ()-> eventManager.chatAPI().sendStatusMessage(status, user, recipients);
     }
 
@@ -195,7 +176,7 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
     }
 
     @Override
-    public void setUserList(Map<Integer, User> users, User activeUser) {
+    public void setUserList(Map<Long, User> users, User activeUser) {
         ArrayList<User>listOfUsers = new ArrayList<>(users.values());
 
         // add new user in the user list
@@ -203,12 +184,9 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
             newUserNotification(activeUser);
 
             recipients.add(
-                    User.newBuilder()
-                            .setId(activeUser.getId())
-                            .setName(activeUser.getName())
-                            .setProfilePicture(activeUser.getProfilePicture())
-                            .setStatus(activeUser.getStatus())
-                            .build()
+                    new User(
+                            activeUser.getId(), activeUser.getName(),activeUser.getStatus(), activeUser.getProfilePicture()
+                    )
             );
         // replace user in user list with itself but with different Status
         }else {
@@ -251,9 +229,9 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
 
         User clickedUser = userList.getSelectionModel().getSelectedItem();
 
-        if(clickedUser != null && !clickedUser.getName().equals(user.getName())){
+        if(clickedUser != null && clickedUser.getId() != user.getId()){
             for(User recipient: recipients){
-                if(recipient.getName().equals(clickedUser.getName())){
+                if(recipient.getId() == clickedUser.getId()){
                     ChoiceDialog<String> dialog = new ChoiceDialog<>(dialogData.get(0), dialogData);
                     dialog.setTitle("Your choices");
                     dialog.setHeaderText("What would you like to do?");
@@ -344,7 +322,7 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
         if(!filesToOpen.isEmpty()){
             for (Map.Entry<Integer, MessageObject> file: filesToOpen.entrySet()){
                 if(clickedMessage == file.getKey()){
-                    eventManager.fileTransferAPI().receiveFile(file.getValue(), user, file.getValue().getOwner());
+//                    eventManager.fileTransferAPI().receiveFile(file.getValue(), user, file.getValue().getOwner());
                     filesToOpen.remove(file.getKey());
                 }
             }
@@ -388,7 +366,7 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
                 bubbledLabel.setBubbleSpec(BubbleSpec.FACE_LEFT_CENTER);
 
                 Circle pic = new Circle(20);
-                Image image = new Image(messageObject.getOwner().getProfilePicture());
+                Image image = new Image(eventManager.chatAPI().getUser(messageObject.getOwnerId(),recipients).getProfilePicture());
                 pic.setFill(new ImagePattern(image));
 
                 switch (messageObject.getObjectType()){
@@ -399,12 +377,12 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
                                 bubbledLabel.setText(messageToShow);
                                 break;
                             case FILE:
-                                bubbledLabel.setText(
-                                        messageToShow + " \n" +
-                                        messageObject.getOwner() +
-                                        " sent you a file: \n " +
-                                        " \n of size: " + messageObject.getFileInfo().getSize()
-                                );
+//                                bubbledLabel.setText(
+//                                        messageToShow + " \n" +
+//                                        messageObject.getOwner() +
+//                                        " sent you a file: \n " +
+//                                        " \n of size: " + messageObject.getFileInfo().getSize()
+//                                );
                                 filesToOpen.put(numberOfMessages, messageObject);
 
                                 bubbledLabel.setGraphic(new ImageView(new Image(getClass().getClassLoader().getResource("images/transfer.png").toExternalForm())));
@@ -412,10 +390,8 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
                             case VOICE_CHAT:
                                 bubbledLabel.setText(
                                         messageToShow +
-                                        "\n Click to open voice player \n" +
-                                        messageToShow +
-                                        " \n  size of message= " +
-                                        messageObject.getVoiceMessage().size()
+                                        " \n  size of message= " +  messageObject.getVoiceMessage().size() + "\n" +
+                                        "\n Click to open voice player \n"
                                 );
                                 audioToListenTo.put(numberOfMessages,messageObject);
 
@@ -431,7 +407,6 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
                     case COMMAND:
                         switch (messageObject.getMessageType().getCommands()){
                             case DM_REQUEST:
-                                System.out.println("MAINCONTROLLER DM REQUEST");
                                 bubbledLabel.setText(messageToShow);
                                 addActionRequired(messageObject, messageToShow);
                                 break;
@@ -451,7 +426,7 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
 
                 }
 
-                setOnlineLabel(String.valueOf(messageObject.getRecipientsCount()));
+                setOnlineLabel(String.valueOf(messageObject.getRecipientsIdsCount()));
                 hBox.getChildren().addAll(pic, bubbledLabel);
                 return hBox;
             }
@@ -472,7 +447,7 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
                 bubbledLabel.setBubbleSpec(BubbleSpec.FACE_RIGHT_CENTER);
 
                 Circle pic = new Circle(20);
-                Image image = new Image(messageObject.getOwner().getProfilePicture());
+                Image image = new Image(eventManager.chatAPI().getUser(messageObject.getOwnerId(),recipients).getProfilePicture());
                 pic.setFill(new ImagePattern(image));
 
                 switch (messageObject.getObjectType()){
@@ -482,11 +457,11 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
                                 bubbledLabel.setText(messageToShow);
                                 break;
                             case FILE:
-                                bubbledLabel.setText(messageToShow + " \n" +
-                                        messageObject.getOwner() +
-                                        " sent you a file: \n " +
-                                        " \n of size: " + messageObject.getFileInfo().getSize()
-                                );
+//                                bubbledLabel.setText(messageToShow + " \n" +
+//                                        messageObject.getOwner() +
+//                                        " sent you a file: \n " +
+//                                        " \n of size: " + messageObject.getFileInfo().getSize()
+//                                );
                                 filesToOpen.put(numberOfMessages, messageObject);
 
                                 bubbledLabel.setGraphic(new ImageView(new Image(getClass().getClassLoader().getResource("images/transfer.png").toExternalForm())));
@@ -518,14 +493,14 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
                         break;
 
                 }
-                setOnlineLabel(String.valueOf(messageObject.getRecipientsCount()));
+                setOnlineLabel(String.valueOf(messageObject.getRecipientsIdsCount()));
                 myHBox.getChildren().addAll(bubbledLabel, pic);
                 return myHBox;
             }
         };
         myMessages.setOnSucceeded(event -> chatPane.getItems().add(myMessages.getValue()));
 
-        if (messageObject.getOwner().getName().equals(user.getName())) {
+        if (messageObject.getOwnerId() == user.getId()) {
             Thread t2 = new Thread(myMessages);
             t2.setDaemon(true);
             t2.start();
@@ -539,7 +514,11 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
     private void addActionRequired(MessageObject messageObject, String line) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, line, ButtonType.YES, ButtonType.NO);
-            alert.setTitle("Owner of the invite: " + messageObject.getOwner().getName());
+            alert.setTitle(
+                    "Owner of the invite: " + eventManager.chatAPI()
+                            .getUser(messageObject.getOwnerId(), recipients)
+                            .getName()
+            );
 
             // clicking X also means no
             ButtonType result = alert.showAndWait().orElse(ButtonType.NO);
@@ -547,14 +526,14 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
             eventManager.directMessageAPI().responseToInvite(
                     result.getText(),
                     user,
-                    messageObject.getOwner()
+                    eventManager.chatAPI().getUser(messageObject.getOwnerId(), recipients)
             );
 
             if(ButtonType.YES.equals(result)) {
                 eventManager.onOpenDirectMessagingGUI(
                         user,
                         line,
-                        messageObject.getOwner()
+                        eventManager.chatAPI().getUser(messageObject.getOwnerId(), recipients)
                 );
             }
         });

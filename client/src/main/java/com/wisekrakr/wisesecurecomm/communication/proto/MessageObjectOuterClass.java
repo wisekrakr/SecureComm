@@ -15,25 +15,20 @@ public final class MessageObjectOuterClass {
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_MessageType_descriptor;
+    internal_static_com_wisekrakr_wisesecurecomm_communication_proto_MessageType_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_MessageType_fieldAccessorTable;
+      internal_static_com_wisekrakr_wisesecurecomm_communication_proto_MessageType_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_MessageObject_descriptor;
+    internal_static_com_wisekrakr_wisesecurecomm_communication_proto_MessageObject_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_MessageObject_fieldAccessorTable;
+      internal_static_com_wisekrakr_wisesecurecomm_communication_proto_MessageObject_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_User_descriptor;
+    internal_static_com_wisekrakr_wisesecurecomm_communication_proto_FileInfo_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_User_fieldAccessorTable;
-  static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_FileInfo_descriptor;
-  static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_FileInfo_fieldAccessorTable;
+      internal_static_com_wisekrakr_wisesecurecomm_communication_proto_FileInfo_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -42,78 +37,64 @@ public final class MessageObjectOuterClass {
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    String[] descriptorData = {
-      "\n\023MessageObject.proto\0225client.src.com.wi" +
-      "sekrakr.wisesecurecomm.communication\"\374\005\n" +
-      "\013MessageType\022[\n\007message\030\001 \001(\0162J.client.s" +
-      "rc.com.wisekrakr.wisesecurecomm.communic" +
-      "ation.MessageType.Message\022h\n\016notificiati" +
-      "ons\030\002 \001(\0162P.client.src.com.wisekrakr.wis" +
-      "esecurecomm.communication.MessageType.No" +
-      "tifications\022]\n\010commands\030\003 \001(\0162K.client.s" +
-      "rc.com.wisekrakr.wisesecurecomm.communic" +
-      "ation.MessageType.Commands\022]\n\010security\030\004" +
-      " \001(\0162K.client.src.com.wisekrakr.wisesecu" +
-      "recomm.communication.MessageType.Securit" +
-      "y\"K\n\007Message\022\017\n\013DIRECT_CHAT\020\000\022\010\n\004TEXT\020\001\022" +
-      "\010\n\004FILE\020\002\022\016\n\nVOICE_CHAT\020\003\022\013\n\007COMMENT\020\004\"x" +
-      "\n\010Commands\022\016\n\nDM_REQUEST\020\000\022\017\n\013DM_RESPONS" +
-      "E\020\001\022\013\n\007DM_QUIT\020\002\022\020\n\014FILE_REQUEST\020\003\022\013\n\007FI" +
-      "LE_OK\020\004\022\014\n\010APP_QUIT\020\005\022\021\n\rREMOVE_CLIENT\020\006" +
-      "\"X\n\rNotifications\022\017\n\013USER_ONLINE\020\000\022\020\n\014US" +
-      "ER_OFFLINE\020\001\022\017\n\013USER_STATUS\020\002\022\t\n\005ERROR\020\003" +
-      "\022\010\n\004INFO\020\004\"G\n\010Security\022\016\n\nGET_SECURE\020\000\022\016" +
-      "\n\nPUBLIC_KEY\020\001\022\017\n\013SESSION_KEY\020\002\022\n\n\006VERIF" +
-      "Y\020\003\"\274\004\n\rMessageObject\022\n\n\002id\030\001 \001(\005\022c\n\nobj" +
-      "ectType\030\002 \001(\0162O.client.src.com.wisekrakr" +
-      ".wisesecurecomm.communication.MessageObj" +
-      "ect.ObjectType\022W\n\013messageType\030\003 \001(\0132B.cl" +
-      "ient.src.com.wisekrakr.wisesecurecomm.co" +
-      "mmunication.MessageType\022\023\n\013textMessage\030\004" +
-      " \001(\t\022\024\n\014voiceMessage\030\005 \001(\014\022Q\n\010fileInfo\030\006" +
-      " \001(\0132?.client.src.com.wisekrakr.wisesecu" +
-      "recomm.communication.FileInfo\022J\n\005owner\030\007" +
-      " \001(\0132;.client.src.com.wisekrakr.wisesecu" +
-      "recomm.communication.User\022O\n\nrecipients\030" +
-      "\010 \003(\0132;.client.src.com.wisekrakr.wisesec" +
-      "urecomm.communication.User\"F\n\nObjectType" +
-      "\022\013\n\007MESSAGE\020\000\022\020\n\014NOTIFICATION\020\001\022\013\n\007COMMA" +
-      "ND\020\002\022\014\n\010SECURITY\020\003\"\303\001\n\004User\022\n\n\002id\030\001 \001(\005\022" +
-      "\014\n\004name\030\002 \001(\t\022R\n\006status\030\003 \001(\0162B.client.s" +
-      "rc.com.wisekrakr.wisesecurecomm.communic" +
-      "ation.User.Status\022\026\n\016profilePicture\030\004 \001(" +
-      "\t\"5\n\006Status\022\n\n\006ONLINE\020\000\022\013\n\007OFFLINE\020\001\022\010\n\004" +
-      "BUSY\020\002\022\010\n\004AWAY\020\003\"2\n\010FileInfo\022\n\n\002id\030\001 \001(\005" +
-      "\022\014\n\004name\030\002 \001(\t\022\014\n\004size\030\003 \001(\004B\002P\001b\006proto3"
+    java.lang.String[] descriptorData = {
+      "\n\023MessageObject.proto\0220com.wisekrakr.wis" +
+      "esecurecomm.communication.proto\"\347\005\n\013Mess" +
+      "ageType\022V\n\007message\030\001 \001(\0162E.com.wisekrakr" +
+      ".wisesecurecomm.communication.proto.Mess" +
+      "ageType.Message\022b\n\rnotifications\030\002 \001(\0162K" +
+      ".com.wisekrakr.wisesecurecomm.communicat" +
+      "ion.proto.MessageType.Notifications\022X\n\010c" +
+      "ommands\030\003 \001(\0162F.com.wisekrakr.wisesecure" +
+      "comm.communication.proto.MessageType.Com" +
+      "mands\022X\n\010security\030\004 \001(\0162F.com.wisekrakr." +
+      "wisesecurecomm.communication.proto.Messa" +
+      "geType.Security\"K\n\007Message\022\017\n\013DIRECT_CHA" +
+      "T\020\000\022\010\n\004TEXT\020\001\022\010\n\004FILE\020\002\022\016\n\nVOICE_CHAT\020\003\022" +
+      "\013\n\007COMMENT\020\004\"x\n\010Commands\022\016\n\nDM_REQUEST\020\000" +
+      "\022\017\n\013DM_RESPONSE\020\001\022\013\n\007DM_QUIT\020\002\022\020\n\014FILE_R" +
+      "EQUEST\020\003\022\013\n\007FILE_OK\020\004\022\014\n\010APP_QUIT\020\005\022\021\n\rR" +
+      "EMOVE_CLIENT\020\006\"X\n\rNotifications\022\017\n\013USER_" +
+      "ONLINE\020\000\022\020\n\014USER_OFFLINE\020\001\022\017\n\013USER_STATU" +
+      "S\020\002\022\t\n\005ERROR\020\003\022\010\n\004INFO\020\004\"G\n\010Security\022\016\n\n" +
+      "GET_SECURE\020\000\022\016\n\nPUBLIC_KEY\020\001\022\017\n\013SESSION_" +
+      "KEY\020\002\022\n\n\006VERIFY\020\003\"\277\003\n\rMessageObject\022\n\n\002i" +
+      "d\030\001 \001(\003\022_\n\013object_type\030\002 \001(\0162J.com.wisek" +
+      "rakr.wisesecurecomm.communication.proto." +
+      "MessageObject.ObjectType\022S\n\014message_type" +
+      "\030\003 \001(\0132=.com.wisekrakr.wisesecurecomm.co" +
+      "mmunication.proto.MessageType\022\024\n\014text_me" +
+      "ssage\030\004 \001(\t\022\025\n\rvoice_message\030\005 \001(\014\022M\n\tfi" +
+      "le_info\030\006 \001(\0132:.com.wisekrakr.wisesecure" +
+      "comm.communication.proto.FileInfo\022\020\n\010own" +
+      "er_id\030\007 \001(\003\022\026\n\016recipients_ids\030\010 \003(\003\"F\n\nO" +
+      "bjectType\022\013\n\007MESSAGE\020\000\022\020\n\014NOTIFICATION\020\001" +
+      "\022\013\n\007COMMAND\020\002\022\014\n\010SECURITY\020\003\"2\n\010FileInfo\022" +
+      "\n\n\002id\030\001 \001(\003\022\014\n\004name\030\002 \001(\t\022\014\n\004size\030\003 \001(\004B" +
+      "\002P\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         });
-    internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_MessageType_descriptor =
+    internal_static_com_wisekrakr_wisesecurecomm_communication_proto_MessageType_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_MessageType_fieldAccessorTable = new
+    internal_static_com_wisekrakr_wisesecurecomm_communication_proto_MessageType_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_MessageType_descriptor,
-        new String[] { "Message", "Notificiations", "Commands", "Security", });
-    internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_MessageObject_descriptor =
+        internal_static_com_wisekrakr_wisesecurecomm_communication_proto_MessageType_descriptor,
+        new java.lang.String[] { "Message", "Notifications", "Commands", "Security", });
+    internal_static_com_wisekrakr_wisesecurecomm_communication_proto_MessageObject_descriptor =
       getDescriptor().getMessageTypes().get(1);
-    internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_MessageObject_fieldAccessorTable = new
+    internal_static_com_wisekrakr_wisesecurecomm_communication_proto_MessageObject_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_MessageObject_descriptor,
-        new String[] { "Id", "ObjectType", "MessageType", "TextMessage", "VoiceMessage", "FileInfo", "Owner", "Recipients", });
-    internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_User_descriptor =
+        internal_static_com_wisekrakr_wisesecurecomm_communication_proto_MessageObject_descriptor,
+        new java.lang.String[] { "Id", "ObjectType", "MessageType", "TextMessage", "VoiceMessage", "FileInfo", "OwnerId", "RecipientsIds", });
+    internal_static_com_wisekrakr_wisesecurecomm_communication_proto_FileInfo_descriptor =
       getDescriptor().getMessageTypes().get(2);
-    internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_User_fieldAccessorTable = new
+    internal_static_com_wisekrakr_wisesecurecomm_communication_proto_FileInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_User_descriptor,
-        new String[] { "Id", "Name", "Status", "ProfilePicture", });
-    internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_FileInfo_descriptor =
-      getDescriptor().getMessageTypes().get(3);
-    internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_FileInfo_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_FileInfo_descriptor,
-        new String[] { "Id", "Name", "Size", });
+        internal_static_com_wisekrakr_wisesecurecomm_communication_proto_FileInfo_descriptor,
+        new java.lang.String[] { "Id", "Name", "Size", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

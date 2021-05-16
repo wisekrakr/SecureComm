@@ -4,7 +4,8 @@ import com.wisekrakr.wisesecurecomm.Client;
 import com.wisekrakr.wisesecurecomm.ClientMessageHandler;
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageType;
-import com.wisekrakr.wisesecurecomm.communication.proto.User;
+import com.wisekrakr.wisesecurecomm.communication.user.Status;
+import com.wisekrakr.wisesecurecomm.communication.user.User;
 import com.wisekrakr.wisesecurecomm.connection.AudioManager;
 import com.wisekrakr.wisesecurecomm.fx.screens.dm.DirectMessagingGUI;
 import com.wisekrakr.wisesecurecomm.fx.screens.filetransfer.FileTransferGUI;
@@ -19,6 +20,7 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class EventManager implements EventListener {
 
@@ -40,7 +42,6 @@ public class EventManager implements EventListener {
             loginGUI = new LoginGUI(this);
             loginGUI.prepareGUI();
             loginGUI.showGUI();
-
 
         } catch (Throwable t) {
             throw new IllegalStateException("Login GUI could not be displayed " ,t);
@@ -83,10 +84,12 @@ public class EventManager implements EventListener {
     public void onDisconnect() {
         client.disconnectClient();
 
-        for(DirectMessagingGUI directMessagingGUI :dmGUIs.values()){
-            directMessagingGUI.hideGUI();
+        if(!dmGUIs.isEmpty()){
+            for(DirectMessagingGUI directMessagingGUI :dmGUIs.values()){
+                directMessagingGUI.hideGUI();
+            }
+            dmGUIs.clear();
         }
-        dmGUIs.clear();
     }
 
     @Override
@@ -128,9 +131,7 @@ public class EventManager implements EventListener {
 
     @Override
     public void removeDirectMessagingGUI(User me, String message, User other) {
-        System.out.println("remove dm " + dmGUIs.size() + " " + dmGUIs.keySet());
         for (Map.Entry<User, DirectMessagingGUI> contact: dmGUIs.entrySet()){
-            System.out.println(contact.getKey() + " closing " + other);
             if(contact.getKey().getId() == other.getId()) {
                 contact.getValue().hideGUI();
                 dmGUIs.remove(contact.getKey());
@@ -177,7 +178,7 @@ public class EventManager implements EventListener {
 
     @Override
     public void onStartCommunication() {
-        EventManager.this.client.start();
+        EventManager.this.client.startClientThread();
     }
 
     @Override
@@ -185,12 +186,31 @@ public class EventManager implements EventListener {
         return new ChatApi() {
 
             @Override
+            public User refreshUser(Status status, User user) {
+                return new User(user.getId(), user.getName(), status, user.getProfilePicture());
+            }
+
+            @Override
+            public User getUser(Long id, ArrayList<User> users) {
+                User u = null;
+
+                if(id != null){
+                    for (User otherUser: users){
+                        if (otherUser.getId() == id)
+                            u = otherUser;
+                    }
+                }
+
+                return u;
+            }
+
+            @Override
             public void sendChatMessage(String message, User user, ArrayList<User> recipients) {
                 EventManager.this.client.sendMessage(
                         ClientMessageHandler.createMessage(
                                 message,
-                                user,
-                                recipients
+                                user.getId(),
+                                recipients.stream().map(User::getId).collect(Collectors.toList())
                         )
                 );
             }
@@ -201,7 +221,7 @@ public class EventManager implements EventListener {
             }
 
             @Override
-            public void getUsersOnline(Map<Integer, User> users, User activeUser) {
+            public void getUsersOnline(Map<Long, User> users, User activeUser) {
                 EventManager.this.mainGui.getController().setUserList(users, activeUser);
             }
 
@@ -211,12 +231,12 @@ public class EventManager implements EventListener {
             }
 
             @Override
-            public void sendStatusMessage(User.Status status, User user, ArrayList<User> recipients) {
+            public void sendStatusMessage(Status status, User user, ArrayList<User> recipients) {
                 EventManager.this.client.sendMessage(
                         ClientMessageHandler.createStatusMessage(
                                 status,
-                                user,
-                                recipients
+                                user.getId(),
+                                recipients.stream().map(User::getId).collect(Collectors.toList())
                         )
                 );
             }
@@ -231,9 +251,10 @@ public class EventManager implements EventListener {
                 EventManager.this.client.sendAudioMessage(
                         ClientMessageHandler.createVoiceMessage(
                                 audioBytes,
+                                user.getName() + " has sent a voice message",
                                 duration,
-                                user,
-                                recipients
+                                user.getId(),
+                                recipients.stream().map(User::getId).collect(Collectors.toList())
                         )
                 );
             }
@@ -275,8 +296,8 @@ public class EventManager implements EventListener {
                 EventManager.this.client.sendMessage(ClientMessageHandler.createCommandMessage(
                         MessageType.Commands.FILE_OK,
                         String.valueOf(messageObject.getFileInfo().getId()),
-                        user,
-                        Collections.singletonList(messageObject.getOwner())
+                        user.getId(),
+                        Collections.singletonList(messageObject.getOwnerId())
                 ));
             }
 
@@ -311,8 +332,8 @@ public class EventManager implements EventListener {
                         ClientMessageHandler.createCommandMessage(
                                 MessageType.Commands.DM_RESPONSE,
                                 yesOrNo,
-                                owner,
-                                Collections.singletonList(other)
+                                owner.getId(),
+                                Collections.singletonList(other.getId())
                         )
                 );
             }
@@ -321,8 +342,8 @@ public class EventManager implements EventListener {
             public void createSecureDirectMessageToShow(String message, MessageObject messageObject) {
 
                 dmGUIs.forEach((user, directMessagingGUI) -> {
-                    for (User recipient: messageObject.getRecipientsList()){
-                        if(user.getName().equals(recipient.getName()) || user.getName().equals(messageObject.getOwner().getName())){
+                    for (Long recipientId: messageObject.getRecipientsIdsList()){
+                        if(user.getId() == recipientId|| user.getId() == messageObject.getOwnerId()){
                             directMessagingGUI.getController().addToChat(message, messageObject);
                         }
                     }
@@ -335,8 +356,8 @@ public class EventManager implements EventListener {
                         ClientMessageHandler.createCommandMessage(
                                 MessageType.Commands.DM_QUIT,
                                 me + " wants to leave",
-                                me,
-                                Collections.singletonList(other)
+                                me.getId(),
+                                Collections.singletonList(other.getId())
                         )
                 );
             }
@@ -347,8 +368,8 @@ public class EventManager implements EventListener {
                         ClientMessageHandler.createCommandMessage(
                                 MessageType.Commands.DM_REQUEST,
                                 message,
-                                me,
-                                Collections.singletonList(other)
+                                me.getId(),
+                                Collections.singletonList(other.getId())
                         )
                 );
             }
@@ -358,8 +379,8 @@ public class EventManager implements EventListener {
                 EventManager.this.client.sendMessage(
                         ClientMessageHandler.createDirectChatMessage(
                                 message,
-                                me,
-                                other
+                                me.getId(),
+                                other.getId()
                         )
                 );
             }

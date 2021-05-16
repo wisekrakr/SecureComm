@@ -4,11 +4,11 @@
 package com.wisekrakr.wisesecurecomm.communication.proto;
 
 /**
- * Protobuf type {@code MessageObject}
+ * Protobuf type {@code com.wisekrakr.wisesecurecomm.communication.proto.MessageObject}
  */
 public final class MessageObject extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:MessageObject)
+    // @@protoc_insertion_point(message_implements:com.wisekrakr.wisesecurecomm.communication.proto.MessageObject)
     MessageObjectOrBuilder {
 private static final long serialVersionUID = 0L;
   // Use MessageObject.newBuilder() to construct.
@@ -19,17 +19,17 @@ private static final long serialVersionUID = 0L;
     objectType_ = 0;
     textMessage_ = "";
     voiceMessage_ = com.google.protobuf.ByteString.EMPTY;
-    recipients_ = java.util.Collections.emptyList();
+    recipientsIds_ = emptyLongList();
   }
 
-  @Override
+  @java.lang.Override
   @SuppressWarnings({"unused"})
-  protected Object newInstance(
+  protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
     return new MessageObject();
   }
 
-  @Override
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet
   getUnknownFields() {
     return this.unknownFields;
@@ -40,7 +40,7 @@ private static final long serialVersionUID = 0L;
       throws com.google.protobuf.InvalidProtocolBufferException {
     this();
     if (extensionRegistry == null) {
-      throw new NullPointerException();
+      throw new java.lang.NullPointerException();
     }
     int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
@@ -55,7 +55,7 @@ private static final long serialVersionUID = 0L;
             break;
           case 8: {
 
-            id_ = input.readInt32();
+            id_ = input.readInt64();
             break;
           }
           case 16: {
@@ -65,11 +65,11 @@ private static final long serialVersionUID = 0L;
             break;
           }
           case 26: {
-            MessageType.Builder subBuilder = null;
+            com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Builder subBuilder = null;
             if (messageType_ != null) {
               subBuilder = messageType_.toBuilder();
             }
-            messageType_ = input.readMessage(MessageType.parser(), extensionRegistry);
+            messageType_ = input.readMessage(com.wisekrakr.wisesecurecomm.communication.proto.MessageType.parser(), extensionRegistry);
             if (subBuilder != null) {
               subBuilder.mergeFrom(messageType_);
               messageType_ = subBuilder.buildPartial();
@@ -78,7 +78,7 @@ private static final long serialVersionUID = 0L;
             break;
           }
           case 34: {
-            String s = input.readStringRequireUtf8();
+            java.lang.String s = input.readStringRequireUtf8();
 
             textMessage_ = s;
             break;
@@ -89,11 +89,11 @@ private static final long serialVersionUID = 0L;
             break;
           }
           case 50: {
-            FileInfo.Builder subBuilder = null;
+            com.wisekrakr.wisesecurecomm.communication.proto.FileInfo.Builder subBuilder = null;
             if (fileInfo_ != null) {
               subBuilder = fileInfo_.toBuilder();
             }
-            fileInfo_ = input.readMessage(FileInfo.parser(), extensionRegistry);
+            fileInfo_ = input.readMessage(com.wisekrakr.wisesecurecomm.communication.proto.FileInfo.parser(), extensionRegistry);
             if (subBuilder != null) {
               subBuilder.mergeFrom(fileInfo_);
               fileInfo_ = subBuilder.buildPartial();
@@ -101,26 +101,30 @@ private static final long serialVersionUID = 0L;
 
             break;
           }
-          case 58: {
-            User.Builder subBuilder = null;
-            if (owner_ != null) {
-              subBuilder = owner_.toBuilder();
-            }
-            owner_ = input.readMessage(User.parser(), extensionRegistry);
-            if (subBuilder != null) {
-              subBuilder.mergeFrom(owner_);
-              owner_ = subBuilder.buildPartial();
-            }
+          case 56: {
 
+            ownerId_ = input.readInt64();
+            break;
+          }
+          case 64: {
+            if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+              recipientsIds_ = newLongList();
+              mutable_bitField0_ |= 0x00000001;
+            }
+            recipientsIds_.addLong(input.readInt64());
             break;
           }
           case 66: {
-            if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-              recipients_ = new java.util.ArrayList<User>();
+            int length = input.readRawVarint32();
+            int limit = input.pushLimit(length);
+            if (!((mutable_bitField0_ & 0x00000001) != 0) && input.getBytesUntilLimit() > 0) {
+              recipientsIds_ = newLongList();
               mutable_bitField0_ |= 0x00000001;
             }
-            recipients_.add(
-                input.readMessage(User.parser(), extensionRegistry));
+            while (input.getBytesUntilLimit() > 0) {
+              recipientsIds_.addLong(input.readInt64());
+            }
+            input.popLimit(limit);
             break;
           }
           default: {
@@ -139,7 +143,7 @@ private static final long serialVersionUID = 0L;
           e).setUnfinishedMessage(this);
     } finally {
       if (((mutable_bitField0_ & 0x00000001) != 0)) {
-        recipients_ = java.util.Collections.unmodifiableList(recipients_);
+        recipientsIds_.makeImmutable(); // C
       }
       this.unknownFields = unknownFields.build();
       makeExtensionsImmutable();
@@ -147,19 +151,19 @@ private static final long serialVersionUID = 0L;
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return MessageObjectOuterClass.internal_static_server_src_com_wisekrakr_wisesecurecomm_communication_MessageObject_descriptor;
+    return com.wisekrakr.wisesecurecomm.communication.proto.MessageObjectOuterClass.internal_static_com_wisekrakr_wisesecurecomm_communication_proto_MessageObject_descriptor;
   }
 
-  @Override
-  protected FieldAccessorTable
+  @java.lang.Override
+  protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return MessageObjectOuterClass.internal_static_server_src_com_wisekrakr_wisesecurecomm_communication_MessageObject_fieldAccessorTable
+    return com.wisekrakr.wisesecurecomm.communication.proto.MessageObjectOuterClass.internal_static_com_wisekrakr_wisesecurecomm_communication_proto_MessageObject_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            MessageObject.class, Builder.class);
+            com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.class, com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.Builder.class);
   }
 
   /**
-   * Protobuf enum {@code MessageObject.ObjectType}
+   * Protobuf enum {@code com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType}
    */
   public enum ObjectType
       implements com.google.protobuf.ProtocolMessageEnum {
@@ -202,7 +206,7 @@ private static final long serialVersionUID = 0L;
 
     public final int getNumber() {
       if (this == UNRECOGNIZED) {
-        throw new IllegalArgumentException(
+        throw new java.lang.IllegalArgumentException(
             "Can't get the number of an unknown enum value.");
       }
       return value;
@@ -213,7 +217,7 @@ private static final long serialVersionUID = 0L;
      * @return The enum associated with the given numeric wire value.
      * @deprecated Use {@link #forNumber(int)} instead.
      */
-    @Deprecated
+    @java.lang.Deprecated
     public static ObjectType valueOf(int value) {
       return forNumber(value);
     }
@@ -247,7 +251,7 @@ private static final long serialVersionUID = 0L;
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
       if (this == UNRECOGNIZED) {
-        throw new IllegalStateException(
+        throw new java.lang.IllegalStateException(
             "Can't get the descriptor of an unrecognized enum value.");
       }
       return getDescriptor().getValues().get(ordinal());
@@ -258,7 +262,7 @@ private static final long serialVersionUID = 0L;
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return MessageObject.getDescriptor().getEnumTypes().get(0);
+      return com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.getDescriptor().getEnumTypes().get(0);
     }
 
     private static final ObjectType[] VALUES = values();
@@ -266,7 +270,7 @@ private static final long serialVersionUID = 0L;
     public static ObjectType valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
-        throw new IllegalArgumentException(
+        throw new java.lang.IllegalArgumentException(
           "EnumValueDescriptor is not for this type.");
       }
       if (desc.getIndex() == -1) {
@@ -281,96 +285,96 @@ private static final long serialVersionUID = 0L;
       this.value = value;
     }
 
-    // @@protoc_insertion_point(enum_scope:MessageObject.ObjectType)
+    // @@protoc_insertion_point(enum_scope:com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType)
   }
 
   public static final int ID_FIELD_NUMBER = 1;
-  private int id_;
+  private long id_;
   /**
-   * <code>int32 id = 1;</code>
+   * <code>int64 id = 1;</code>
    * @return The id.
    */
-  @Override
-  public int getId() {
+  @java.lang.Override
+  public long getId() {
     return id_;
   }
 
-  public static final int OBJECTTYPE_FIELD_NUMBER = 2;
+  public static final int OBJECT_TYPE_FIELD_NUMBER = 2;
   private int objectType_;
   /**
-   * <code>.MessageObject.ObjectType objectType = 2;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType object_type = 2;</code>
    * @return The enum numeric value on the wire for objectType.
    */
-  @Override public int getObjectTypeValue() {
+  @java.lang.Override public int getObjectTypeValue() {
     return objectType_;
   }
   /**
-   * <code>.MessageObject.ObjectType objectType = 2;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType object_type = 2;</code>
    * @return The objectType.
    */
-  @Override public ObjectType getObjectType() {
+  @java.lang.Override public com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType getObjectType() {
     @SuppressWarnings("deprecation")
-    ObjectType result = ObjectType.valueOf(objectType_);
-    return result == null ? ObjectType.UNRECOGNIZED : result;
+    com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType result = com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType.valueOf(objectType_);
+    return result == null ? com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType.UNRECOGNIZED : result;
   }
 
-  public static final int MESSAGETYPE_FIELD_NUMBER = 3;
-  private MessageType messageType_;
+  public static final int MESSAGE_TYPE_FIELD_NUMBER = 3;
+  private com.wisekrakr.wisesecurecomm.communication.proto.MessageType messageType_;
   /**
-   * <code>.MessageType messageType = 3;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType message_type = 3;</code>
    * @return Whether the messageType field is set.
    */
-  @Override
+  @java.lang.Override
   public boolean hasMessageType() {
     return messageType_ != null;
   }
   /**
-   * <code>.MessageType messageType = 3;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType message_type = 3;</code>
    * @return The messageType.
    */
-  @Override
-  public MessageType getMessageType() {
-    return messageType_ == null ? MessageType.getDefaultInstance() : messageType_;
+  @java.lang.Override
+  public com.wisekrakr.wisesecurecomm.communication.proto.MessageType getMessageType() {
+    return messageType_ == null ? com.wisekrakr.wisesecurecomm.communication.proto.MessageType.getDefaultInstance() : messageType_;
   }
   /**
-   * <code>.MessageType messageType = 3;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType message_type = 3;</code>
    */
-  @Override
-  public MessageTypeOrBuilder getMessageTypeOrBuilder() {
+  @java.lang.Override
+  public com.wisekrakr.wisesecurecomm.communication.proto.MessageTypeOrBuilder getMessageTypeOrBuilder() {
     return getMessageType();
   }
 
-  public static final int TEXTMESSAGE_FIELD_NUMBER = 4;
-  private volatile Object textMessage_;
+  public static final int TEXT_MESSAGE_FIELD_NUMBER = 4;
+  private volatile java.lang.Object textMessage_;
   /**
-   * <code>string textMessage = 4;</code>
+   * <code>string text_message = 4;</code>
    * @return The textMessage.
    */
-  @Override
-  public String getTextMessage() {
-    Object ref = textMessage_;
-    if (ref instanceof String) {
-      return (String) ref;
+  @java.lang.Override
+  public java.lang.String getTextMessage() {
+    java.lang.Object ref = textMessage_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
     } else {
-      com.google.protobuf.ByteString bs =
+      com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
-      String s = bs.toStringUtf8();
+      java.lang.String s = bs.toStringUtf8();
       textMessage_ = s;
       return s;
     }
   }
   /**
-   * <code>string textMessage = 4;</code>
+   * <code>string text_message = 4;</code>
    * @return The bytes for textMessage.
    */
-  @Override
+  @java.lang.Override
   public com.google.protobuf.ByteString
       getTextMessageBytes() {
-    Object ref = textMessage_;
-    if (ref instanceof String) {
-      com.google.protobuf.ByteString b =
+    java.lang.Object ref = textMessage_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
-              (String) ref);
+              (java.lang.String) ref);
       textMessage_ = b;
       return b;
     } else {
@@ -378,111 +382,84 @@ private static final long serialVersionUID = 0L;
     }
   }
 
-  public static final int VOICEMESSAGE_FIELD_NUMBER = 5;
+  public static final int VOICE_MESSAGE_FIELD_NUMBER = 5;
   private com.google.protobuf.ByteString voiceMessage_;
   /**
-   * <code>bytes voiceMessage = 5;</code>
+   * <code>bytes voice_message = 5;</code>
    * @return The voiceMessage.
    */
-  @Override
+  @java.lang.Override
   public com.google.protobuf.ByteString getVoiceMessage() {
     return voiceMessage_;
   }
 
-  public static final int FILEINFO_FIELD_NUMBER = 6;
-  private FileInfo fileInfo_;
+  public static final int FILE_INFO_FIELD_NUMBER = 6;
+  private com.wisekrakr.wisesecurecomm.communication.proto.FileInfo fileInfo_;
   /**
-   * <code>.FileInfo fileInfo = 6;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.FileInfo file_info = 6;</code>
    * @return Whether the fileInfo field is set.
    */
-  @Override
+  @java.lang.Override
   public boolean hasFileInfo() {
     return fileInfo_ != null;
   }
   /**
-   * <code>.FileInfo fileInfo = 6;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.FileInfo file_info = 6;</code>
    * @return The fileInfo.
    */
-  @Override
-  public FileInfo getFileInfo() {
-    return fileInfo_ == null ? FileInfo.getDefaultInstance() : fileInfo_;
+  @java.lang.Override
+  public com.wisekrakr.wisesecurecomm.communication.proto.FileInfo getFileInfo() {
+    return fileInfo_ == null ? com.wisekrakr.wisesecurecomm.communication.proto.FileInfo.getDefaultInstance() : fileInfo_;
   }
   /**
-   * <code>.FileInfo fileInfo = 6;</code>
+   * <code>.com.wisekrakr.wisesecurecomm.communication.proto.FileInfo file_info = 6;</code>
    */
-  @Override
-  public FileInfoOrBuilder getFileInfoOrBuilder() {
+  @java.lang.Override
+  public com.wisekrakr.wisesecurecomm.communication.proto.FileInfoOrBuilder getFileInfoOrBuilder() {
     return getFileInfo();
   }
 
-  public static final int OWNER_FIELD_NUMBER = 7;
-  private User owner_;
+  public static final int OWNER_ID_FIELD_NUMBER = 7;
+  private long ownerId_;
   /**
-   * <code>.User owner = 7;</code>
-   * @return Whether the owner field is set.
+   * <code>int64 owner_id = 7;</code>
+   * @return The ownerId.
    */
-  @Override
-  public boolean hasOwner() {
-    return owner_ != null;
-  }
-  /**
-   * <code>.User owner = 7;</code>
-   * @return The owner.
-   */
-  @Override
-  public User getOwner() {
-    return owner_ == null ? User.getDefaultInstance() : owner_;
-  }
-  /**
-   * <code>.User owner = 7;</code>
-   */
-  @Override
-  public UserOrBuilder getOwnerOrBuilder() {
-    return getOwner();
+  @java.lang.Override
+  public long getOwnerId() {
+    return ownerId_;
   }
 
-  public static final int RECIPIENTS_FIELD_NUMBER = 8;
-  private java.util.List<User> recipients_;
+  public static final int RECIPIENTS_IDS_FIELD_NUMBER = 8;
+  private com.google.protobuf.Internal.LongList recipientsIds_;
   /**
-   * <code>repeated .User recipients = 8;</code>
+   * <code>repeated int64 recipients_ids = 8;</code>
+   * @return A list containing the recipientsIds.
    */
-  @Override
-  public java.util.List<User> getRecipientsList() {
-    return recipients_;
+  @java.lang.Override
+  public java.util.List<java.lang.Long>
+      getRecipientsIdsList() {
+    return recipientsIds_;
   }
   /**
-   * <code>repeated .User recipients = 8;</code>
+   * <code>repeated int64 recipients_ids = 8;</code>
+   * @return The count of recipientsIds.
    */
-  @Override
-  public java.util.List<? extends UserOrBuilder>
-      getRecipientsOrBuilderList() {
-    return recipients_;
+  public int getRecipientsIdsCount() {
+    return recipientsIds_.size();
   }
   /**
-   * <code>repeated .User recipients = 8;</code>
+   * <code>repeated int64 recipients_ids = 8;</code>
+   * @param index The index of the element to return.
+   * @return The recipientsIds at the given index.
    */
-  @Override
-  public int getRecipientsCount() {
-    return recipients_.size();
+  public long getRecipientsIds(int index) {
+    return recipientsIds_.getLong(index);
   }
-  /**
-   * <code>repeated .User recipients = 8;</code>
-   */
-  @Override
-  public User getRecipients(int index) {
-    return recipients_.get(index);
-  }
-  /**
-   * <code>repeated .User recipients = 8;</code>
-   */
-  @Override
-  public UserOrBuilder getRecipientsOrBuilder(
-      int index) {
-    return recipients_.get(index);
-  }
+  private int recipientsIdsMemoizedSerializedSize = -1;
 
   private byte memoizedIsInitialized = -1;
-  @Override
+  @java.lang.Override
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
     if (isInitialized == 1) return true;
@@ -492,13 +469,14 @@ private static final long serialVersionUID = 0L;
     return true;
   }
 
-  @Override
+  @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (id_ != 0) {
-      output.writeInt32(1, id_);
+    getSerializedSize();
+    if (id_ != 0L) {
+      output.writeInt64(1, id_);
     }
-    if (objectType_ != ObjectType.MESSAGE.getNumber()) {
+    if (objectType_ != com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType.MESSAGE.getNumber()) {
       output.writeEnum(2, objectType_);
     }
     if (messageType_ != null) {
@@ -513,26 +491,30 @@ private static final long serialVersionUID = 0L;
     if (fileInfo_ != null) {
       output.writeMessage(6, getFileInfo());
     }
-    if (owner_ != null) {
-      output.writeMessage(7, getOwner());
+    if (ownerId_ != 0L) {
+      output.writeInt64(7, ownerId_);
     }
-    for (int i = 0; i < recipients_.size(); i++) {
-      output.writeMessage(8, recipients_.get(i));
+    if (getRecipientsIdsList().size() > 0) {
+      output.writeUInt32NoTag(66);
+      output.writeUInt32NoTag(recipientsIdsMemoizedSerializedSize);
+    }
+    for (int i = 0; i < recipientsIds_.size(); i++) {
+      output.writeInt64NoTag(recipientsIds_.getLong(i));
     }
     unknownFields.writeTo(output);
   }
 
-  @Override
+  @java.lang.Override
   public int getSerializedSize() {
     int size = memoizedSize;
     if (size != -1) return size;
 
     size = 0;
-    if (id_ != 0) {
+    if (id_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(1, id_);
+        .computeInt64Size(1, id_);
     }
-    if (objectType_ != ObjectType.MESSAGE.getNumber()) {
+    if (objectType_ != com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType.MESSAGE.getNumber()) {
       size += com.google.protobuf.CodedOutputStream
         .computeEnumSize(2, objectType_);
     }
@@ -551,28 +533,38 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(6, getFileInfo());
     }
-    if (owner_ != null) {
+    if (ownerId_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(7, getOwner());
+        .computeInt64Size(7, ownerId_);
     }
-    for (int i = 0; i < recipients_.size(); i++) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(8, recipients_.get(i));
+    {
+      int dataSize = 0;
+      for (int i = 0; i < recipientsIds_.size(); i++) {
+        dataSize += com.google.protobuf.CodedOutputStream
+          .computeInt64SizeNoTag(recipientsIds_.getLong(i));
+      }
+      size += dataSize;
+      if (!getRecipientsIdsList().isEmpty()) {
+        size += 1;
+        size += com.google.protobuf.CodedOutputStream
+            .computeInt32SizeNoTag(dataSize);
+      }
+      recipientsIdsMemoizedSerializedSize = dataSize;
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
     return size;
   }
 
-  @Override
-  public boolean equals(final Object obj) {
+  @java.lang.Override
+  public boolean equals(final java.lang.Object obj) {
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof MessageObject)) {
+    if (!(obj instanceof com.wisekrakr.wisesecurecomm.communication.proto.MessageObject)) {
       return super.equals(obj);
     }
-    MessageObject other = (MessageObject) obj;
+    com.wisekrakr.wisesecurecomm.communication.proto.MessageObject other = (com.wisekrakr.wisesecurecomm.communication.proto.MessageObject) obj;
 
     if (getId()
         != other.getId()) return false;
@@ -591,18 +583,15 @@ private static final long serialVersionUID = 0L;
       if (!getFileInfo()
           .equals(other.getFileInfo())) return false;
     }
-    if (hasOwner() != other.hasOwner()) return false;
-    if (hasOwner()) {
-      if (!getOwner()
-          .equals(other.getOwner())) return false;
-    }
-    if (!getRecipientsList()
-        .equals(other.getRecipientsList())) return false;
+    if (getOwnerId()
+        != other.getOwnerId()) return false;
+    if (!getRecipientsIdsList()
+        .equals(other.getRecipientsIdsList())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
 
-  @Override
+  @java.lang.Override
   public int hashCode() {
     if (memoizedHashCode != 0) {
       return memoizedHashCode;
@@ -610,97 +599,97 @@ private static final long serialVersionUID = 0L;
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + ID_FIELD_NUMBER;
-    hash = (53 * hash) + getId();
-    hash = (37 * hash) + OBJECTTYPE_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getId());
+    hash = (37 * hash) + OBJECT_TYPE_FIELD_NUMBER;
     hash = (53 * hash) + objectType_;
     if (hasMessageType()) {
-      hash = (37 * hash) + MESSAGETYPE_FIELD_NUMBER;
+      hash = (37 * hash) + MESSAGE_TYPE_FIELD_NUMBER;
       hash = (53 * hash) + getMessageType().hashCode();
     }
-    hash = (37 * hash) + TEXTMESSAGE_FIELD_NUMBER;
+    hash = (37 * hash) + TEXT_MESSAGE_FIELD_NUMBER;
     hash = (53 * hash) + getTextMessage().hashCode();
-    hash = (37 * hash) + VOICEMESSAGE_FIELD_NUMBER;
+    hash = (37 * hash) + VOICE_MESSAGE_FIELD_NUMBER;
     hash = (53 * hash) + getVoiceMessage().hashCode();
     if (hasFileInfo()) {
-      hash = (37 * hash) + FILEINFO_FIELD_NUMBER;
+      hash = (37 * hash) + FILE_INFO_FIELD_NUMBER;
       hash = (53 * hash) + getFileInfo().hashCode();
     }
-    if (hasOwner()) {
-      hash = (37 * hash) + OWNER_FIELD_NUMBER;
-      hash = (53 * hash) + getOwner().hashCode();
-    }
-    if (getRecipientsCount() > 0) {
-      hash = (37 * hash) + RECIPIENTS_FIELD_NUMBER;
-      hash = (53 * hash) + getRecipientsList().hashCode();
+    hash = (37 * hash) + OWNER_ID_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getOwnerId());
+    if (getRecipientsIdsCount() > 0) {
+      hash = (37 * hash) + RECIPIENTS_IDS_FIELD_NUMBER;
+      hash = (53 * hash) + getRecipientsIdsList().hashCode();
     }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static MessageObject parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageObject parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static MessageObject parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageObject parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static MessageObject parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageObject parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static MessageObject parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageObject parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static MessageObject parseFrom(byte[] data)
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageObject parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static MessageObject parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageObject parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static MessageObject parseFrom(java.io.InputStream input)
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageObject parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static MessageObject parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageObject parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static MessageObject parseDelimitedFrom(java.io.InputStream input)
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageObject parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static MessageObject parseDelimitedFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageObject parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static MessageObject parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageObject parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static MessageObject parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageObject parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -708,66 +697,65 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  @Override
+  @java.lang.Override
   public Builder newBuilderForType() { return newBuilder(); }
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(MessageObject prototype) {
+  public static Builder newBuilder(com.wisekrakr.wisesecurecomm.communication.proto.MessageObject prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
-  @Override
+  @java.lang.Override
   public Builder toBuilder() {
     return this == DEFAULT_INSTANCE
         ? new Builder() : new Builder().mergeFrom(this);
   }
 
-  @Override
+  @java.lang.Override
   protected Builder newBuilderForType(
-      BuilderParent parent) {
+      com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
     Builder builder = new Builder(parent);
     return builder;
   }
   /**
-   * Protobuf type {@code MessageObject}
+   * Protobuf type {@code com.wisekrakr.wisesecurecomm.communication.proto.MessageObject}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:MessageObject)
-          MessageObjectOrBuilder {
+      // @@protoc_insertion_point(builder_implements:com.wisekrakr.wisesecurecomm.communication.proto.MessageObject)
+      com.wisekrakr.wisesecurecomm.communication.proto.MessageObjectOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return MessageObjectOuterClass.internal_static_server_src_com_wisekrakr_wisesecurecomm_communication_MessageObject_descriptor;
+      return com.wisekrakr.wisesecurecomm.communication.proto.MessageObjectOuterClass.internal_static_com_wisekrakr_wisesecurecomm_communication_proto_MessageObject_descriptor;
     }
 
-    @Override
-    protected FieldAccessorTable
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return MessageObjectOuterClass.internal_static_server_src_com_wisekrakr_wisesecurecomm_communication_MessageObject_fieldAccessorTable
+      return com.wisekrakr.wisesecurecomm.communication.proto.MessageObjectOuterClass.internal_static_com_wisekrakr_wisesecurecomm_communication_proto_MessageObject_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              MessageObject.class, Builder.class);
+              com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.class, com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.Builder.class);
     }
 
-    // Construct using MessageObject.newBuilder()
+    // Construct using com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
 
     private Builder(
-        BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
       maybeForceBuilderInitialization();
     }
     private void maybeForceBuilderInitialization() {
       if (com.google.protobuf.GeneratedMessageV3
               .alwaysUseFieldBuilders) {
-        getRecipientsFieldBuilder();
       }
     }
-    @Override
+    @java.lang.Override
     public Builder clear() {
       super.clear();
-      id_ = 0;
+      id_ = 0L;
 
       objectType_ = 0;
 
@@ -787,44 +775,36 @@ private static final long serialVersionUID = 0L;
         fileInfo_ = null;
         fileInfoBuilder_ = null;
       }
-      if (ownerBuilder_ == null) {
-        owner_ = null;
-      } else {
-        owner_ = null;
-        ownerBuilder_ = null;
-      }
-      if (recipientsBuilder_ == null) {
-        recipients_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000001);
-      } else {
-        recipientsBuilder_.clear();
-      }
+      ownerId_ = 0L;
+
+      recipientsIds_ = emptyLongList();
+      bitField0_ = (bitField0_ & ~0x00000001);
       return this;
     }
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return MessageObjectOuterClass.internal_static_server_src_com_wisekrakr_wisesecurecomm_communication_MessageObject_descriptor;
+      return com.wisekrakr.wisesecurecomm.communication.proto.MessageObjectOuterClass.internal_static_com_wisekrakr_wisesecurecomm_communication_proto_MessageObject_descriptor;
     }
 
-    @Override
-    public MessageObject getDefaultInstanceForType() {
-      return MessageObject.getDefaultInstance();
+    @java.lang.Override
+    public com.wisekrakr.wisesecurecomm.communication.proto.MessageObject getDefaultInstanceForType() {
+      return com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.getDefaultInstance();
     }
 
-    @Override
-    public MessageObject build() {
-      MessageObject result = buildPartial();
+    @java.lang.Override
+    public com.wisekrakr.wisesecurecomm.communication.proto.MessageObject build() {
+      com.wisekrakr.wisesecurecomm.communication.proto.MessageObject result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
       return result;
     }
 
-    @Override
-    public MessageObject buildPartial() {
-      MessageObject result = new MessageObject(this);
+    @java.lang.Override
+    public com.wisekrakr.wisesecurecomm.communication.proto.MessageObject buildPartial() {
+      com.wisekrakr.wisesecurecomm.communication.proto.MessageObject result = new com.wisekrakr.wisesecurecomm.communication.proto.MessageObject(this);
       int from_bitField0_ = bitField0_;
       result.id_ = id_;
       result.objectType_ = objectType_;
@@ -840,69 +820,61 @@ private static final long serialVersionUID = 0L;
       } else {
         result.fileInfo_ = fileInfoBuilder_.build();
       }
-      if (ownerBuilder_ == null) {
-        result.owner_ = owner_;
-      } else {
-        result.owner_ = ownerBuilder_.build();
+      result.ownerId_ = ownerId_;
+      if (((bitField0_ & 0x00000001) != 0)) {
+        recipientsIds_.makeImmutable();
+        bitField0_ = (bitField0_ & ~0x00000001);
       }
-      if (recipientsBuilder_ == null) {
-        if (((bitField0_ & 0x00000001) != 0)) {
-          recipients_ = java.util.Collections.unmodifiableList(recipients_);
-          bitField0_ = (bitField0_ & ~0x00000001);
-        }
-        result.recipients_ = recipients_;
-      } else {
-        result.recipients_ = recipientsBuilder_.build();
-      }
+      result.recipientsIds_ = recipientsIds_;
       onBuilt();
       return result;
     }
 
-    @Override
+    @java.lang.Override
     public Builder clone() {
       return super.clone();
     }
-    @Override
+    @java.lang.Override
     public Builder setField(
         com.google.protobuf.Descriptors.FieldDescriptor field,
-        Object value) {
+        java.lang.Object value) {
       return super.setField(field, value);
     }
-    @Override
+    @java.lang.Override
     public Builder clearField(
         com.google.protobuf.Descriptors.FieldDescriptor field) {
       return super.clearField(field);
     }
-    @Override
+    @java.lang.Override
     public Builder clearOneof(
         com.google.protobuf.Descriptors.OneofDescriptor oneof) {
       return super.clearOneof(oneof);
     }
-    @Override
+    @java.lang.Override
     public Builder setRepeatedField(
         com.google.protobuf.Descriptors.FieldDescriptor field,
-        int index, Object value) {
+        int index, java.lang.Object value) {
       return super.setRepeatedField(field, index, value);
     }
-    @Override
+    @java.lang.Override
     public Builder addRepeatedField(
         com.google.protobuf.Descriptors.FieldDescriptor field,
-        Object value) {
+        java.lang.Object value) {
       return super.addRepeatedField(field, value);
     }
-    @Override
+    @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof MessageObject) {
-        return mergeFrom((MessageObject)other);
+      if (other instanceof com.wisekrakr.wisesecurecomm.communication.proto.MessageObject) {
+        return mergeFrom((com.wisekrakr.wisesecurecomm.communication.proto.MessageObject)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(MessageObject other) {
-      if (other == MessageObject.getDefaultInstance()) return this;
-      if (other.getId() != 0) {
+    public Builder mergeFrom(com.wisekrakr.wisesecurecomm.communication.proto.MessageObject other) {
+      if (other == com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.getDefaultInstance()) return this;
+      if (other.getId() != 0L) {
         setId(other.getId());
       }
       if (other.objectType_ != 0) {
@@ -921,55 +893,39 @@ private static final long serialVersionUID = 0L;
       if (other.hasFileInfo()) {
         mergeFileInfo(other.getFileInfo());
       }
-      if (other.hasOwner()) {
-        mergeOwner(other.getOwner());
+      if (other.getOwnerId() != 0L) {
+        setOwnerId(other.getOwnerId());
       }
-      if (recipientsBuilder_ == null) {
-        if (!other.recipients_.isEmpty()) {
-          if (recipients_.isEmpty()) {
-            recipients_ = other.recipients_;
-            bitField0_ = (bitField0_ & ~0x00000001);
-          } else {
-            ensureRecipientsIsMutable();
-            recipients_.addAll(other.recipients_);
-          }
-          onChanged();
+      if (!other.recipientsIds_.isEmpty()) {
+        if (recipientsIds_.isEmpty()) {
+          recipientsIds_ = other.recipientsIds_;
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          ensureRecipientsIdsIsMutable();
+          recipientsIds_.addAll(other.recipientsIds_);
         }
-      } else {
-        if (!other.recipients_.isEmpty()) {
-          if (recipientsBuilder_.isEmpty()) {
-            recipientsBuilder_.dispose();
-            recipientsBuilder_ = null;
-            recipients_ = other.recipients_;
-            bitField0_ = (bitField0_ & ~0x00000001);
-            recipientsBuilder_ =
-              com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                 getRecipientsFieldBuilder() : null;
-          } else {
-            recipientsBuilder_.addAllMessages(other.recipients_);
-          }
-        }
+        onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
       return this;
     }
 
-    @Override
+    @java.lang.Override
     public final boolean isInitialized() {
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public Builder mergeFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      MessageObject parsedMessage = null;
+      com.wisekrakr.wisesecurecomm.communication.proto.MessageObject parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (MessageObject) e.getUnfinishedMessage();
+        parsedMessage = (com.wisekrakr.wisesecurecomm.communication.proto.MessageObject) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -980,116 +936,116 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private int id_ ;
+    private long id_ ;
     /**
-     * <code>int32 id = 1;</code>
+     * <code>int64 id = 1;</code>
      * @return The id.
      */
-    @Override
-    public int getId() {
+    @java.lang.Override
+    public long getId() {
       return id_;
     }
     /**
-     * <code>int32 id = 1;</code>
+     * <code>int64 id = 1;</code>
      * @param value The id to set.
      * @return This builder for chaining.
      */
-    public Builder setId(int value) {
-
+    public Builder setId(long value) {
+      
       id_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 id = 1;</code>
+     * <code>int64 id = 1;</code>
      * @return This builder for chaining.
      */
     public Builder clearId() {
-
-      id_ = 0;
+      
+      id_ = 0L;
       onChanged();
       return this;
     }
 
     private int objectType_ = 0;
     /**
-     * <code>.MessageObject.ObjectType objectType = 2;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType object_type = 2;</code>
      * @return The enum numeric value on the wire for objectType.
      */
-    @Override public int getObjectTypeValue() {
+    @java.lang.Override public int getObjectTypeValue() {
       return objectType_;
     }
     /**
-     * <code>.MessageObject.ObjectType objectType = 2;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType object_type = 2;</code>
      * @param value The enum numeric value on the wire for objectType to set.
      * @return This builder for chaining.
      */
     public Builder setObjectTypeValue(int value) {
-
+      
       objectType_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>.MessageObject.ObjectType objectType = 2;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType object_type = 2;</code>
      * @return The objectType.
      */
-    @Override
-    public ObjectType getObjectType() {
+    @java.lang.Override
+    public com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType getObjectType() {
       @SuppressWarnings("deprecation")
-      ObjectType result = ObjectType.valueOf(objectType_);
-      return result == null ? ObjectType.UNRECOGNIZED : result;
+      com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType result = com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType.valueOf(objectType_);
+      return result == null ? com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType.UNRECOGNIZED : result;
     }
     /**
-     * <code>.MessageObject.ObjectType objectType = 2;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType object_type = 2;</code>
      * @param value The objectType to set.
      * @return This builder for chaining.
      */
-    public Builder setObjectType(ObjectType value) {
+    public Builder setObjectType(com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType value) {
       if (value == null) {
         throw new NullPointerException();
       }
-
+      
       objectType_ = value.getNumber();
       onChanged();
       return this;
     }
     /**
-     * <code>.MessageObject.ObjectType objectType = 2;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageObject.ObjectType object_type = 2;</code>
      * @return This builder for chaining.
      */
     public Builder clearObjectType() {
-
+      
       objectType_ = 0;
       onChanged();
       return this;
     }
 
-    private MessageType messageType_;
+    private com.wisekrakr.wisesecurecomm.communication.proto.MessageType messageType_;
     private com.google.protobuf.SingleFieldBuilderV3<
-            MessageType, MessageType.Builder, MessageTypeOrBuilder> messageTypeBuilder_;
+        com.wisekrakr.wisesecurecomm.communication.proto.MessageType, com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Builder, com.wisekrakr.wisesecurecomm.communication.proto.MessageTypeOrBuilder> messageTypeBuilder_;
     /**
-     * <code>.MessageType messageType = 3;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType message_type = 3;</code>
      * @return Whether the messageType field is set.
      */
     public boolean hasMessageType() {
       return messageTypeBuilder_ != null || messageType_ != null;
     }
     /**
-     * <code>.MessageType messageType = 3;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType message_type = 3;</code>
      * @return The messageType.
      */
-    public MessageType getMessageType() {
+    public com.wisekrakr.wisesecurecomm.communication.proto.MessageType getMessageType() {
       if (messageTypeBuilder_ == null) {
-        return messageType_ == null ? MessageType.getDefaultInstance() : messageType_;
+        return messageType_ == null ? com.wisekrakr.wisesecurecomm.communication.proto.MessageType.getDefaultInstance() : messageType_;
       } else {
         return messageTypeBuilder_.getMessage();
       }
     }
     /**
-     * <code>.MessageType messageType = 3;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType message_type = 3;</code>
      */
-    public Builder setMessageType(MessageType value) {
+    public Builder setMessageType(com.wisekrakr.wisesecurecomm.communication.proto.MessageType value) {
       if (messageTypeBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -1103,10 +1059,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.MessageType messageType = 3;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType message_type = 3;</code>
      */
     public Builder setMessageType(
-        MessageType.Builder builderForValue) {
+        com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Builder builderForValue) {
       if (messageTypeBuilder_ == null) {
         messageType_ = builderForValue.build();
         onChanged();
@@ -1117,13 +1073,13 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.MessageType messageType = 3;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType message_type = 3;</code>
      */
-    public Builder mergeMessageType(MessageType value) {
+    public Builder mergeMessageType(com.wisekrakr.wisesecurecomm.communication.proto.MessageType value) {
       if (messageTypeBuilder_ == null) {
         if (messageType_ != null) {
           messageType_ =
-            MessageType.newBuilder(messageType_).mergeFrom(value).buildPartial();
+            com.wisekrakr.wisesecurecomm.communication.proto.MessageType.newBuilder(messageType_).mergeFrom(value).buildPartial();
         } else {
           messageType_ = value;
         }
@@ -1135,7 +1091,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.MessageType messageType = 3;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType message_type = 3;</code>
      */
     public Builder clearMessageType() {
       if (messageTypeBuilder_ == null) {
@@ -1149,33 +1105,33 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.MessageType messageType = 3;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType message_type = 3;</code>
      */
-    public MessageType.Builder getMessageTypeBuilder() {
-
+    public com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Builder getMessageTypeBuilder() {
+      
       onChanged();
       return getMessageTypeFieldBuilder().getBuilder();
     }
     /**
-     * <code>.MessageType messageType = 3;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType message_type = 3;</code>
      */
-    public MessageTypeOrBuilder getMessageTypeOrBuilder() {
+    public com.wisekrakr.wisesecurecomm.communication.proto.MessageTypeOrBuilder getMessageTypeOrBuilder() {
       if (messageTypeBuilder_ != null) {
         return messageTypeBuilder_.getMessageOrBuilder();
       } else {
         return messageType_ == null ?
-            MessageType.getDefaultInstance() : messageType_;
+            com.wisekrakr.wisesecurecomm.communication.proto.MessageType.getDefaultInstance() : messageType_;
       }
     }
     /**
-     * <code>.MessageType messageType = 3;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.MessageType message_type = 3;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-            MessageType, MessageType.Builder, MessageTypeOrBuilder>
+        com.wisekrakr.wisesecurecomm.communication.proto.MessageType, com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Builder, com.wisekrakr.wisesecurecomm.communication.proto.MessageTypeOrBuilder> 
         getMessageTypeFieldBuilder() {
       if (messageTypeBuilder_ == null) {
         messageTypeBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                MessageType, MessageType.Builder, MessageTypeOrBuilder>(
+            com.wisekrakr.wisesecurecomm.communication.proto.MessageType, com.wisekrakr.wisesecurecomm.communication.proto.MessageType.Builder, com.wisekrakr.wisesecurecomm.communication.proto.MessageTypeOrBuilder>(
                 getMessageType(),
                 getParentForChildren(),
                 isClean());
@@ -1184,34 +1140,34 @@ private static final long serialVersionUID = 0L;
       return messageTypeBuilder_;
     }
 
-    private Object textMessage_ = "";
+    private java.lang.Object textMessage_ = "";
     /**
-     * <code>string textMessage = 4;</code>
+     * <code>string text_message = 4;</code>
      * @return The textMessage.
      */
-    public String getTextMessage() {
-      Object ref = textMessage_;
-      if (!(ref instanceof String)) {
+    public java.lang.String getTextMessage() {
+      java.lang.Object ref = textMessage_;
+      if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         textMessage_ = s;
         return s;
       } else {
-        return (String) ref;
+        return (java.lang.String) ref;
       }
     }
     /**
-     * <code>string textMessage = 4;</code>
+     * <code>string text_message = 4;</code>
      * @return The bytes for textMessage.
      */
     public com.google.protobuf.ByteString
         getTextMessageBytes() {
-      Object ref = textMessage_;
+      java.lang.Object ref = textMessage_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
+        com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         textMessage_ = b;
         return b;
       } else {
@@ -1219,32 +1175,32 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>string textMessage = 4;</code>
+     * <code>string text_message = 4;</code>
      * @param value The textMessage to set.
      * @return This builder for chaining.
      */
     public Builder setTextMessage(
-        String value) {
+        java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
-
+  
       textMessage_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string textMessage = 4;</code>
+     * <code>string text_message = 4;</code>
      * @return This builder for chaining.
      */
     public Builder clearTextMessage() {
-
+      
       textMessage_ = getDefaultInstance().getTextMessage();
       onChanged();
       return this;
     }
     /**
-     * <code>string textMessage = 4;</code>
+     * <code>string text_message = 4;</code>
      * @param value The bytes for textMessage to set.
      * @return This builder for chaining.
      */
@@ -1254,7 +1210,7 @@ private static final long serialVersionUID = 0L;
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-
+      
       textMessage_ = value;
       onChanged();
       return this;
@@ -1262,15 +1218,15 @@ private static final long serialVersionUID = 0L;
 
     private com.google.protobuf.ByteString voiceMessage_ = com.google.protobuf.ByteString.EMPTY;
     /**
-     * <code>bytes voiceMessage = 5;</code>
+     * <code>bytes voice_message = 5;</code>
      * @return The voiceMessage.
      */
-    @Override
+    @java.lang.Override
     public com.google.protobuf.ByteString getVoiceMessage() {
       return voiceMessage_;
     }
     /**
-     * <code>bytes voiceMessage = 5;</code>
+     * <code>bytes voice_message = 5;</code>
      * @param value The voiceMessage to set.
      * @return This builder for chaining.
      */
@@ -1278,47 +1234,47 @@ private static final long serialVersionUID = 0L;
       if (value == null) {
     throw new NullPointerException();
   }
-
+  
       voiceMessage_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>bytes voiceMessage = 5;</code>
+     * <code>bytes voice_message = 5;</code>
      * @return This builder for chaining.
      */
     public Builder clearVoiceMessage() {
-
+      
       voiceMessage_ = getDefaultInstance().getVoiceMessage();
       onChanged();
       return this;
     }
 
-    private FileInfo fileInfo_;
+    private com.wisekrakr.wisesecurecomm.communication.proto.FileInfo fileInfo_;
     private com.google.protobuf.SingleFieldBuilderV3<
-            FileInfo, FileInfo.Builder, FileInfoOrBuilder> fileInfoBuilder_;
+        com.wisekrakr.wisesecurecomm.communication.proto.FileInfo, com.wisekrakr.wisesecurecomm.communication.proto.FileInfo.Builder, com.wisekrakr.wisesecurecomm.communication.proto.FileInfoOrBuilder> fileInfoBuilder_;
     /**
-     * <code>.FileInfo fileInfo = 6;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.FileInfo file_info = 6;</code>
      * @return Whether the fileInfo field is set.
      */
     public boolean hasFileInfo() {
       return fileInfoBuilder_ != null || fileInfo_ != null;
     }
     /**
-     * <code>.FileInfo fileInfo = 6;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.FileInfo file_info = 6;</code>
      * @return The fileInfo.
      */
-    public FileInfo getFileInfo() {
+    public com.wisekrakr.wisesecurecomm.communication.proto.FileInfo getFileInfo() {
       if (fileInfoBuilder_ == null) {
-        return fileInfo_ == null ? FileInfo.getDefaultInstance() : fileInfo_;
+        return fileInfo_ == null ? com.wisekrakr.wisesecurecomm.communication.proto.FileInfo.getDefaultInstance() : fileInfo_;
       } else {
         return fileInfoBuilder_.getMessage();
       }
     }
     /**
-     * <code>.FileInfo fileInfo = 6;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.FileInfo file_info = 6;</code>
      */
-    public Builder setFileInfo(FileInfo value) {
+    public Builder setFileInfo(com.wisekrakr.wisesecurecomm.communication.proto.FileInfo value) {
       if (fileInfoBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -1332,10 +1288,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.FileInfo fileInfo = 6;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.FileInfo file_info = 6;</code>
      */
     public Builder setFileInfo(
-        FileInfo.Builder builderForValue) {
+        com.wisekrakr.wisesecurecomm.communication.proto.FileInfo.Builder builderForValue) {
       if (fileInfoBuilder_ == null) {
         fileInfo_ = builderForValue.build();
         onChanged();
@@ -1346,13 +1302,13 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.FileInfo fileInfo = 6;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.FileInfo file_info = 6;</code>
      */
-    public Builder mergeFileInfo(FileInfo value) {
+    public Builder mergeFileInfo(com.wisekrakr.wisesecurecomm.communication.proto.FileInfo value) {
       if (fileInfoBuilder_ == null) {
         if (fileInfo_ != null) {
           fileInfo_ =
-            FileInfo.newBuilder(fileInfo_).mergeFrom(value).buildPartial();
+            com.wisekrakr.wisesecurecomm.communication.proto.FileInfo.newBuilder(fileInfo_).mergeFrom(value).buildPartial();
         } else {
           fileInfo_ = value;
         }
@@ -1364,7 +1320,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.FileInfo fileInfo = 6;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.FileInfo file_info = 6;</code>
      */
     public Builder clearFileInfo() {
       if (fileInfoBuilder_ == null) {
@@ -1378,33 +1334,33 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.FileInfo fileInfo = 6;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.FileInfo file_info = 6;</code>
      */
-    public FileInfo.Builder getFileInfoBuilder() {
-
+    public com.wisekrakr.wisesecurecomm.communication.proto.FileInfo.Builder getFileInfoBuilder() {
+      
       onChanged();
       return getFileInfoFieldBuilder().getBuilder();
     }
     /**
-     * <code>.FileInfo fileInfo = 6;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.FileInfo file_info = 6;</code>
      */
-    public FileInfoOrBuilder getFileInfoOrBuilder() {
+    public com.wisekrakr.wisesecurecomm.communication.proto.FileInfoOrBuilder getFileInfoOrBuilder() {
       if (fileInfoBuilder_ != null) {
         return fileInfoBuilder_.getMessageOrBuilder();
       } else {
         return fileInfo_ == null ?
-            FileInfo.getDefaultInstance() : fileInfo_;
+            com.wisekrakr.wisesecurecomm.communication.proto.FileInfo.getDefaultInstance() : fileInfo_;
       }
     }
     /**
-     * <code>.FileInfo fileInfo = 6;</code>
+     * <code>.com.wisekrakr.wisesecurecomm.communication.proto.FileInfo file_info = 6;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-            FileInfo, FileInfo.Builder, FileInfoOrBuilder>
+        com.wisekrakr.wisesecurecomm.communication.proto.FileInfo, com.wisekrakr.wisesecurecomm.communication.proto.FileInfo.Builder, com.wisekrakr.wisesecurecomm.communication.proto.FileInfoOrBuilder> 
         getFileInfoFieldBuilder() {
       if (fileInfoBuilder_ == null) {
         fileInfoBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                FileInfo, FileInfo.Builder, FileInfoOrBuilder>(
+            com.wisekrakr.wisesecurecomm.communication.proto.FileInfo, com.wisekrakr.wisesecurecomm.communication.proto.FileInfo.Builder, com.wisekrakr.wisesecurecomm.communication.proto.FileInfoOrBuilder>(
                 getFileInfo(),
                 getParentForChildren(),
                 isClean());
@@ -1413,393 +1369,144 @@ private static final long serialVersionUID = 0L;
       return fileInfoBuilder_;
     }
 
-    private User owner_;
-    private com.google.protobuf.SingleFieldBuilderV3<
-            User, User.Builder, UserOrBuilder> ownerBuilder_;
+    private long ownerId_ ;
     /**
-     * <code>.User owner = 7;</code>
-     * @return Whether the owner field is set.
+     * <code>int64 owner_id = 7;</code>
+     * @return The ownerId.
      */
-    public boolean hasOwner() {
-      return ownerBuilder_ != null || owner_ != null;
+    @java.lang.Override
+    public long getOwnerId() {
+      return ownerId_;
     }
     /**
-     * <code>.User owner = 7;</code>
-     * @return The owner.
+     * <code>int64 owner_id = 7;</code>
+     * @param value The ownerId to set.
+     * @return This builder for chaining.
      */
-    public User getOwner() {
-      if (ownerBuilder_ == null) {
-        return owner_ == null ? User.getDefaultInstance() : owner_;
-      } else {
-        return ownerBuilder_.getMessage();
-      }
-    }
-    /**
-     * <code>.User owner = 7;</code>
-     */
-    public Builder setOwner(User value) {
-      if (ownerBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        owner_ = value;
-        onChanged();
-      } else {
-        ownerBuilder_.setMessage(value);
-      }
-
-      return this;
-    }
-    /**
-     * <code>.User owner = 7;</code>
-     */
-    public Builder setOwner(
-        User.Builder builderForValue) {
-      if (ownerBuilder_ == null) {
-        owner_ = builderForValue.build();
-        onChanged();
-      } else {
-        ownerBuilder_.setMessage(builderForValue.build());
-      }
-
-      return this;
-    }
-    /**
-     * <code>.User owner = 7;</code>
-     */
-    public Builder mergeOwner(User value) {
-      if (ownerBuilder_ == null) {
-        if (owner_ != null) {
-          owner_ =
-            User.newBuilder(owner_).mergeFrom(value).buildPartial();
-        } else {
-          owner_ = value;
-        }
-        onChanged();
-      } else {
-        ownerBuilder_.mergeFrom(value);
-      }
-
-      return this;
-    }
-    /**
-     * <code>.User owner = 7;</code>
-     */
-    public Builder clearOwner() {
-      if (ownerBuilder_ == null) {
-        owner_ = null;
-        onChanged();
-      } else {
-        owner_ = null;
-        ownerBuilder_ = null;
-      }
-
-      return this;
-    }
-    /**
-     * <code>.User owner = 7;</code>
-     */
-    public User.Builder getOwnerBuilder() {
-
+    public Builder setOwnerId(long value) {
+      
+      ownerId_ = value;
       onChanged();
-      return getOwnerFieldBuilder().getBuilder();
+      return this;
     }
     /**
-     * <code>.User owner = 7;</code>
+     * <code>int64 owner_id = 7;</code>
+     * @return This builder for chaining.
      */
-    public UserOrBuilder getOwnerOrBuilder() {
-      if (ownerBuilder_ != null) {
-        return ownerBuilder_.getMessageOrBuilder();
-      } else {
-        return owner_ == null ?
-            User.getDefaultInstance() : owner_;
-      }
-    }
-    /**
-     * <code>.User owner = 7;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-            User, User.Builder, UserOrBuilder>
-        getOwnerFieldBuilder() {
-      if (ownerBuilder_ == null) {
-        ownerBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                User, User.Builder, UserOrBuilder>(
-                getOwner(),
-                getParentForChildren(),
-                isClean());
-        owner_ = null;
-      }
-      return ownerBuilder_;
+    public Builder clearOwnerId() {
+      
+      ownerId_ = 0L;
+      onChanged();
+      return this;
     }
 
-    private java.util.List<User> recipients_ =
-      java.util.Collections.emptyList();
-    private void ensureRecipientsIsMutable() {
+    private com.google.protobuf.Internal.LongList recipientsIds_ = emptyLongList();
+    private void ensureRecipientsIdsIsMutable() {
       if (!((bitField0_ & 0x00000001) != 0)) {
-        recipients_ = new java.util.ArrayList<User>(recipients_);
+        recipientsIds_ = mutableCopy(recipientsIds_);
         bitField0_ |= 0x00000001;
        }
     }
-
-    private com.google.protobuf.RepeatedFieldBuilderV3<
-            User, User.Builder, UserOrBuilder> recipientsBuilder_;
-
     /**
-     * <code>repeated .User recipients = 8;</code>
+     * <code>repeated int64 recipients_ids = 8;</code>
+     * @return A list containing the recipientsIds.
      */
-    public java.util.List<User> getRecipientsList() {
-      if (recipientsBuilder_ == null) {
-        return java.util.Collections.unmodifiableList(recipients_);
-      } else {
-        return recipientsBuilder_.getMessageList();
-      }
+    public java.util.List<java.lang.Long>
+        getRecipientsIdsList() {
+      return ((bitField0_ & 0x00000001) != 0) ?
+               java.util.Collections.unmodifiableList(recipientsIds_) : recipientsIds_;
     }
     /**
-     * <code>repeated .User recipients = 8;</code>
+     * <code>repeated int64 recipients_ids = 8;</code>
+     * @return The count of recipientsIds.
      */
-    public int getRecipientsCount() {
-      if (recipientsBuilder_ == null) {
-        return recipients_.size();
-      } else {
-        return recipientsBuilder_.getCount();
-      }
+    public int getRecipientsIdsCount() {
+      return recipientsIds_.size();
     }
     /**
-     * <code>repeated .User recipients = 8;</code>
+     * <code>repeated int64 recipients_ids = 8;</code>
+     * @param index The index of the element to return.
+     * @return The recipientsIds at the given index.
      */
-    public User getRecipients(int index) {
-      if (recipientsBuilder_ == null) {
-        return recipients_.get(index);
-      } else {
-        return recipientsBuilder_.getMessage(index);
-      }
+    public long getRecipientsIds(int index) {
+      return recipientsIds_.getLong(index);
     }
     /**
-     * <code>repeated .User recipients = 8;</code>
+     * <code>repeated int64 recipients_ids = 8;</code>
+     * @param index The index to set the value at.
+     * @param value The recipientsIds to set.
+     * @return This builder for chaining.
      */
-    public Builder setRecipients(
-        int index, User value) {
-      if (recipientsBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureRecipientsIsMutable();
-        recipients_.set(index, value);
-        onChanged();
-      } else {
-        recipientsBuilder_.setMessage(index, value);
-      }
+    public Builder setRecipientsIds(
+        int index, long value) {
+      ensureRecipientsIdsIsMutable();
+      recipientsIds_.setLong(index, value);
+      onChanged();
       return this;
     }
     /**
-     * <code>repeated .User recipients = 8;</code>
+     * <code>repeated int64 recipients_ids = 8;</code>
+     * @param value The recipientsIds to add.
+     * @return This builder for chaining.
      */
-    public Builder setRecipients(
-        int index, User.Builder builderForValue) {
-      if (recipientsBuilder_ == null) {
-        ensureRecipientsIsMutable();
-        recipients_.set(index, builderForValue.build());
-        onChanged();
-      } else {
-        recipientsBuilder_.setMessage(index, builderForValue.build());
-      }
+    public Builder addRecipientsIds(long value) {
+      ensureRecipientsIdsIsMutable();
+      recipientsIds_.addLong(value);
+      onChanged();
       return this;
     }
     /**
-     * <code>repeated .User recipients = 8;</code>
+     * <code>repeated int64 recipients_ids = 8;</code>
+     * @param values The recipientsIds to add.
+     * @return This builder for chaining.
      */
-    public Builder addRecipients(User value) {
-      if (recipientsBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureRecipientsIsMutable();
-        recipients_.add(value);
-        onChanged();
-      } else {
-        recipientsBuilder_.addMessage(value);
-      }
+    public Builder addAllRecipientsIds(
+        java.lang.Iterable<? extends java.lang.Long> values) {
+      ensureRecipientsIdsIsMutable();
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(
+          values, recipientsIds_);
+      onChanged();
       return this;
     }
     /**
-     * <code>repeated .User recipients = 8;</code>
+     * <code>repeated int64 recipients_ids = 8;</code>
+     * @return This builder for chaining.
      */
-    public Builder addRecipients(
-        int index, User value) {
-      if (recipientsBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureRecipientsIsMutable();
-        recipients_.add(index, value);
-        onChanged();
-      } else {
-        recipientsBuilder_.addMessage(index, value);
-      }
+    public Builder clearRecipientsIds() {
+      recipientsIds_ = emptyLongList();
+      bitField0_ = (bitField0_ & ~0x00000001);
+      onChanged();
       return this;
     }
-    /**
-     * <code>repeated .User recipients = 8;</code>
-     */
-    public Builder addRecipients(
-        User.Builder builderForValue) {
-      if (recipientsBuilder_ == null) {
-        ensureRecipientsIsMutable();
-        recipients_.add(builderForValue.build());
-        onChanged();
-      } else {
-        recipientsBuilder_.addMessage(builderForValue.build());
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .User recipients = 8;</code>
-     */
-    public Builder addRecipients(
-        int index, User.Builder builderForValue) {
-      if (recipientsBuilder_ == null) {
-        ensureRecipientsIsMutable();
-        recipients_.add(index, builderForValue.build());
-        onChanged();
-      } else {
-        recipientsBuilder_.addMessage(index, builderForValue.build());
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .User recipients = 8;</code>
-     */
-    public Builder addAllRecipients(
-        Iterable<? extends User> values) {
-      if (recipientsBuilder_ == null) {
-        ensureRecipientsIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, recipients_);
-        onChanged();
-      } else {
-        recipientsBuilder_.addAllMessages(values);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .User recipients = 8;</code>
-     */
-    public Builder clearRecipients() {
-      if (recipientsBuilder_ == null) {
-        recipients_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000001);
-        onChanged();
-      } else {
-        recipientsBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .User recipients = 8;</code>
-     */
-    public Builder removeRecipients(int index) {
-      if (recipientsBuilder_ == null) {
-        ensureRecipientsIsMutable();
-        recipients_.remove(index);
-        onChanged();
-      } else {
-        recipientsBuilder_.remove(index);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .User recipients = 8;</code>
-     */
-    public User.Builder getRecipientsBuilder(
-        int index) {
-      return getRecipientsFieldBuilder().getBuilder(index);
-    }
-    /**
-     * <code>repeated .User recipients = 8;</code>
-     */
-    public UserOrBuilder getRecipientsOrBuilder(
-        int index) {
-      if (recipientsBuilder_ == null) {
-        return recipients_.get(index);  } else {
-        return recipientsBuilder_.getMessageOrBuilder(index);
-      }
-    }
-    /**
-     * <code>repeated .User recipients = 8;</code>
-     */
-    public java.util.List<? extends UserOrBuilder>
-         getRecipientsOrBuilderList() {
-      if (recipientsBuilder_ != null) {
-        return recipientsBuilder_.getMessageOrBuilderList();
-      } else {
-        return java.util.Collections.unmodifiableList(recipients_);
-      }
-    }
-    /**
-     * <code>repeated .User recipients = 8;</code>
-     */
-    public User.Builder addRecipientsBuilder() {
-      return getRecipientsFieldBuilder().addBuilder(
-          User.getDefaultInstance());
-    }
-    /**
-     * <code>repeated .User recipients = 8;</code>
-     */
-    public User.Builder addRecipientsBuilder(
-        int index) {
-      return getRecipientsFieldBuilder().addBuilder(
-          index, User.getDefaultInstance());
-    }
-    /**
-     * <code>repeated .User recipients = 8;</code>
-     */
-    public java.util.List<User.Builder>
-         getRecipientsBuilderList() {
-      return getRecipientsFieldBuilder().getBuilderList();
-    }
-    private com.google.protobuf.RepeatedFieldBuilderV3<
-            User, User.Builder, UserOrBuilder>
-        getRecipientsFieldBuilder() {
-      if (recipientsBuilder_ == null) {
-        recipientsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-                User, User.Builder, UserOrBuilder>(
-                recipients_,
-                ((bitField0_ & 0x00000001) != 0),
-                getParentForChildren(),
-                isClean());
-        recipients_ = null;
-      }
-      return recipientsBuilder_;
-    }
-    @Override
+    @java.lang.Override
     public final Builder setUnknownFields(
         final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
     }
 
-    @Override
+    @java.lang.Override
     public final Builder mergeUnknownFields(
         final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.mergeUnknownFields(unknownFields);
     }
 
 
-    // @@protoc_insertion_point(builder_scope:MessageObject)
+    // @@protoc_insertion_point(builder_scope:com.wisekrakr.wisesecurecomm.communication.proto.MessageObject)
   }
 
-  // @@protoc_insertion_point(class_scope:MessageObject)
-  private static final MessageObject DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:com.wisekrakr.wisesecurecomm.communication.proto.MessageObject)
+  private static final com.wisekrakr.wisesecurecomm.communication.proto.MessageObject DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new MessageObject();
+    DEFAULT_INSTANCE = new com.wisekrakr.wisesecurecomm.communication.proto.MessageObject();
   }
 
-  public static MessageObject getDefaultInstance() {
+  public static com.wisekrakr.wisesecurecomm.communication.proto.MessageObject getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
   private static final com.google.protobuf.Parser<MessageObject>
       PARSER = new com.google.protobuf.AbstractParser<MessageObject>() {
-    @Override
+    @java.lang.Override
     public MessageObject parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1812,13 +1519,13 @@ private static final long serialVersionUID = 0L;
     return PARSER;
   }
 
-  @Override
+  @java.lang.Override
   public com.google.protobuf.Parser<MessageObject> getParserForType() {
     return PARSER;
   }
 
-  @Override
-  public MessageObject getDefaultInstanceForType() {
+  @java.lang.Override
+  public com.wisekrakr.wisesecurecomm.communication.proto.MessageObject getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

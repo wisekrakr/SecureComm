@@ -1,7 +1,7 @@
 package com.wisekrakr.wisesecurecomm.fx.events;
 
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
-import com.wisekrakr.wisesecurecomm.communication.proto.User;
+import com.wisekrakr.wisesecurecomm.communication.user.User;
 import com.wisekrakr.wisesecurecomm.fx.screens.traynotifications.TrayNotificationType;
 
 import java.util.List;

@@ -4,11 +4,11 @@
 package com.wisekrakr.wisesecurecomm.communication.proto;
 
 /**
- * Protobuf type {@code FileInfo}
+ * Protobuf type {@code com.wisekrakr.wisesecurecomm.communication.proto.FileInfo}
  */
 public final class FileInfo extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:FileInfo)
+    // @@protoc_insertion_point(message_implements:com.wisekrakr.wisesecurecomm.communication.proto.FileInfo)
     FileInfoOrBuilder {
 private static final long serialVersionUID = 0L;
   // Use FileInfo.newBuilder() to construct.
@@ -19,14 +19,14 @@ private static final long serialVersionUID = 0L;
     name_ = "";
   }
 
-  @Override
+  @java.lang.Override
   @SuppressWarnings({"unused"})
-  protected Object newInstance(
+  protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
     return new FileInfo();
   }
 
-  @Override
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet
   getUnknownFields() {
     return this.unknownFields;
@@ -37,7 +37,7 @@ private static final long serialVersionUID = 0L;
       throws com.google.protobuf.InvalidProtocolBufferException {
     this();
     if (extensionRegistry == null) {
-      throw new NullPointerException();
+      throw new java.lang.NullPointerException();
     }
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -51,11 +51,11 @@ private static final long serialVersionUID = 0L;
             break;
           case 8: {
 
-            id_ = input.readInt32();
+            id_ = input.readInt64();
             break;
           }
           case 18: {
-            String s = input.readStringRequireUtf8();
+            java.lang.String s = input.readStringRequireUtf8();
 
             name_ = s;
             break;
@@ -86,43 +86,43 @@ private static final long serialVersionUID = 0L;
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return MessageObjectOuterClass.internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_FileInfo_descriptor;
+    return com.wisekrakr.wisesecurecomm.communication.proto.MessageObjectOuterClass.internal_static_com_wisekrakr_wisesecurecomm_communication_proto_FileInfo_descriptor;
   }
 
-  @Override
-  protected FieldAccessorTable
+  @java.lang.Override
+  protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return MessageObjectOuterClass.internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_FileInfo_fieldAccessorTable
+    return com.wisekrakr.wisesecurecomm.communication.proto.MessageObjectOuterClass.internal_static_com_wisekrakr_wisesecurecomm_communication_proto_FileInfo_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            FileInfo.class, Builder.class);
+            com.wisekrakr.wisesecurecomm.communication.proto.FileInfo.class, com.wisekrakr.wisesecurecomm.communication.proto.FileInfo.Builder.class);
   }
 
   public static final int ID_FIELD_NUMBER = 1;
-  private int id_;
+  private long id_;
   /**
-   * <code>int32 id = 1;</code>
+   * <code>int64 id = 1;</code>
    * @return The id.
    */
-  @Override
-  public int getId() {
+  @java.lang.Override
+  public long getId() {
     return id_;
   }
 
   public static final int NAME_FIELD_NUMBER = 2;
-  private volatile Object name_;
+  private volatile java.lang.Object name_;
   /**
    * <code>string name = 2;</code>
    * @return The name.
    */
-  @Override
-  public String getName() {
-    Object ref = name_;
-    if (ref instanceof String) {
-      return (String) ref;
+  @java.lang.Override
+  public java.lang.String getName() {
+    java.lang.Object ref = name_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
     } else {
-      com.google.protobuf.ByteString bs =
+      com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
-      String s = bs.toStringUtf8();
+      java.lang.String s = bs.toStringUtf8();
       name_ = s;
       return s;
     }
@@ -131,14 +131,14 @@ private static final long serialVersionUID = 0L;
    * <code>string name = 2;</code>
    * @return The bytes for name.
    */
-  @Override
+  @java.lang.Override
   public com.google.protobuf.ByteString
       getNameBytes() {
-    Object ref = name_;
-    if (ref instanceof String) {
-      com.google.protobuf.ByteString b =
+    java.lang.Object ref = name_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
-              (String) ref);
+              (java.lang.String) ref);
       name_ = b;
       return b;
     } else {
@@ -152,13 +152,13 @@ private static final long serialVersionUID = 0L;
    * <code>uint64 size = 3;</code>
    * @return The size.
    */
-  @Override
+  @java.lang.Override
   public long getSize() {
     return size_;
   }
 
   private byte memoizedIsInitialized = -1;
-  @Override
+  @java.lang.Override
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
     if (isInitialized == 1) return true;
@@ -168,11 +168,11 @@ private static final long serialVersionUID = 0L;
     return true;
   }
 
-  @Override
+  @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (id_ != 0) {
-      output.writeInt32(1, id_);
+    if (id_ != 0L) {
+      output.writeInt64(1, id_);
     }
     if (!getNameBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, name_);
@@ -183,15 +183,15 @@ private static final long serialVersionUID = 0L;
     unknownFields.writeTo(output);
   }
 
-  @Override
+  @java.lang.Override
   public int getSerializedSize() {
     int size = memoizedSize;
     if (size != -1) return size;
 
     size = 0;
-    if (id_ != 0) {
+    if (id_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(1, id_);
+        .computeInt64Size(1, id_);
     }
     if (!getNameBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, name_);
@@ -205,15 +205,15 @@ private static final long serialVersionUID = 0L;
     return size;
   }
 
-  @Override
-  public boolean equals(final Object obj) {
+  @java.lang.Override
+  public boolean equals(final java.lang.Object obj) {
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof FileInfo)) {
+    if (!(obj instanceof com.wisekrakr.wisesecurecomm.communication.proto.FileInfo)) {
       return super.equals(obj);
     }
-    FileInfo other = (FileInfo) obj;
+    com.wisekrakr.wisesecurecomm.communication.proto.FileInfo other = (com.wisekrakr.wisesecurecomm.communication.proto.FileInfo) obj;
 
     if (getId()
         != other.getId()) return false;
@@ -225,7 +225,7 @@ private static final long serialVersionUID = 0L;
     return true;
   }
 
-  @Override
+  @java.lang.Override
   public int hashCode() {
     if (memoizedHashCode != 0) {
       return memoizedHashCode;
@@ -233,7 +233,8 @@ private static final long serialVersionUID = 0L;
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + ID_FIELD_NUMBER;
-    hash = (53 * hash) + getId();
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getId());
     hash = (37 * hash) + NAME_FIELD_NUMBER;
     hash = (53 * hash) + getName().hashCode();
     hash = (37 * hash) + SIZE_FIELD_NUMBER;
@@ -244,69 +245,69 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static FileInfo parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.FileInfo parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static FileInfo parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.FileInfo parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static FileInfo parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.FileInfo parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static FileInfo parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.FileInfo parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static FileInfo parseFrom(byte[] data)
+  public static com.wisekrakr.wisesecurecomm.communication.proto.FileInfo parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static FileInfo parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.FileInfo parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static FileInfo parseFrom(java.io.InputStream input)
+  public static com.wisekrakr.wisesecurecomm.communication.proto.FileInfo parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static FileInfo parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.FileInfo parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static FileInfo parseDelimitedFrom(java.io.InputStream input)
+  public static com.wisekrakr.wisesecurecomm.communication.proto.FileInfo parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static FileInfo parseDelimitedFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.FileInfo parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static FileInfo parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.FileInfo parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static FileInfo parseFrom(
+  public static com.wisekrakr.wisesecurecomm.communication.proto.FileInfo parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -314,53 +315,53 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  @Override
+  @java.lang.Override
   public Builder newBuilderForType() { return newBuilder(); }
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(FileInfo prototype) {
+  public static Builder newBuilder(com.wisekrakr.wisesecurecomm.communication.proto.FileInfo prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
-  @Override
+  @java.lang.Override
   public Builder toBuilder() {
     return this == DEFAULT_INSTANCE
         ? new Builder() : new Builder().mergeFrom(this);
   }
 
-  @Override
+  @java.lang.Override
   protected Builder newBuilderForType(
-      BuilderParent parent) {
+      com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
     Builder builder = new Builder(parent);
     return builder;
   }
   /**
-   * Protobuf type {@code FileInfo}
+   * Protobuf type {@code com.wisekrakr.wisesecurecomm.communication.proto.FileInfo}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:FileInfo)
-          FileInfoOrBuilder {
+      // @@protoc_insertion_point(builder_implements:com.wisekrakr.wisesecurecomm.communication.proto.FileInfo)
+      com.wisekrakr.wisesecurecomm.communication.proto.FileInfoOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return MessageObjectOuterClass.internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_FileInfo_descriptor;
+      return com.wisekrakr.wisesecurecomm.communication.proto.MessageObjectOuterClass.internal_static_com_wisekrakr_wisesecurecomm_communication_proto_FileInfo_descriptor;
     }
 
-    @Override
-    protected FieldAccessorTable
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return MessageObjectOuterClass.internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_FileInfo_fieldAccessorTable
+      return com.wisekrakr.wisesecurecomm.communication.proto.MessageObjectOuterClass.internal_static_com_wisekrakr_wisesecurecomm_communication_proto_FileInfo_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              FileInfo.class, Builder.class);
+              com.wisekrakr.wisesecurecomm.communication.proto.FileInfo.class, com.wisekrakr.wisesecurecomm.communication.proto.FileInfo.Builder.class);
     }
 
-    // Construct using FileInfo.newBuilder()
+    // Construct using com.wisekrakr.wisesecurecomm.communication.proto.FileInfo.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
 
     private Builder(
-        BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
       maybeForceBuilderInitialization();
     }
@@ -369,10 +370,10 @@ private static final long serialVersionUID = 0L;
               .alwaysUseFieldBuilders) {
       }
     }
-    @Override
+    @java.lang.Override
     public Builder clear() {
       super.clear();
-      id_ = 0;
+      id_ = 0L;
 
       name_ = "";
 
@@ -381,29 +382,29 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return MessageObjectOuterClass.internal_static_client_src_com_wisekrakr_wisesecurecomm_communication_FileInfo_descriptor;
+      return com.wisekrakr.wisesecurecomm.communication.proto.MessageObjectOuterClass.internal_static_com_wisekrakr_wisesecurecomm_communication_proto_FileInfo_descriptor;
     }
 
-    @Override
-    public FileInfo getDefaultInstanceForType() {
-      return FileInfo.getDefaultInstance();
+    @java.lang.Override
+    public com.wisekrakr.wisesecurecomm.communication.proto.FileInfo getDefaultInstanceForType() {
+      return com.wisekrakr.wisesecurecomm.communication.proto.FileInfo.getDefaultInstance();
     }
 
-    @Override
-    public FileInfo build() {
-      FileInfo result = buildPartial();
+    @java.lang.Override
+    public com.wisekrakr.wisesecurecomm.communication.proto.FileInfo build() {
+      com.wisekrakr.wisesecurecomm.communication.proto.FileInfo result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
       return result;
     }
 
-    @Override
-    public FileInfo buildPartial() {
-      FileInfo result = new FileInfo(this);
+    @java.lang.Override
+    public com.wisekrakr.wisesecurecomm.communication.proto.FileInfo buildPartial() {
+      com.wisekrakr.wisesecurecomm.communication.proto.FileInfo result = new com.wisekrakr.wisesecurecomm.communication.proto.FileInfo(this);
       result.id_ = id_;
       result.name_ = name_;
       result.size_ = size_;
@@ -411,51 +412,51 @@ private static final long serialVersionUID = 0L;
       return result;
     }
 
-    @Override
+    @java.lang.Override
     public Builder clone() {
       return super.clone();
     }
-    @Override
+    @java.lang.Override
     public Builder setField(
         com.google.protobuf.Descriptors.FieldDescriptor field,
-        Object value) {
+        java.lang.Object value) {
       return super.setField(field, value);
     }
-    @Override
+    @java.lang.Override
     public Builder clearField(
         com.google.protobuf.Descriptors.FieldDescriptor field) {
       return super.clearField(field);
     }
-    @Override
+    @java.lang.Override
     public Builder clearOneof(
         com.google.protobuf.Descriptors.OneofDescriptor oneof) {
       return super.clearOneof(oneof);
     }
-    @Override
+    @java.lang.Override
     public Builder setRepeatedField(
         com.google.protobuf.Descriptors.FieldDescriptor field,
-        int index, Object value) {
+        int index, java.lang.Object value) {
       return super.setRepeatedField(field, index, value);
     }
-    @Override
+    @java.lang.Override
     public Builder addRepeatedField(
         com.google.protobuf.Descriptors.FieldDescriptor field,
-        Object value) {
+        java.lang.Object value) {
       return super.addRepeatedField(field, value);
     }
-    @Override
+    @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof FileInfo) {
-        return mergeFrom((FileInfo)other);
+      if (other instanceof com.wisekrakr.wisesecurecomm.communication.proto.FileInfo) {
+        return mergeFrom((com.wisekrakr.wisesecurecomm.communication.proto.FileInfo)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(FileInfo other) {
-      if (other == FileInfo.getDefaultInstance()) return this;
-      if (other.getId() != 0) {
+    public Builder mergeFrom(com.wisekrakr.wisesecurecomm.communication.proto.FileInfo other) {
+      if (other == com.wisekrakr.wisesecurecomm.communication.proto.FileInfo.getDefaultInstance()) return this;
+      if (other.getId() != 0L) {
         setId(other.getId());
       }
       if (!other.getName().isEmpty()) {
@@ -470,21 +471,21 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    @Override
+    @java.lang.Override
     public final boolean isInitialized() {
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public Builder mergeFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      FileInfo parsedMessage = null;
+      com.wisekrakr.wisesecurecomm.communication.proto.FileInfo parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (FileInfo) e.getUnfinishedMessage();
+        parsedMessage = (com.wisekrakr.wisesecurecomm.communication.proto.FileInfo) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -494,52 +495,52 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private int id_ ;
+    private long id_ ;
     /**
-     * <code>int32 id = 1;</code>
+     * <code>int64 id = 1;</code>
      * @return The id.
      */
-    @Override
-    public int getId() {
+    @java.lang.Override
+    public long getId() {
       return id_;
     }
     /**
-     * <code>int32 id = 1;</code>
+     * <code>int64 id = 1;</code>
      * @param value The id to set.
      * @return This builder for chaining.
      */
-    public Builder setId(int value) {
-
+    public Builder setId(long value) {
+      
       id_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 id = 1;</code>
+     * <code>int64 id = 1;</code>
      * @return This builder for chaining.
      */
     public Builder clearId() {
-
-      id_ = 0;
+      
+      id_ = 0L;
       onChanged();
       return this;
     }
 
-    private Object name_ = "";
+    private java.lang.Object name_ = "";
     /**
      * <code>string name = 2;</code>
      * @return The name.
      */
-    public String getName() {
-      Object ref = name_;
-      if (!(ref instanceof String)) {
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         name_ = s;
         return s;
       } else {
-        return (String) ref;
+        return (java.lang.String) ref;
       }
     }
     /**
@@ -548,11 +549,11 @@ private static final long serialVersionUID = 0L;
      */
     public com.google.protobuf.ByteString
         getNameBytes() {
-      Object ref = name_;
+      java.lang.Object ref = name_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
+        com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         name_ = b;
         return b;
       } else {
@@ -565,11 +566,11 @@ private static final long serialVersionUID = 0L;
      * @return This builder for chaining.
      */
     public Builder setName(
-        String value) {
+        java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
-
+  
       name_ = value;
       onChanged();
       return this;
@@ -579,7 +580,7 @@ private static final long serialVersionUID = 0L;
      * @return This builder for chaining.
      */
     public Builder clearName() {
-
+      
       name_ = getDefaultInstance().getName();
       onChanged();
       return this;
@@ -595,7 +596,7 @@ private static final long serialVersionUID = 0L;
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-
+      
       name_ = value;
       onChanged();
       return this;
@@ -606,7 +607,7 @@ private static final long serialVersionUID = 0L;
      * <code>uint64 size = 3;</code>
      * @return The size.
      */
-    @Override
+    @java.lang.Override
     public long getSize() {
       return size_;
     }
@@ -616,7 +617,7 @@ private static final long serialVersionUID = 0L;
      * @return This builder for chaining.
      */
     public Builder setSize(long value) {
-
+      
       size_ = value;
       onChanged();
       return this;
@@ -626,40 +627,40 @@ private static final long serialVersionUID = 0L;
      * @return This builder for chaining.
      */
     public Builder clearSize() {
-
+      
       size_ = 0L;
       onChanged();
       return this;
     }
-    @Override
+    @java.lang.Override
     public final Builder setUnknownFields(
         final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
     }
 
-    @Override
+    @java.lang.Override
     public final Builder mergeUnknownFields(
         final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.mergeUnknownFields(unknownFields);
     }
 
 
-    // @@protoc_insertion_point(builder_scope:FileInfo)
+    // @@protoc_insertion_point(builder_scope:com.wisekrakr.wisesecurecomm.communication.proto.FileInfo)
   }
 
-  // @@protoc_insertion_point(class_scope:FileInfo)
-  private static final FileInfo DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:com.wisekrakr.wisesecurecomm.communication.proto.FileInfo)
+  private static final com.wisekrakr.wisesecurecomm.communication.proto.FileInfo DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new FileInfo();
+    DEFAULT_INSTANCE = new com.wisekrakr.wisesecurecomm.communication.proto.FileInfo();
   }
 
-  public static FileInfo getDefaultInstance() {
+  public static com.wisekrakr.wisesecurecomm.communication.proto.FileInfo getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
   private static final com.google.protobuf.Parser<FileInfo>
       PARSER = new com.google.protobuf.AbstractParser<FileInfo>() {
-    @Override
+    @java.lang.Override
     public FileInfo parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -672,13 +673,13 @@ private static final long serialVersionUID = 0L;
     return PARSER;
   }
 
-  @Override
+  @java.lang.Override
   public com.google.protobuf.Parser<FileInfo> getParserForType() {
     return PARSER;
   }
 
-  @Override
-  public FileInfo getDefaultInstanceForType() {
+  @java.lang.Override
+  public com.wisekrakr.wisesecurecomm.communication.proto.FileInfo getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 
