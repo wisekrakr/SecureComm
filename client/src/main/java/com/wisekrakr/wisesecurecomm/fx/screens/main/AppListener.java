@@ -13,7 +13,7 @@ public interface AppListener {
     Runnable sendMessage(String message);
     Runnable sendStatus(Status status);
     void sendAudioMessage(byte[] audioBytes, int duration, ArrayList<User> recipients);
-    void setUserList(Map<Long, User> users, User activeUser);
+    void setUserList(String line, Map<Long, User> users, User activeUser);
     void queueFilesToOpen(String line, MessageObject fileObject);
 
 }

@@ -19,7 +19,7 @@ public interface ChatApi {
     void sendChatMessage(String msg, User user, ArrayList<User> recipientsList);
     void addMessageToShow(String line, MessageObject messageObject);
 
-    void getUsersOnline(Map<Long, User> users, User activeUser);
+    void getUsersOnline(String line, Map<Long, User> users, User activeUser);
 
     void getServerMessage(String message);
 

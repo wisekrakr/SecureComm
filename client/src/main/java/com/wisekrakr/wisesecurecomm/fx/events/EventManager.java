@@ -67,8 +67,8 @@ public class EventManager implements EventListener {
     }
 
     @Override
-    public void onConnect(String hostname, int port, String username, String profilePicture) {
-        client.connectClient(hostname, port, username,profilePicture);
+    public void onConnect(String hostname, int port, String username, String profilePicture, boolean setSecureConnection) {
+        client.connectClient(hostname, port, username,profilePicture,setSecureConnection);
     }
 
     @Override
@@ -221,8 +221,8 @@ public class EventManager implements EventListener {
             }
 
             @Override
-            public void getUsersOnline(Map<Long, User> users, User activeUser) {
-                EventManager.this.mainGui.getController().setUserList(users, activeUser);
+            public void getUsersOnline(String line, Map<Long, User> users, User activeUser) {
+                EventManager.this.mainGui.getController().setUserList(line,users, activeUser);
             }
 
             @Override

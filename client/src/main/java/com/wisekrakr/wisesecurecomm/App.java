@@ -5,8 +5,6 @@ import com.wisekrakr.wisesecurecomm.communication.user.User;
 import com.wisekrakr.wisesecurecomm.fx.events.EventManager;
 import com.wisekrakr.wisesecurecomm.fx.screens.traynotifications.TrayNotificationType;
 
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.Map;
 
@@ -66,8 +64,8 @@ public class App implements Serializable {
                     }
 
                     @Override
-                    public void onGetOnlineUser(Map<Long, User> users, User activeUser) {
-                        eventManager.chatAPI().getUsersOnline(users, activeUser);
+                    public void onGetOnlineUser(String line, Map<Long, User> users, User activeUser) {
+                        eventManager.chatAPI().getUsersOnline(line, users, activeUser);
                     }
 
                     @Override

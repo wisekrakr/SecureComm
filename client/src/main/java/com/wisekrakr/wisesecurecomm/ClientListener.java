@@ -12,7 +12,7 @@ public interface ClientListener {
     void onMessageReceived(String line, MessageObject messageObject);
     void onNotSecureConnection();
 
-    void onGetOnlineUser(Map<Long, User> users, User activeUser);
+    void onGetOnlineUser(String line, Map<Long, User> users, User activeUser);
     void onNotification(String title, String body, TrayNotificationType trayNotificationType);
 
     void onDirectMessageRequestReceived(String line, MessageObject messageObject);

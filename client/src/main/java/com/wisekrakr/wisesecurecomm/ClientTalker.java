@@ -25,9 +25,10 @@ public interface ClientTalker {
      * @param port port to connect on
      * @param username client's username
      * @param profilePicture URI string
+     * @param setSecureConnection
      *
      */
-    void connectClient(String hostname, int port, String username, String profilePicture);
+    void connectClient(String hostname, int port, String username, String profilePicture, boolean setSecureConnection);
 
     /**
      * Sends a quit command to the server. The server can remove user out of a list and send quit back.

@@ -176,7 +176,7 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
     }
 
     @Override
-    public void setUserList(Map<Long, User> users, User activeUser) {
+    public void setUserList(String line, Map<Long, User> users, User activeUser) {
         ArrayList<User>listOfUsers = new ArrayList<>(users.values());
 
         // add new user in the user list
@@ -201,7 +201,7 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
         Platform.runLater(() -> {
             ObservableList<User> allTheUsers = FXCollections.observableList(listOfUsers);
             userList.setItems(allTheUsers);
-            userList.setCellFactory(new UserCellRenderer());
+            userList.setCellFactory(new UserCellRenderer(line));
             setOnlineLabel(String.valueOf(users.size()));
         });
     }// ## End App Manager Methods
@@ -212,6 +212,7 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
     @FXML
     private void connect(){
         clickToConnectImage.setVisible(false);
+        //todo send status when beginning and in server keep user map with status
         eventManager.onStartCommunication();
     }
 

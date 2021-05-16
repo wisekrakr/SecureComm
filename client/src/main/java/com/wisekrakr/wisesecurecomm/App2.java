@@ -65,8 +65,8 @@ public class App2 implements Serializable {
                     }
 
                     @Override
-                    public void onGetOnlineUser(Map<Long, User> users, User activeUser) {
-                        eventManager.chatAPI().getUsersOnline(users, activeUser);
+                    public void onGetOnlineUser(String line, Map<Long, User> users, User activeUser) {
+                        eventManager.chatAPI().getUsersOnline(line, users, activeUser);
                     }
 
                     @Override

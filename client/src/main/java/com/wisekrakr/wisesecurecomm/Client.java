@@ -44,6 +44,7 @@ public class Client implements ClientTalker {
 
     private double calculatedSentTime;
     private Thread sendThread;
+    private boolean optedForSecurity;
 
     public Client(){
         this.keyPair = generateKeyPair();
@@ -117,8 +118,9 @@ public class Client implements ClientTalker {
     }
 
     @Override
-    public void connectClient(String hostname, int port, String username, String profilePicture){
+    public void connectClient(String hostname, int port, String username, String profilePicture, boolean setSecureConnection){
         this.user = createUser(null, username, Status.ONLINE, profilePicture);
+        this.optedForSecurity = setSecureConnection;
 
         try {
             SSLSocketFactory sslSocketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
@@ -175,12 +177,11 @@ public class Client implements ClientTalker {
         clientThread = new Thread(() -> {
             try {
                 if (systemConnected()) {
-                    boolean firstContact = true;
 
                     try {
                         while (!isStopped) {
                             //Create a secure line
-                            if (firstContact) {
+                            if (optedForSecurity) {
 
                                 sendMessage(ClientMessageHandler.createSecurityMessage(
                                         MessageType.Security.GET_SECURE,
@@ -197,11 +198,17 @@ public class Client implements ClientTalker {
                                     ));
 
                                     isSecure = true;
-                                    firstContact = false;
                                 } catch (Throwable t) {
                                     listener.onNotSecureConnection();
                                     throw new IllegalArgumentException("Failed securing client", t);
                                 }
+                            }else{
+                                sendMessage(ClientMessageHandler.createSecurityMessage(
+                                        MessageType.Security.GET_SECURE,
+                                        "[CMD_NO_SECURITY]",
+                                        user.getId(),
+                                        0L
+                                ));
                             }
 
 
@@ -275,20 +282,30 @@ public class Client implements ClientTalker {
                                                 }
                                                 break;
                                             case VERIFY:
-                                                isVerified = true;
-                                                System.out.println("*** Got verification from server! ***");
+                                                if(optedForSecurity){
+                                                    isVerified = true;
+                                                    System.out.println("*** Got verification from server! ***");
 
-                                                sendMessage(ClientMessageHandler.createSecurityMessage(
-                                                        MessageType.Security.VERIFY,
-                                                        MessageCryptography.getHex(
-                                                                MessageCryptography.encryptData(
-                                                                        sessionKey,
-                                                                        line.getBytes()
-                                                                )
-                                                        ),
-                                                        user.getId(),
-                                                        0L
-                                                ));
+                                                    sendMessage(ClientMessageHandler.createSecurityMessage(
+                                                            MessageType.Security.VERIFY,
+                                                            MessageCryptography.getHex(
+                                                                    MessageCryptography.encryptData(
+                                                                            sessionKey,
+                                                                            line.getBytes()
+                                                                    )
+                                                            ),
+                                                            user.getId(),
+                                                            0L
+                                                    ));
+                                                }else{
+                                                    sendMessage(ClientMessageHandler.createSecurityMessage(
+                                                            MessageType.Security.VERIFY,
+                                                            "[CMD_NO_SECURITY]",
+                                                            user.getId(),
+                                                            0L
+                                                    ));
+                                                }
+
                                                 break;
                                             default:
                                                 throw new IllegalStateException("Unexpected security type: " + messageObject.getMessageType());
@@ -388,15 +405,15 @@ public class Client implements ClientTalker {
                                                 User newUser = convertStringToUser(line);
 
                                                 users.put(newUser.getId(), newUser);
-                                                listener.onGetOnlineUser(users, newUser); // show all users
+                                                listener.onGetOnlineUser("ONLINE", users, newUser); // show all users
                                                 break;
                                             case USER_OFFLINE: // remove user out of HashMap. Remove name from gui.
                                                 User finalUser = getUser(messageObject.getOwnerId());
                                                 users.entrySet().removeIf(u -> u.getKey().equals(finalUser.getId()));
-                                                listener.onGetOnlineUser(users,finalUser);
+                                                listener.onGetOnlineUser(line, users,finalUser);
                                                 break;
                                             case USER_STATUS: // show status change in gui.
-                                                listener.onGetOnlineUser(users, getUser(messageObject.getOwnerId()));
+                                                listener.onGetOnlineUser(line, users, getUser(messageObject.getOwnerId()));
                                                 break;
                                             case ERROR:
                                                 listener.onNotification("Server error", line, TrayNotificationType.ERROR);

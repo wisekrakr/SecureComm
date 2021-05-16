@@ -10,15 +10,16 @@ public interface ClientHandlerListener {
 
     // security methods
     void onGettingSecurity(long id, String encodedPublicKey);
+    void onNoSecurityWanted(long id);
     void onStoringPublicKey(long id, String encodedSessionKey);
     void onStoringSessionKey(long id, String sessionKey);
-    void onVerified(boolean secureConnection);
+    void onVerified();
 
     // command methods
     void onDMCommand(String line, MessageObject messageObject);
 
     // notification methods
-    void onClientStatusUpdate(MessageObject messageObject);
+    void onClientStatusUpdate(String line, MessageObject messageObject);
 
 
     /**
@@ -42,4 +43,5 @@ public interface ClientHandlerListener {
 
     User getUser(Long id);
     List<User>getUserList(List<Long>recipientsIds);
+
 }

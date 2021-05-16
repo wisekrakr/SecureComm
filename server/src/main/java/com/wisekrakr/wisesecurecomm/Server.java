@@ -128,6 +128,7 @@ public class Server  {
                                         messageObject.getOwnerId()
                                 ).toByteArray())
                 );
+
             }
 
         } catch (Throwable t) {
@@ -150,6 +151,20 @@ public class Server  {
                                         id,
                                         MessageType.Security.PUBLIC_KEY,
                                         encodedPublicKey,
+                                        clientHandlerAlpha.getUser().getId(),
+                                        clientHandlerAlpha.getUser().getId()
+                                ),
+                                clientHandlerAlpha
+                        );
+                    }
+
+                    @Override
+                    public void onNoSecurityWanted(long id) {
+                        sendMessage(
+                                createSecurityMessage(
+                                        id,
+                                        MessageType.Security.VERIFY,
+                                        "//// Warning, you do not have a secure connection! ////",
                                         clientHandlerAlpha.getUser().getId(),
                                         clientHandlerAlpha.getUser().getId()
                                 ),
@@ -190,7 +205,7 @@ public class Server  {
                     }
 
                     @Override
-                    public void onVerified(boolean secureConnection) {
+                    public void onVerified() {
                         welcomeMessage(clientHandlerAlpha);
                         giveUsers(clientHandlerAlpha);
                     }
@@ -349,9 +364,17 @@ public class Server  {
                     }
 
                     @Override
-                    public void onClientStatusUpdate(MessageObject messageObject) {
+                    public void onClientStatusUpdate(String line, MessageObject messageObject) {
                         for (ClientHandler clientHandler : clientHandlers.values()) {
-                            sendMessage(messageObject, clientHandler);
+                            sendMessage(
+                                    createStatusMessage(
+                                            messageObject.getId(),
+                                            line,
+                                            messageObject.getOwnerId(),
+                                            messageObject.getRecipientsIdsList()
+                                    ),
+                                    clientHandler
+                            );
                         }
                     }
 

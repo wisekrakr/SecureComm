@@ -134,7 +134,7 @@ public class ClientHandler {
 						case SECURITY:
 							switch (messageObject.getMessageType().getSecurity()) {
 								case GET_SECURE:
-									secureChat(messageObject.getId());
+									secureChat(messageObject.getId(),line);
 									break;
 								case PUBLIC_KEY:
 									storeClientPublicKey(messageObject.getId(),line);
@@ -143,7 +143,7 @@ public class ClientHandler {
 									storeSignedSessionKey(messageObject.getId(),line);
 									break;
 								case VERIFY:
-									listener.onVerified(isSecureConnection());
+									listener.onVerified();
 									break;
 								default:
 									throw new IllegalStateException("Unexpected security type: " + messageObject.getMessageType());
@@ -246,7 +246,8 @@ public class ClientHandler {
 							break;
 						case NOTIFICATION:
 							if (messageObject.getMessageType().getNotifications() == MessageType.Notifications.USER_STATUS) {
-								listener.onClientStatusUpdate(messageObject);
+								// line has the user status in string form. Send this back to all clients
+								listener.onClientStatusUpdate(line,messageObject);
 							} else {
 								throw new IllegalStateException("Unexpected message type: " + messageObject.getMessageType());
 							}
@@ -297,12 +298,19 @@ public class ClientHandler {
 	/**
 	 * Activate secure transfer of data!
 	 * @param id current message object id
+	 * @param line
 	 */
-	private void secureChat(long id){
-		isSecure = true;
+	private void secureChat(long id, String line){
+
 		try {
-			System.out.println( user.getName() + " send public key!");
-			listener.onGettingSecurity(id,MessageCryptography.getHex(keyPair.getPublic().getEncoded()));
+			if(line.equals("[CMD_SECURITY]")){
+				System.out.println( user.getName() + " send public key!");
+				listener.onGettingSecurity(id,MessageCryptography.getHex(keyPair.getPublic().getEncoded()));
+				isSecure = true;
+			}else if(line.equals("[CMD_NO_SECURITY]")){
+				listener.onNoSecurityWanted(id);
+			}
+
 		} catch (Throwable t) {
 			throw new IllegalArgumentException(" Exception sending public key: +",t);
 		}

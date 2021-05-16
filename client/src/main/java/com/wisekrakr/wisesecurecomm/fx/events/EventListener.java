@@ -9,7 +9,7 @@ import java.util.List;
 public interface EventListener {
     void onStartUp();
     void onWaitForAuthentication(double v);
-    void onConnect(String hostname, int port, String username, String profilePicture);
+    void onConnect(String hostname, int port, String username, String profilePicture, boolean setSecureConnection);
     void onStartCommunication();
     void onNotSecureConnection();
     void onDisconnect();

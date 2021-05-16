@@ -4,6 +4,7 @@ import com.google.protobuf.ByteString;
 import com.wisekrakr.wisesecurecomm.communication.proto.FileInfo;
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageType;
+import com.wisekrakr.wisesecurecomm.communication.user.Status;
 
 import java.util.List;
 
@@ -147,6 +148,19 @@ public class ClientThreadMessageHandler{
                 .setMessageType(MessageType.newBuilder().setMessage(MessageType.Message.FILE).build())
                 .setTextMessage(message)
                 .setFileInfo(FileInfo.newBuilder().setName(fileName).setSize(size).build())
+                .setOwnerId(ownerId)
+                .addAllRecipientsIds(recipients)
+                .build();
+    }
+
+    public static MessageObject createStatusMessage(long id, String status, long ownerId, List<Long> recipients){
+        MessageObject.Builder builder = MessageObject.newBuilder();
+
+        return builder
+                .setId(id)
+                .setObjectType(MessageObject.ObjectType.NOTIFICATION)
+                .setMessageType(MessageType.newBuilder().setNotifications(MessageType.Notifications.USER_STATUS).build())
+                .setTextMessage(status)
                 .setOwnerId(ownerId)
                 .addAllRecipientsIds(recipients)
                 .build();

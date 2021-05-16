@@ -9,10 +9,7 @@ import com.wisekrakr.wisesecurecomm.fx.util.ShapeAnimations;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
-import javafx.scene.control.Button;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
@@ -35,6 +32,8 @@ public class LoginController extends AbstractJFXPanel implements ControllerConte
     @FXML private ProgressBar progress;
     @FXML private Button connectButton;
     @FXML private TextField pictureLink;
+    @FXML private CheckBox secureCheckBox;
+
 
     private double xOffset;
     private double yOffset;
@@ -94,7 +93,7 @@ public class LoginController extends AbstractJFXPanel implements ControllerConte
         connectButton.setVisible(false);
         progress.setVisible(true);
 
-        eventManager.onConnect(hostname,port,username,picture);
+        eventManager.onConnect(hostname,port,username,picture, secureCheckBox.isSelected());
     }
 
     @FXML

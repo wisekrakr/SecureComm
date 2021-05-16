@@ -98,7 +98,7 @@ public class ClientMessageHandler {
                 .setId(longIdGenerator.generateLongId())
                 .setObjectType(MessageObject.ObjectType.NOTIFICATION)
                 .setMessageType(MessageType.newBuilder().setNotifications(MessageType.Notifications.USER_STATUS).build())
-                .setTextMessage(String.valueOf(status.getValue()))
+                .setTextMessage(String.valueOf(status))
                 .setOwnerId(ownerId)
                 .addAllRecipientsIds(recipients)
                 .build();
