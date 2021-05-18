@@ -222,7 +222,7 @@ public class EventManager implements EventListener {
 
             @Override
             public void getUsersOnline(String line, Map<Long, User> users, User activeUser) {
-                EventManager.this.mainGui.getController().setUserList(line,users, activeUser);
+                EventManager.this.mainGui.getController().setUserList(line, users, activeUser);
             }
 
             @Override

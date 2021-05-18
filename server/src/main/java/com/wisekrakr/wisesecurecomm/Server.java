@@ -6,7 +6,9 @@ import com.google.protobuf.ByteString;
 import com.wisekrakr.wisesecurecomm.communication.crypto.MessageCryptography;
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageType;
+import com.wisekrakr.wisesecurecomm.communication.user.Status;
 import com.wisekrakr.wisesecurecomm.communication.user.User;
+import com.wisekrakr.wisesecurecomm.terminal.ServerTerminal;
 
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
@@ -25,6 +27,7 @@ import static com.wisekrakr.wisesecurecomm.ClientThreadMessageHandler.*;
 public class Server  {
 
     private static Thread serverThread;
+    private static ServerTerminal serverTerminal;
     private final Map<Long, ClientHandler> clientHandlers = new HashMap<>();
     private final List<User> clients = new ArrayList<>();
     private final List<Long> iDs = new ArrayList<>();
@@ -43,6 +46,11 @@ public class Server  {
     private static void initServer(){
         Server server = new Server();
         server.startServer();
+
+        serverTerminal = new ServerTerminal(server);
+        serverTerminal.create();
+        serverTerminal.start();
+
     }
 
     private void startServer(){
@@ -70,6 +78,7 @@ public class Server  {
 
             System.out.println("Server up and running ...");
 
+
             final Executor exec = Executors.newCachedThreadPool();
             while (true) {
                 try {
@@ -92,8 +101,37 @@ public class Server  {
         serverThread.start();
     }
 
-    private void stopServer(){
-        if(!serverThread.isInterrupted())serverThread.interrupt();
+    public void stopServer(){
+        if(!serverThread.isInterrupted()){
+
+            for(ClientHandler clientHandler: clientHandlers.values()){
+                sendBye(clientHandler.getUser().getId(), clientHandler);
+
+                try {
+                    if (clientHandler.getClientSocket() != null)
+                        clientHandler.getClientSocket().close();
+                } catch (Throwable t) {
+                    throw new IllegalStateException("Error: Closing client socket", t);
+                }
+
+                // Close all streams and connections
+                try {
+                    clientHandler.getIncoming().close();
+                    clientHandler.getOutgoing().close();
+                } catch (Throwable t) {
+                    throw new IllegalStateException("Error: Closing streams", t);
+                }
+
+
+            }
+            clientHandlers.clear();
+            clients.clear();
+            iDs.clear();
+
+            serverThread.interrupt();
+            System.exit(1);
+        }
+
     }
 
     private void establishInitialConnection(SSLSocket clientSocket) {
@@ -375,7 +413,9 @@ public class Server  {
                                     ),
                                     clientHandler
                             );
+                            clientHandler.getUser().setStatus(Status.valueOf(line));
                         }
+                        serverTerminal.refresh(clientHandlers);
                     }
 
                     @Override
@@ -406,16 +446,7 @@ public class Server  {
 
                             } else {
                                 // Bye message to this client
-                                sendMessage(
-                                        createCommandMessage(
-                                                id,
-                                                MessageType.Commands.APP_QUIT,
-                                                "Adios " + clientHandlerAlpha.getUser().getName(),
-                                                clientHandlerAlpha.getUser().getId(),
-                                                clientHandlerAlpha.getUser().getId()
-                                        ),
-                                        clientHandlerAlpha
-                                );
+                                sendBye(id, clientHandlerAlpha);
                             }
                         }
                     }
@@ -445,6 +476,10 @@ public class Server  {
                                 throw new IllegalStateException("Error: Closing streams", t);
                             }
                             System.out.println("Removing user " + user.getName());
+
+                            //refresh terminal so that right number of clients is shown
+                            serverTerminal.refresh(clientHandlers);
+
                         }
                     }
 
@@ -466,6 +501,8 @@ public class Server  {
 
                 System.out.println("New client thread accepted. (Thread:" + "Client-" + user.getId() + ")");
                 System.out.println("Clients in chat: " + clientHandlers.size());
+                serverTerminal.refresh(clientHandlers);
+
             } else {
                 System.out.println("No slots free for new client!");
             }
@@ -650,6 +687,19 @@ public class Server  {
         }
     }
 
+    private void sendBye(Long id, ClientHandler clientHandler){
+        sendMessage(
+                createCommandMessage(
+                        id,
+                        MessageType.Commands.APP_QUIT,
+                        "Adios " + clientHandler.getUser().getName(),
+                        clientHandler.getUser().getId(),
+                        clientHandler.getUser().getId()
+                ),
+                clientHandler
+        );
+    }
+
     /**
      * Add client handler to thread pool
      *
@@ -719,6 +769,10 @@ public class Server  {
                 }
             }
         }
+    }
+
+    public Map<Long, ClientHandler> getClientHandlers() {
+        return clientHandlers;
     }
 
     private User convertStringToUser(String message){

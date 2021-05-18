@@ -201,7 +201,7 @@ public class MainController extends AbstractJFXPanel implements ControllerContex
         Platform.runLater(() -> {
             ObservableList<User> allTheUsers = FXCollections.observableList(listOfUsers);
             userList.setItems(allTheUsers);
-            userList.setCellFactory(new UserCellRenderer(line));
+            userList.setCellFactory(new UserCellRenderer());
             setOnlineLabel(String.valueOf(users.size()));
         });
     }// ## End App Manager Methods

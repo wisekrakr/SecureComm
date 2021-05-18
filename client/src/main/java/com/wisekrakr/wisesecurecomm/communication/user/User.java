@@ -29,6 +29,10 @@ public class User implements Serializable {
         return status;
     }
 
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     public String getProfilePicture() {
         return profilePicture;
     }

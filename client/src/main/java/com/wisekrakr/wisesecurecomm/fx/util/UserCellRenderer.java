@@ -23,11 +23,6 @@ import java.util.TimerTask;
  * A Class for Rendering users images / name / status color on the user list.
  */
 public class UserCellRenderer implements Callback<ListView<User>,ListCell<User>>{
-    private final String status;
-
-    public UserCellRenderer(String line) {
-        this.status = line;
-    }
 
     @Override
     public ListCell<User> call(ListView<User> p) {
@@ -47,14 +42,14 @@ public class UserCellRenderer implements Callback<ListView<User>,ListCell<User>>
                     pictureImage.setStrokeWidth(4);
 
                     Platform.runLater(() -> {
-                        switch (status){
-                            case "ONLINE":
+                        switch (user.getStatus()){
+                            case ONLINE:
                                 pictureImage.setStroke(Color.GREEN);
                                 break;
-                            case "BUSY":
+                            case BUSY:
                                 pictureImage.setStroke(Color.BEIGE);
                                 break;
-                            case "AWAY":
+                            case AWAY:
                                 pictureImage.setStroke(Color.BLUE);
                                 break;
                         }

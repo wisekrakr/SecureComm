@@ -410,10 +410,14 @@ public class Client implements ClientTalker {
                                             case USER_OFFLINE: // remove user out of HashMap. Remove name from gui.
                                                 User finalUser = getUser(messageObject.getOwnerId());
                                                 users.entrySet().removeIf(u -> u.getKey().equals(finalUser.getId()));
-                                                listener.onGetOnlineUser(line, users,finalUser);
+                                                listener.onGetOnlineUser(line, users, finalUser);
                                                 break;
                                             case USER_STATUS: // show status change in gui.
-                                                listener.onGetOnlineUser(line, users, getUser(messageObject.getOwnerId()));
+                                                User refreshUser = getUser(messageObject.getOwnerId());
+                                                refreshUser.setStatus(Status.valueOf(line));
+                                                users.replace(refreshUser.getId(), refreshUser);
+
+                                                listener.onGetOnlineUser(line, users, refreshUser);
                                                 break;
                                             case ERROR:
                                                 listener.onNotification("Server error", line, TrayNotificationType.ERROR);
