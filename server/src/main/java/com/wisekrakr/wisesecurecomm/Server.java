@@ -9,14 +9,12 @@ import com.wisekrakr.wisesecurecomm.communication.proto.MessageType;
 import com.wisekrakr.wisesecurecomm.communication.user.Status;
 import com.wisekrakr.wisesecurecomm.communication.user.User;
 import com.wisekrakr.wisesecurecomm.terminal.ServerTerminal;
+import com.wisekrakr.wisesecurecomm.terminal.UserStatus;
 
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.Executor;
@@ -414,8 +412,9 @@ public class Server  {
                                     clientHandler
                             );
                             clientHandler.getUser().setStatus(Status.valueOf(line));
+                            serverTerminal.refresh(clientHandler, UserStatus.UPDATE);
+
                         }
-                        serverTerminal.refresh(clientHandlers);
                     }
 
                     @Override
@@ -478,7 +477,7 @@ public class Server  {
                             System.out.println("Removing user " + user.getName());
 
                             //refresh terminal so that right number of clients is shown
-                            serverTerminal.refresh(clientHandlers);
+                            serverTerminal.refresh(clientHandlerAlpha, UserStatus.REMOVE);
 
                         }
                     }
@@ -501,7 +500,7 @@ public class Server  {
 
                 System.out.println("New client thread accepted. (Thread:" + "Client-" + user.getId() + ")");
                 System.out.println("Clients in chat: " + clientHandlers.size());
-                serverTerminal.refresh(clientHandlers);
+                serverTerminal.addUser(clientHandlerAlpha);
 
             } else {
                 System.out.println("No slots free for new client!");

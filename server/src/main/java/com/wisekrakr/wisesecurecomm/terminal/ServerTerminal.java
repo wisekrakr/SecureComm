@@ -2,6 +2,9 @@ package com.wisekrakr.wisesecurecomm.terminal;
 
 import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.graphics.TextGraphics;
+import com.googlecode.lanterna.gui2.*;
+import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
+import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
 import com.googlecode.lanterna.gui2.table.Table;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.screen.TerminalScreen;
@@ -10,17 +13,28 @@ import com.googlecode.lanterna.terminal.Terminal;
 import com.wisekrakr.wisesecurecomm.ClientHandler;
 import com.wisekrakr.wisesecurecomm.Server;
 
+import java.io.IOException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
+
 
 
 public class ServerTerminal {
 
     private Terminal terminal;
     private TerminalScreen screen;
-    private Server server;
+    private final Server server;
     private TextGraphics graphics;
+    private Table<String> table;
+    private boolean running = true;
+    private MultiWindowTextGUI gui;
+    private Map<Long, Integer>userTablePosition = new HashMap<>();
+    private int count = 0;
 
     public ServerTerminal(Server server) {
 
@@ -30,8 +44,10 @@ public class ServerTerminal {
     public void create() {
         try {
             terminal = new DefaultTerminalFactory().createTerminal();
+
             screen = new TerminalScreen(terminal);
             screen.startScreen();
+
         } catch (Throwable t) {
             throw new IllegalStateException("Could not create new Server Terminal", t);
         }
@@ -129,25 +145,22 @@ public class ServerTerminal {
             screen.refresh();
 
 
-            boolean running = true;
             while (running){
                 KeyStroke keyPressed = terminal.pollInput();
 
                 if(keyPressed != null){
+                    screen.clear();
                     switch (keyPressed.getKeyType()){
-                        case Escape:
-                            running = false;
-                            screen.stopScreen();
-                            server.stopServer();
+                        case F10:
+                            exit();
                             break;
                         case Enter:
-                            screen.clear();
                             showMain();
-                            screen.refresh();
                             break;
                         default:
                             System.out.println("Key has no function! -> " + keyPressed.getCharacter());
                     }
+                    screen.refresh();
                 }
             }
 
@@ -158,17 +171,34 @@ public class ServerTerminal {
     }
 
     private void showIntro(){
+        boolean introShown = true;
+        while (!introShown){
+
+            cursorWait(0, 1111);
+            typeLine(">_ WISE SERVER INTERFACE READY", 0);
+            cursorWait(0, 999);
+            typeLine(">_ INITIALIZING CLIENT SUPPORT DATA MATRIX", 4);
+            cursorWait(0, 888);
+            typeLine(">_ ....................................................", 6);
+            cursorWait(0, 777);
+            typeLine(">_ SECURECOMM WISE SERVER IS ALIVE!- CLIENT SYSTEM", 6);
+            cursorWait(0, 666);
+
+            introShown = true;
+        }
+
         graphics.setForegroundColor(TextColor.ANSI.GREEN_BRIGHT);
 
         graphics.drawRectangle(
-                new TerminalPosition(20,10),
-                new TerminalSize(40,4),
+                new TerminalPosition(10,10),
+                new TerminalSize(50,4),
                 '*'
         );
 
-        graphics.putString(22,11,"Welcome to the WISE Server Terminal");
-        graphics.putString(22,16,"Enter to continue, Escape to quit");
+        graphics.putString(12,11,"Welcome to the SecureComm WISE Server Terminal");
+        graphics.putString(12,16,"Enter to continue, F10 to stop the server");
     }
+
 
     private void showServerHeader(){
         graphics.drawRectangle(
@@ -182,27 +212,74 @@ public class ServerTerminal {
 
     private void showMain(){
         showServerHeader();
+
         graphics.putString(5, 10, "No clients connected", SGR.BLINK);
+
+        // Create window to hold the panel
+        BasicWindow window = new BasicWindow();
+        window.setHints(Arrays.asList(Window.Hint.FIT_TERMINAL_WINDOW, Window.Hint.NO_DECORATIONS));
+
+        // Create gui and start gui
+        gui = new MultiWindowTextGUI(screen, new DefaultWindowManager(), new EmptySpace(TextColor.ANSI.BLUE));
+        table = new Table<>("Name", "ID", "IP", "Created At", "Status");
+        table.setPosition(new TerminalPosition(10,10));
+        window.setComponent(table);
+
+        gui.addWindowAndWait(window);
+
     }
 
-    public void refresh(Map<Long, ClientHandler> clientHandlers) {
-        screen.clear();
-        showServerHeader();
+    public void addUser(ClientHandler clientHandler){
+        try {
+            if(table.getTableModel().getRowCount() != 0) count++;
 
-        int row = 10, col = 20;
-
-
-        for (ClientHandler clientHandler: clientHandlers.values()){
-
-            graphics.putString(col, row++,"client name: " + clientHandler.getUser().getName(), SGR.UNDERLINE);
-            graphics.putString(col, row++, Long.toString(clientHandler.getUser().getId()), SGR.ITALIC);
-            graphics.putString(col, row++, clientHandler.getUser().getStatus().toString(), SGR.BLINK);
-            graphics.putString(col, row++, clientHandler.getClientSocket().getRemoteSocketAddress().toString(), SGR.BORDERED);
-            graphics.putString(col, row++, "created at: " +
-                    convertTime(clientHandler.getClientSocket().getSession().getCreationTime()), SGR.FRAKTUR);
-
-            graphics.putString(col, row++, "---------------------------------------", SGR.BOLD);
+            terminal.bell();
+            table.getTableModel().addRow(
+                    clientHandler.getUser().getName(),
+                    String.valueOf(clientHandler.getUser().getId()),
+                    String.valueOf(clientHandler.getClientSocket().getRemoteSocketAddress()),
+                    convertTime(clientHandler.getClientSocket().getSession().getCreationTime()),
+                    String.valueOf(clientHandler.getUser().getStatus())
+            );
+            userTablePosition.put(clientHandler.getUser().getId(), count);
+        }catch (Exception e){
+            // Exception for the system beep sound.
+            e.printStackTrace();
         }
+
+    }
+
+    public void refresh(ClientHandler clientHandler, UserStatus userStatus) {
+        try {
+            terminal.bell();
+
+//            screen.clear();
+            showServerHeader();
+
+            for(Map.Entry<Long, Integer>userPos: userTablePosition.entrySet()){
+                if(clientHandler.getUser().getId() == userPos.getKey()){
+                    switch (userStatus){
+                        case UPDATE:
+                            table.getTableModel().removeRow(userPos.getValue());
+                            addUser(clientHandler);
+                            break;
+                        case REMOVE:
+                            table.getTableModel().removeRow(userPos.getValue());
+                            userTablePosition.remove(userPos.getKey());
+                            break;
+                        default:
+                            MessageDialog.showMessageDialog(
+                                    gui, "Error",
+                                    clientHandler.getUser().getName()+ " could not be updated!",
+                                    MessageDialogButton.OK
+                            );
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         try {
             screen.refresh();
@@ -211,9 +288,63 @@ public class ServerTerminal {
         }
     }
 
+
+    private void cursorWait(int row, int millis) {
+
+        screen.setCursorPosition(null);
+        screen.setCursorPosition(new TerminalPosition(0, row));
+
+        try {
+            screen.refresh();
+
+            Thread.sleep(millis);
+        } catch (Throwable t) {
+            //
+        }
+    }
+
+    private void typeLine(String msg, int row) {
+        TextColor foregroundColor = TextColor.ANSI.GREEN;
+        int interval = 11;
+
+        for (int i = 0; i < msg.length(); i++) {
+            screen.setCursorPosition(new TerminalPosition(i, row));
+            screen.setCharacter( (i), row, new TextCharacter(msg.charAt(i), foregroundColor, TextColor.ANSI.BLUE));
+
+            try {
+                screen.refresh();
+                Thread.sleep(ThreadLocalRandom.current().nextInt(interval*3));
+            } catch (Throwable t) {
+                //
+            }
+        }
+    }
+
     private String convertTime(long time){
         Date date = new Date(time);
         Format format = new SimpleDateFormat("dd MM yyyy HH:mm");
         return format.format(date);
     }
+
+    private void exit(){
+        running = false;
+
+        screen.clear();
+        cursorWait(2, 666);
+        typeLine(">_ SYSTEM EXIT REQUESTED", 0);
+        cursorWait(2, 1111);
+        typeLine(">_ SERVER BYE TO CLIENTS", 1);
+        cursorWait(2, 1111);
+        typeLine(">_ SERVER TERMINATED", 2);
+        cursorWait(2, 1111);
+
+        try {
+            screen.stopScreen();
+            server.stopServer();
+        }catch (Throwable t){
+            throw new IllegalStateException("Error while closing server and shutting down terminal",t);
+        }
+
+    }
+
 }
