@@ -7,6 +7,7 @@ import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
 import com.googlecode.lanterna.gui2.table.Table;
 import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
@@ -171,7 +172,7 @@ public class ServerTerminal {
     }
 
     private void showIntro(){
-        boolean introShown = true;
+        boolean introShown = false;
         while (!introShown){
 
             cursorWait(0, 666);
@@ -227,6 +228,14 @@ public class ServerTerminal {
         table = new Table<>("Name", "ID", "IP", "Created At", "Status");
         table.setPosition(new TerminalPosition(10,10));
         window.setComponent(table);
+
+        try {
+            KeyStroke keyPressed = terminal.pollInput();
+            if(keyPressed.getKeyType().equals(KeyType.F10)) exit();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
 
         gui.addWindowAndWait(window);
 
