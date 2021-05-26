@@ -64,8 +64,6 @@ public interface ClientTalker {
     /**
      * While {@link Client} is not interrupted or stopped the client can send messages
      * The message is encrypted with the session key (SecretKey) and send to the server with a ObjectOutputStream.
-     * If the RunningChatConnection Thread is stopped, incoming and outgoing stream are stopped and well as
-     * the thread itself.
      * @param messageObject message object with specific object type
      */
     void sendMessage(MessageObject messageObject);

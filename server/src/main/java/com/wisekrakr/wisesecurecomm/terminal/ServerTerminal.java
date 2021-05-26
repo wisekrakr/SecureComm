@@ -174,13 +174,13 @@ public class ServerTerminal {
         boolean introShown = true;
         while (!introShown){
 
-            cursorWait(0, 1111);
+            cursorWait(0, 666);
             typeLine(">_ WISE SERVER INTERFACE READY", 0);
-            cursorWait(0, 999);
+            cursorWait(0, 666);
             typeLine(">_ INITIALIZING CLIENT SUPPORT DATA MATRIX", 4);
-            cursorWait(0, 888);
+            cursorWait(0, 666);
             typeLine(">_ ....................................................", 6);
-            cursorWait(0, 777);
+            cursorWait(0, 666);
             typeLine(">_ SECURECOMM WISE SERVER IS ALIVE!- CLIENT SYSTEM", 6);
             cursorWait(0, 666);
 
@@ -197,6 +197,9 @@ public class ServerTerminal {
 
         graphics.putString(12,11,"Welcome to the SecureComm WISE Server Terminal");
         graphics.putString(12,16,"Enter to continue, F10 to stop the server");
+        cursorWait(0, 1111);
+        typeLine(">_ ....................................................", 17);
+
     }
 
 

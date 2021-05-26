@@ -3,6 +3,7 @@ package com.wisekrakr.wisesecurecomm;
 
 
 import com.google.protobuf.ByteString;
+import com.wisekrakr.wisesecurecomm.communication.Message;
 import com.wisekrakr.wisesecurecomm.communication.crypto.MessageCryptography;
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageType;
@@ -119,9 +120,8 @@ public class Server  {
                 } catch (Throwable t) {
                     throw new IllegalStateException("Error: Closing streams", t);
                 }
-
-
             }
+
             clientHandlers.clear();
             clients.clear();
             iDs.clear();
@@ -141,6 +141,18 @@ public class Server  {
 
             // Get user from client
             MessageObject messageObject = MessageObject.parseFrom(Base64.getDecoder().decode((byte[]) in.readObject()));
+
+//            int count = 0;
+//            byte[]buffer = new byte[4096];
+//            ByteArrayOutputStream b = new ByteArrayOutputStream();
+//            while ((count = in.read(buffer,0,buffer.length))>= 0){
+//                b.write(buffer,0,count);
+//                System.out.println("Count= " + count);
+//            }
+//
+//            ByteArrayInputStream bais = new ByteArrayInputStream(b.toByteArray());
+//            ObjectInputStream is = new ObjectInputStream(bais);
+//            Message message = (Message) is.readObject();
 
             User newUser = convertStringToUser(messageObject.getTextMessage());
 
@@ -768,10 +780,6 @@ public class Server  {
                 }
             }
         }
-    }
-
-    public Map<Long, ClientHandler> getClientHandlers() {
-        return clientHandlers;
     }
 
     private User convertStringToUser(String message){

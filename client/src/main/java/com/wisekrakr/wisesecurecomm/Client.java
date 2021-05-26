@@ -1,6 +1,8 @@
 package com.wisekrakr.wisesecurecomm;
 
 import com.google.protobuf.ByteString;
+import com.wisekrakr.wisesecurecomm.communication.Message;
+import com.wisekrakr.wisesecurecomm.communication.ObjectType;
 import com.wisekrakr.wisesecurecomm.communication.crypto.MessageCryptography;
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageObject;
 import com.wisekrakr.wisesecurecomm.communication.proto.MessageType;
@@ -147,7 +149,7 @@ public class Client implements ClientTalker {
 
                 String userAsString = convertUserToString(user);
 
-                // tell server my identity
+                //tell server my identity
                 sendMessage(ClientMessageHandler.createMessage(
                         userAsString,
                         user.getId(),
@@ -581,9 +583,45 @@ public class Client implements ClientTalker {
                 }
 
             }else {
-                outgoing.writeObject(Base64.getEncoder().encode(messageObject.toByteArray()));
+//                outgoing.writeObject(Base64.getEncoder().encode(messageObject.toByteArray()));
+                outgoing.writeObject(messageObject);
             }
 //            outgoing.flush();
+        }catch (Throwable t){
+            listener.onNotification(
+                    "Send Message Failure!",
+                    "Client could not send message \n Please try again ..." + t.getMessage(),
+                    TrayNotificationType.ERROR
+            );
+        }
+    }
+
+    private void sendPlainMessage(byte[]data){
+        LongIDGenerator longIdGenerator = new LongIDGenerator(1507141731000L, 0, 41, 10, 13, IDMode.TIME_UID_SEQUENCE);
+        try {
+            Message message = new Message(
+                    ObjectType.MESSAGE,
+                    com.wisekrakr.wisesecurecomm.communication.MessageType.MSG_TEXT,
+                    longIdGenerator.generateLongId(),
+                    data,
+                    user.getId(),
+                    users.values().stream().map(User::getId).collect(Collectors.toList())
+            );
+
+            ByteArrayOutputStream bo = new ByteArrayOutputStream();
+            ObjectOutputStream so = new ObjectOutputStream(bo);
+            so.writeObject(message);
+            byte[]msg = bo.toByteArray();
+
+            byte[]buffer = new byte[4096];
+
+            int count = 0;
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(msg);
+            while ((count = inputStream.read(buffer,0,buffer.length))>= 0){
+                outgoing.write(buffer,0,count);
+            }
+
+
         }catch (Throwable t){
             listener.onNotification(
                     "Send Message Failure!",
