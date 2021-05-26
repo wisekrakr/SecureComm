@@ -2,6 +2,7 @@
 <img src="https://img.shields.io/badge/Java-build%20with%20Java-blue"/>
 ![version](https://img.shields.io/badge/version-0.0.3-blue)
 
+### This project is currently under heavy construction, so some features might not work.
     
                               CommUniWise Secure: java secure chat and file transfer project
                                     https://github.com/wisekrakr/SecureComm

@@ -583,8 +583,7 @@ public class Client implements ClientTalker {
                 }
 
             }else {
-//                outgoing.writeObject(Base64.getEncoder().encode(messageObject.toByteArray()));
-                outgoing.writeObject(messageObject);
+                outgoing.writeObject(Base64.getEncoder().encode(messageObject.toByteArray()));
             }
 //            outgoing.flush();
         }catch (Throwable t){
